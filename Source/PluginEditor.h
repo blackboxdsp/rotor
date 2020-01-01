@@ -16,7 +16,8 @@
 //==============================================================================
 /**
 */
-class RingModulatorAudioProcessorEditor  : public AudioProcessorEditor
+class RingModulatorAudioProcessorEditor  : public AudioProcessorEditor,
+                                           private Slider::Listener
 {
 public:
     RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor&);
@@ -30,6 +31,11 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     RingModulatorAudioProcessor& processor;
+
+    void sliderValueChanged(Slider* slider) override;
+
+    // slider declarations for parameters
+    Slider inputGainSlider;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };

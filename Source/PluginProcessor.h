@@ -58,12 +58,9 @@ public:
     // custom methods
     void updateSmoothedValues();
 
-private:
     // Gain parameter declarations
     AudioParameterFloat* inputGain;
     AudioParameterFloat* outputGain;
-    SmoothedValue<float, ValueSmoothingTypes::Linear> s_inputGain;
-    SmoothedValue<float, ValueSmoothingTypes::Linear> s_outputGain;
 
     // Dry / wet parameter declaration
     AudioParameterFloat* dryWet;
@@ -71,6 +68,11 @@ private:
     // Modulation parameter declarations
     AudioParameterChoice* modulationWaveform;
     AudioParameterFloat* modulationFrequency;
+
+private:
+    // Smoothed values for parameters (gain)
+    SmoothedValue<float, ValueSmoothingTypes::Linear> s_inputGain;
+    SmoothedValue<float, ValueSmoothingTypes::Linear> s_outputGain;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessor)
