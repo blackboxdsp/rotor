@@ -56,6 +56,13 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    // Parameter declarations (defined in *processor.cpp)
+    AudioParameterFloat* inputGain;
+    AudioParameterFloat* outputGain;
+    AudioParameterFloat* dryWet;
+    AudioParameterChoice* modulationWaveform;
+    AudioParameterFloat* modulationFrequency;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessor)
 };
