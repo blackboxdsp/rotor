@@ -55,11 +55,20 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    // custom methods
+    void updateSmoothedValues();
+
 private:
-    // Parameter declarations (defined in *processor.cpp)
+    // Gain parameter declarations
     AudioParameterFloat* inputGain;
     AudioParameterFloat* outputGain;
+    SmoothedValue<float, ValueSmoothingTypes::Linear> s_inputGain;
+    SmoothedValue<float, ValueSmoothingTypes::Linear> s_outputGain;
+
+    // Dry / wet parameter declaration
     AudioParameterFloat* dryWet;
+
+    // Modulation parameter declarations
     AudioParameterChoice* modulationWaveform;
     AudioParameterFloat* modulationFrequency;
 
