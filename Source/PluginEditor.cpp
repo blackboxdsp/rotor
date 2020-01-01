@@ -15,16 +15,20 @@
 RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
+    // GUI variables
+    int textBoxWidth = 100;
+    int textBoxHeight = 20;
+
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (480, 360);
 
     // define parameters for input gain slider
     inputGainSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    inputGainSlider.setRange(0.0f, 1.0f, 0.001f);
-    inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 90, 10);
+    inputGainSlider.setRange(0.0f, 1.0f, 0.01f);
+    inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     inputGainSlider.setPopupDisplayEnabled(true, false, this);
-    inputGainSlider.setTextValueSuffix("Input Gain");
+    inputGainSlider.setTextValueSuffix(" Input Gain");
     inputGainSlider.setValue(1.0f);
 
     // add slider listeners
@@ -47,7 +51,7 @@ void RingModulatorAudioProcessorEditor::paint (Graphics& g)
 
 void RingModulatorAudioProcessorEditor::resized()
 {
-    int size = 60;
+    int size = getWidth() * 0.4f;
     inputGainSlider.setBounds(getWidth() / 2 - (size / 2), getHeight() / 2 - (size / 2), size, size);
 }
 

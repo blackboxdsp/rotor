@@ -109,8 +109,8 @@ void RingModulatorAudioProcessor::changeProgramName (int index, const String& ne
 void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // initialize the gain floats
-    s_inputGain.setCurrentAndTargetValue(*inputGain);
-    s_inputGain.setCurrentAndTargetValue(*outputGain);
+    previousInputGain = *inputGain;
+    previousOutputGain = *outputGain;
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -149,10 +149,11 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     const auto totalNumInputChannels  = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // update all parameters that need smoothing
-    updateSmoothedValues();
+    // get current input gain and update if needed then apply it
+    auto currentInputGain = inputGain->get();
+    previousInputGain = setBufferGain(previousInputGain, currentInputGain, buffer);
 
-    // Loop through channels...
+    // loop through channels...
     for (int channel = 0; channel < totalNumInputChannels; channel += 1)
     {
         // Get pointer for channel from buffer method
@@ -164,16 +165,16 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             // create two variables (original and processed)
             auto sampleData = channelData[sample], p_sampleData = channelData[sample];
 
-            // apply input gain
-            p_sampleData *= s_inputGain.getCurrentValue();
-            
-            // apply output gain
-            p_sampleData *= s_outputGain.getCurrentValue();
+            // other processing here...
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
             channelData[sample] = (p_sampleData * dryWet->get()) + (sampleData * (1.0f - dryWet->get()));
         }
     }
+
+    // get current output gain and update if needed then apply it
+    auto currentOutputGain = outputGain->get();
+    previousOutputGain = setBufferGain(previousOutputGain, currentOutputGain, buffer);
 }
 
 //==============================================================================
@@ -208,26 +209,15 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new RingModulatorAudioProcessor();
 }
 
-// Updates parameters
-void RingModulatorAudioProcessor::updateSmoothedValues()
+float RingModulatorAudioProcessor::setBufferGain(float p_gain, float c_gain, AudioBuffer<float>& buffer)
 {
-    // get i/o gain parameter values
-    auto c_inputGain = inputGain->get();
-    auto c_outputGain = outputGain->get();
-
-    // apply input gain changes
-    if (c_inputGain != s_inputGain.getTargetValue())
+    if (p_gain == c_gain)
     {
-        s_inputGain.setTargetValue(c_inputGain);
+        buffer.applyGain(c_gain);
     }
-
-    // apply output gain changes
-    if (c_outputGain != s_outputGain.getTargetValue())
+    else
     {
-        s_outputGain.setTargetValue(c_outputGain);
+        buffer.applyGainRamp(0, buffer.getNumSamples(), p_gain, c_gain);
     }
-
-    // update gain parameters
-    s_inputGain.setValue(s_inputGain.getNextValue());
-    s_outputGain.setValue(s_outputGain.getNextValue());
+    return(c_gain);
 }

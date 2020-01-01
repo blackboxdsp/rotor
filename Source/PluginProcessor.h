@@ -56,7 +56,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     // custom methods
-    void updateSmoothedValues();
+    float setBufferGain(float, float, AudioBuffer<float>&);
 
     // Gain parameter declarations
     AudioParameterFloat* inputGain;
@@ -70,9 +70,9 @@ public:
     AudioParameterFloat* modulationFrequency;
 
 private:
-    // Smoothed values for parameters (gain)
-    SmoothedValue<float, ValueSmoothingTypes::Linear> s_inputGain;
-    SmoothedValue<float, ValueSmoothingTypes::Linear> s_outputGain;
+    // variables for gain ramps
+    float previousInputGain;
+    float previousOutputGain;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessor)
