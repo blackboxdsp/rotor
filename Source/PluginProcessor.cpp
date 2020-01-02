@@ -171,15 +171,15 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
         for (int sample = 0; sample < buffer.getNumSamples(); sample += 1)
         {
             // create two variables (original and processed)
-            auto sampleData = channelData[sample], p_sampleData = channelData[sample];
+            auto sampleData = channelData[sample], previousSampleData = channelData[sample];
 
             // processing here...
-            p_sampleData *= (float)std::sin(currentAngle);
+            previousSampleData *= (float) std::sin(currentAngle);
             currentAngle += angleDelta;
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
             auto currentDryWet = dryWet->get();
-            channelData[sample] = (p_sampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
+            channelData[sample] = (previousSampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
         }
     }
 
