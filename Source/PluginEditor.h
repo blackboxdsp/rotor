@@ -38,5 +38,9 @@ private:
     Slider inputGainSlider;
     Slider outputGainSlider;
 
+    // declare labels
+    Label inputGainLabel;
+    Label outputGainLabel;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };
