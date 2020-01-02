@@ -174,6 +174,8 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             auto sampleData = channelData[sample], p_sampleData = channelData[sample];
 
             // processing here...
+            p_sampleData *= (float)std::sin(currentAngle);
+            currentAngle += angleDelta;
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
             auto currentDryWet = dryWet->get();
@@ -224,4 +226,11 @@ void RingModulatorAudioProcessor::setStateInformation (const void* data, int siz
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new RingModulatorAudioProcessor();
+}
+
+// updates angle delta provided a frequency value from slider
+void RingModulatorAudioProcessor::updateAngleDelta(double frequency, double sampleRate)
+{
+    auto cyclesPerSample = frequency / sampleRate;
+    angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
 }

@@ -37,10 +37,14 @@ private:
     // slider declarations for parameters
     Slider inputGainSlider;
     Slider outputGainSlider;
+    Slider modulationFrequencySlider;
+    Slider dryWetSlider;
 
     // declare labels
     Label inputGainLabel;
     Label outputGainLabel;
+    Label modulationFrequencyLabel;
+    Label dryWetLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };

@@ -55,6 +55,9 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    // custom methods
+    void updateAngleDelta(double frequency, double sampleRate);
+
     // Gain parameter declarations
     AudioParameterFloat* inputGain;
     AudioParameterFloat* outputGain;
@@ -68,8 +71,12 @@ public:
 
 private:
     // variables for gain ramps
-    float previousInputGain;
-    float previousOutputGain;
+    float previousInputGain = 1.0f;
+    float previousOutputGain = 1.0f;
+
+    // waveform variables
+    double currentAngle = 0.0;
+    double angleDelta = 0.0;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessor)

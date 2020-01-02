@@ -23,55 +23,85 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     // editor's size to whatever you need it to be.
     setSize (480, 360);
 
+    // SLIDERS =================================================================
+
     // set slider styles
     inputGainSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     outputGainSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    
+    modulationFrequencySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    dryWetSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
     // set slider ranges
-    inputGainSlider.setRange(-30.0f, 0.0f, 0.5f);
-    outputGainSlider.setRange(-30.0f, 0.0f, 0.5f);
+    inputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
+    outputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
+    modulationFrequencySlider.setRange(10.0f, 12000.0f, 1.0f);
+    dryWetSlider.setRange(0.0f, 100.0f, 0.5f);
 
     // set textbox styles
     inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     outputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
-    
+    modulationFrequencySlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    dryWetSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+
     // set popup display configs
     inputGainSlider.setPopupDisplayEnabled(true, false, this);
     outputGainSlider.setPopupDisplayEnabled(true, false, this);
+    modulationFrequencySlider.setPopupDisplayEnabled(true, false, this);
+    dryWetSlider.setPopupDisplayEnabled(true, false, this);
 
     // set text value suffixes
     inputGainSlider.setTextValueSuffix(" dB");
     outputGainSlider.setTextValueSuffix(" dB");
-
-    // set label text values
-    inputGainLabel.setText("Input Gain", NotificationType::dontSendNotification);
-    outputGainLabel.setText("Output Gain", NotificationType::dontSendNotification);
-
-    // attach labels to components
-    inputGainLabel.attachToComponent(&inputGainSlider, false);
-    outputGainLabel.attachToComponent(&outputGainSlider, false);
-
-    // set label justification types
-    inputGainLabel.setJustificationType(Justification::centredTop);
-    outputGainLabel.setJustificationType(Justification::centredTop);
+    modulationFrequencySlider.setTextValueSuffix(" Hz");
+    dryWetSlider.setTextValueSuffix(" %");
 
     // set slider values 
     inputGainSlider.setValue(0.0f);
     outputGainSlider.setValue(0.0f);
+    modulationFrequencySlider.setValue(500.0f);
+    dryWetSlider.setValue(100.0f);
 
     // add slider listeners
     inputGainSlider.addListener(this);
     outputGainSlider.addListener(this);
+    modulationFrequencySlider.addListener(this);
+    dryWetSlider.addListener(this);
 
     // add all sliders and make visible 
     addAndMakeVisible(&inputGainSlider);
     addAndMakeVisible(&outputGainSlider);
+    addAndMakeVisible(&modulationFrequencySlider);
+    addAndMakeVisible(&dryWetSlider);
+
+    // LABELS ==================================================================
+
+    // set label text values
+    inputGainLabel.setText("Input Gain", NotificationType::dontSendNotification);
+    outputGainLabel.setText("Output Gain", NotificationType::dontSendNotification);
+    modulationFrequencyLabel.setText("Mod Frequency", NotificationType::dontSendNotification);
+    dryWetLabel.setText("Dry / Wet", NotificationType::dontSendNotification);
+
+    // attach labels to components
+    inputGainLabel.attachToComponent(&inputGainSlider, false);
+    outputGainLabel.attachToComponent(&outputGainSlider, false);
+    modulationFrequencyLabel.attachToComponent(&modulationFrequencySlider, false);
+    dryWetLabel.attachToComponent(&dryWetSlider, false);
+
+    // set label justification types
+    inputGainLabel.setJustificationType(Justification::centredTop);
+    outputGainLabel.setJustificationType(Justification::centredTop);
+    modulationFrequencyLabel.setJustificationType(Justification::centredTop);
+    dryWetLabel.setJustificationType(Justification::centredTop);
 
     // add all labels
     addAndMakeVisible(&inputGainLabel);
     addAndMakeVisible(&outputGainLabel);
+    addAndMakeVisible(&modulationFrequencyLabel);
+    addAndMakeVisible(&dryWetLabel);
     
-    // handles slider value changes
+    // SLIDER ONVALUECHANGE DEFINITIONS ========================================
+
+    // i/o gain handling
     inputGainSlider.onValueChange = [this]
     {
         auto currentSliderValue = pow(2, inputGainSlider.getValue() / 6);
@@ -81,6 +111,25 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     {
         auto currentSliderValue = pow(2, outputGainSlider.getValue() / 6);
         processor.outputGain->setValueNotifyingHost(currentSliderValue);
+    };
+    // if freq changes, call custom method in processor
+    modulationFrequencySlider.onValueChange = [this]
+    {
+        auto currentSampleRate = processor.getSampleRate();
+        if (currentSampleRate > 0.0)
+        {
+            auto frequency = modulationFrequencySlider.getValue();
+            processor.updateAngleDelta(
+                frequency,
+                currentSampleRate
+            );
+            processor.modulationFrequency->setValueNotifyingHost(frequency);
+        }
+    };
+    // set processor's dryWet parameter value
+    dryWetSlider.onValueChange = [this]
+    {
+        processor.dryWet->setValueNotifyingHost(dryWetSlider.getValue() / 100.0f);
     };
 }
 
@@ -97,13 +146,25 @@ void RingModulatorAudioProcessorEditor::paint (Graphics& g)
 
 void RingModulatorAudioProcessorEditor::resized()
 {
-    int size = getWidth() * 0.4f;
-    inputGainSlider.setBounds(getWidth() / 2 - (size / 2) - (size * 0.6f), getHeight() / 2 - (size / 2), size, size);
-    outputGainSlider.setBounds(getWidth() / 2 - (size / 2) + (size * 0.6f), getHeight() / 2 - (size / 2), size, size);
+    // get canvas
+    auto area = getLocalBounds();
+
+    // handle header / footer area
+    auto headerHeight = area.getHeight() * 0.1;
+    area.removeFromTop(headerHeight * 2);
+    area.removeFromBottom(headerHeight * 2);
+
+    // dimension and layout variables
+    int dialWidth = area.getWidth() / 5;
+    int quarterWidth = area.getWidth() / 4;
+
+    // position sliders
+    inputGainSlider.setBounds(area.removeFromLeft(quarterWidth));
+    modulationFrequencySlider.setBounds(area.removeFromLeft(quarterWidth));
+    outputGainSlider.setBounds(area.removeFromLeft(quarterWidth));
+    dryWetSlider.setBounds(area.removeFromLeft(quarterWidth));
 }
 
 void RingModulatorAudioProcessorEditor::sliderValueChanged(Slider* slider) 
 {
-    auto currentSliderValue = slider->getValue();
-    // do something ...
 }
