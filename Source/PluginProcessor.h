@@ -55,9 +55,6 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    // custom methods
-    float setBufferGain(float, float, AudioBuffer<float>&);
-
     // Gain parameter declarations
     AudioParameterFloat* inputGain;
     AudioParameterFloat* outputGain;

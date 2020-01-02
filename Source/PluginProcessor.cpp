@@ -108,9 +108,9 @@ void RingModulatorAudioProcessor::changeProgramName (int index, const String& ne
 //==============================================================================
 void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // initialize the gain floats
-    previousInputGain = *inputGain;
-    previousOutputGain = *outputGain;
+    // initialize previous gain values
+    previousInputGain = inputGain->get();
+    previousOutputGain = outputGain->get();
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -149,9 +149,17 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     const auto totalNumInputChannels  = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // get current input gain and update if needed then apply it
+    // get current input gain (in 0.0 - 1.0) and update if needed then apply it
     auto currentInputGain = inputGain->get();
-    previousInputGain = setBufferGain(previousInputGain, currentInputGain, buffer);
+    if (previousInputGain == currentInputGain)
+    {
+        buffer.applyGain(currentInputGain);
+    }
+    else
+    {
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousInputGain, currentInputGain);
+        previousInputGain = currentInputGain;
+    }
 
     // loop through channels...
     for (int channel = 0; channel < totalNumInputChannels; channel += 1)
@@ -165,16 +173,25 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             // create two variables (original and processed)
             auto sampleData = channelData[sample], p_sampleData = channelData[sample];
 
-            // other processing here...
+            // processing here...
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
-            channelData[sample] = (p_sampleData * dryWet->get()) + (sampleData * (1.0f - dryWet->get()));
+            auto currentDryWet = dryWet->get();
+            channelData[sample] = (p_sampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
         }
     }
 
     // get current output gain and update if needed then apply it
     auto currentOutputGain = outputGain->get();
-    previousOutputGain = setBufferGain(previousOutputGain, currentOutputGain, buffer);
+    if (previousOutputGain == currentOutputGain)
+    {
+        buffer.applyGain(currentOutputGain);
+    }
+    else
+    {
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousOutputGain, currentOutputGain);
+        previousOutputGain = currentOutputGain;
+    }
 }
 
 //==============================================================================
@@ -207,17 +224,4 @@ void RingModulatorAudioProcessor::setStateInformation (const void* data, int siz
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new RingModulatorAudioProcessor();
-}
-
-float RingModulatorAudioProcessor::setBufferGain(float p_gain, float c_gain, AudioBuffer<float>& buffer)
-{
-    if (p_gain == c_gain)
-    {
-        buffer.applyGain(c_gain);
-    }
-    else
-    {
-        buffer.applyGainRamp(0, buffer.getNumSamples(), p_gain, c_gain);
-    }
-    return(c_gain);
 }
