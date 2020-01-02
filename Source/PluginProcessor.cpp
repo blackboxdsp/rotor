@@ -27,7 +27,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
     // Parameter definitions
     addParameter(inputGain = new AudioParameterFloat("inputGain", "Input Gain", 0.0f, 1.0f, 1.0f));
     addParameter(outputGain = new AudioParameterFloat("outputGain", "Output Gain", 0.0f, 1.0f, 1.0f));
-    addParameter(dryWet = new AudioParameterFloat("dryWet", "Dry / Wet", 0.0f, 1.0f, 1.0f));
+    addParameter(dryWet = new AudioParameterFloat("dryWet", "Dry / Wet", 0.0f, 1.0f, 0.5f));
     const StringArray waveformChoices =
     {
         "Sine",
@@ -36,7 +36,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
         "Triangle"
     };
     addParameter(modulationWaveform = new AudioParameterChoice("modulationWaveform", "Modulation Frequency", waveformChoices, 0));
-    addParameter(modulationFrequency = new AudioParameterFloat("modulationFrequency", "Modulation Frequency", NormalisableRange<float> (20.0f, 15000.0f), 250.0f));
+    addParameter(modulationFrequency = new AudioParameterFloat("modulationFrequency", "Modulation Frequency", NormalisableRange<float> (20.0f, 15000.0f), 500.0f));
 }
 
 RingModulatorAudioProcessor::~RingModulatorAudioProcessor()

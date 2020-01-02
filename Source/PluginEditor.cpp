@@ -59,13 +59,22 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     inputGainSlider.setValue(0.0f);
     outputGainSlider.setValue(0.0f);
     modulationFrequencySlider.setValue(500.0f);
-    dryWetSlider.setValue(100.0f);
+    dryWetSlider.setValue(50.0f);
 
     // add slider listeners
     inputGainSlider.addListener(this);
     outputGainSlider.addListener(this);
     modulationFrequencySlider.addListener(this);
     dryWetSlider.addListener(this);
+
+    // set double click return values
+    inputGainSlider.setDoubleClickReturnValue(true, 0.0f);
+    outputGainSlider.setDoubleClickReturnValue(true, 0.0f);
+    modulationFrequencySlider.setDoubleClickReturnValue(true, 500.0f);
+    dryWetSlider.setDoubleClickReturnValue(true, 50.0f);
+
+    // set any skew options
+    modulationFrequencySlider.setSkewFactorFromMidPoint(500.0f);
 
     // add all sliders and make visible 
     addAndMakeVisible(&inputGainSlider);
@@ -151,8 +160,8 @@ void RingModulatorAudioProcessorEditor::resized()
 
     // handle header / footer area
     auto headerHeight = area.getHeight() * 0.1;
-    area.removeFromTop(headerHeight * 2);
-    area.removeFromBottom(headerHeight * 2);
+    area.removeFromTop(headerHeight * 3);
+    area.removeFromBottom(headerHeight * 3);
 
     // dimension and layout variables
     int dialWidth = area.getWidth() / 5;
