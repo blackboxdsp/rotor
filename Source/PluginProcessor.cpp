@@ -27,24 +27,27 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
         {
             std::make_unique<AudioParameterFloat>("inputGain",
                                                    "Input Gain",
+                                                   -36.0f,
                                                    0.0f,
-                                                   1.0f,
-                                                   1.0f),
+                                                   0.0f),
             std::make_unique<AudioParameterFloat>("outputGain",
                                                    "Output Gain",
+                                                   -36.0f,
                                                    0.0f,
-                                                   1.0f,
-                                                   1.0f),
+                                                   0.0f),
             std::make_unique<AudioParameterFloat>("dryWet",
                                                    "Dry / Wet",
                                                    0.0f,
-                                                   1.0f,
-                                                   0.5f),
+                                                   100.0f,
+                                                   50.0f),
             std::make_unique<AudioParameterFloat>("modulationFrequency",
                                                    "Modulation Frequency",
-                                                   10.0f,
-                                                   12000.0f,
-                                                   500.0f),
+                                                   NormalisableRange<float>(10.0f, 
+                                                                            12000.0f, 
+                                                                            1.0f, 
+                                                                            getSkewFactor(10.0f, 12000.0f, 500.0f),
+                                                                            false),
+                                                   500.0f)
         })
 {
     // Parameter definitions
@@ -136,6 +139,9 @@ void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     // initialize previous gain values
     previousInputGain = *inputGain;
     previousOutputGain = *outputGain;
+
+    // handle frequency parameter stuff
+    updateAngleDelta(*modulationFrequency, sampleRate);
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -175,7 +181,7 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // get current input gain (in 0.0 - 1.0) and update if needed then apply it
-    auto currentInputGain = *inputGain;
+    auto currentInputGain = pow(2, *inputGain / 6);
     if (previousInputGain == currentInputGain)
     {
         buffer.applyGain(currentInputGain);
@@ -203,13 +209,13 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             currentAngle += angleDelta;
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
-            auto currentDryWet = *dryWet;
+            auto currentDryWet = *dryWet / 100.0f;
             channelData[sample] = (previousSampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
         }
     }
 
     // get current output gain and update if needed then apply it
-    auto currentOutputGain = *outputGain;
+    auto currentOutputGain = pow(2, *outputGain / 6);
     if (previousOutputGain == currentOutputGain)
     {
         buffer.applyGain(currentOutputGain);
@@ -264,4 +270,10 @@ void RingModulatorAudioProcessor::updateAngleDelta(double frequency, double samp
 {
     auto cyclesPerSample = frequency / sampleRate;
     angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
+}
+
+// returns skew factor that is skewed from the midpoint
+float RingModulatorAudioProcessor::getSkewFactor(float start, float end, float center)
+{
+    return std::log((0.5f)) / std::log((center - start) / (end - start));
 }

@@ -57,6 +57,7 @@ public:
 
     // custom methods
     void updateAngleDelta(double frequency, double sampleRate);
+    float getSkewFactor(float start, float end, float center);
 
     // Gain parameter declarations
     float* inputGain;
@@ -72,10 +73,10 @@ public:
 private:
     // for storing / retrieving parameters
     AudioProcessorValueTreeState parameters;
-
-    // variables for gain ramps
-    float previousInputGain = 1.0f;
-    float previousOutputGain = 1.0f;
+    
+    // variables for gain ramps --- 0.0f to 1.0f (same for current gain in .cpp ^)
+    float previousInputGain;
+    float previousOutputGain;
 
     // waveform variables
     double currentAngle = 0.0;

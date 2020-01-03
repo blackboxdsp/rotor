@@ -31,41 +31,17 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     modulationFrequencySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     dryWetSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
-    // set slider ranges
-    /*inputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
-    outputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
-    modulationFrequencySlider.setRange(10.0f, 12000.0f, 1.0f);
-    dryWetSlider.setRange(0.0f, 100.0f, 0.5f);*/
-
     // set textbox styles
     inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     outputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     modulationFrequencySlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     dryWetSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
 
-    // set popup display configs
-    inputGainSlider.setPopupDisplayEnabled(true, false, this);
-    outputGainSlider.setPopupDisplayEnabled(true, false, this);
-    modulationFrequencySlider.setPopupDisplayEnabled(true, false, this);
-    dryWetSlider.setPopupDisplayEnabled(true, false, this);
-
     // set text value suffixes
     inputGainSlider.setTextValueSuffix(" dB");
     outputGainSlider.setTextValueSuffix(" dB");
     modulationFrequencySlider.setTextValueSuffix(" Hz");
     dryWetSlider.setTextValueSuffix(" %");
-
-    // set slider values 
-    /*inputGainSlider.setValue(0.0f);
-    outputGainSlider.setValue(0.0f);
-    modulationFrequencySlider.setValue(500.0f);
-    dryWetSlider.setValue(50.0f);*/
-
-    // add slider listeners
-    /*inputGainSlider.addListener(this);
-    outputGainSlider.addListener(this);
-    modulationFrequencySlider.addListener(this);
-    dryWetSlider.addListener(this);*/
 
     // set double click return values
     inputGainSlider.setDoubleClickReturnValue(true, 0.0f);
@@ -78,9 +54,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     outputGainAttachment.reset(new SliderAttachment(valueTreeState, "outputGain", outputGainSlider));
     dryWetAttachment.reset(new SliderAttachment(valueTreeState, "dryWet", dryWetSlider));
     modulationFrequencyAttachment.reset(new SliderAttachment(valueTreeState, "modulationFrequency", modulationFrequencySlider));
-
-    // set any skew options
-    modulationFrequencySlider.setSkewFactorFromMidPoint(500.0f);
 
     // add all sliders and make visible 
     addAndMakeVisible(&inputGainSlider);
@@ -115,36 +88,14 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     addAndMakeVisible(&dryWetLabel);
     
     // SLIDER ONVALUECHANGE DEFINITIONS ========================================
-
-    // i/o gain handling
-    inputGainSlider.onValueChange = [this]
-    {
-        auto currentSliderValue = pow(2, inputGainSlider.getValue() / 6);
-        *processor.inputGain = currentSliderValue;
-    };
-    outputGainSlider.onValueChange = [this]
-    {
-        auto currentSliderValue = pow(2, outputGainSlider.getValue() / 6);
-        *processor.outputGain = currentSliderValue;
-    };
-    // if freq changes, call custom method in processor
     modulationFrequencySlider.onValueChange = [this]
     {
         auto currentSampleRate = processor.getSampleRate();
         if (currentSampleRate > 0.0)
         {
             auto frequency = modulationFrequencySlider.getValue();
-            processor.updateAngleDelta(
-                frequency,
-                currentSampleRate
-            );
-            *processor.modulationFrequency = frequency;
+            processor.updateAngleDelta(frequency, currentSampleRate);
         }
-    };
-    // set processor's dryWet parameter value
-    dryWetSlider.onValueChange = [this]
-    {
-        *processor.dryWet = dryWetSlider.getValue() / 100.0f;
     };
 }
 
