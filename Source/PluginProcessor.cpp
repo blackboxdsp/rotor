@@ -21,13 +21,33 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
 #endif
         .withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
-    )
+    ),
 #endif
+    parameters(*this, nullptr, Identifier("RingModulator"),
+        {
+            std::make_unique<AudioParameterFloat>("inputGain",
+                                                   "Input Gain",
+                                                   0.0f,
+                                                   1.0f,
+                                                   1.0f),
+            std::make_unique<AudioParameterFloat>("outputGain",
+                                                   "Output Gain",
+                                                   0.0f,
+                                                   1.0f,
+                                                   1.0f),
+            std::make_unique<AudioParameterFloat>("dryWet",
+                                                   "Dry / Wet",
+                                                   0.0f,
+                                                   1.0f,
+                                                   0.5f),
+            std::make_unique<AudioParameterFloat>("modulationFrequency",
+                                                   "Modulation Frequency",
+                                                   10.0f,
+                                                   12000.0f,
+                                                   500.0f),
+        })
 {
     // Parameter definitions
-    addParameter(inputGain = new AudioParameterFloat("inputGain", "Input Gain", 0.0f, 1.0f, 1.0f));
-    addParameter(outputGain = new AudioParameterFloat("outputGain", "Output Gain", 0.0f, 1.0f, 1.0f));
-    addParameter(dryWet = new AudioParameterFloat("dryWet", "Dry / Wet", 0.0f, 1.0f, 0.5f));
     const StringArray waveformChoices =
     {
         "Sine",
@@ -36,7 +56,12 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
         "Triangle"
     };
     addParameter(modulationWaveform = new AudioParameterChoice("modulationWaveform", "Modulation Frequency", waveformChoices, 0));
-    addParameter(modulationFrequency = new AudioParameterFloat("modulationFrequency", "Modulation Frequency", NormalisableRange<float> (20.0f, 15000.0f), 500.0f));
+
+    // add parameters to state value tree
+    inputGain = parameters.getRawParameterValue("inputGain");
+    outputGain = parameters.getRawParameterValue("outputGain");
+    dryWet = parameters.getRawParameterValue("dryWet");
+    modulationFrequency = parameters.getRawParameterValue("modulationFrequency");
 }
 
 RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
@@ -109,8 +134,8 @@ void RingModulatorAudioProcessor::changeProgramName (int index, const String& ne
 void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // initialize previous gain values
-    previousInputGain = inputGain->get();
-    previousOutputGain = outputGain->get();
+    previousInputGain = *inputGain;
+    previousOutputGain = *outputGain;
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -150,7 +175,7 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // get current input gain (in 0.0 - 1.0) and update if needed then apply it
-    auto currentInputGain = inputGain->get();
+    auto currentInputGain = *inputGain;
     if (previousInputGain == currentInputGain)
     {
         buffer.applyGain(currentInputGain);
@@ -178,13 +203,13 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             currentAngle += angleDelta;
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
-            auto currentDryWet = dryWet->get();
+            auto currentDryWet = *dryWet;
             channelData[sample] = (previousSampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
         }
     }
 
     // get current output gain and update if needed then apply it
-    auto currentOutputGain = outputGain->get();
+    auto currentOutputGain = *outputGain;
     if (previousOutputGain == currentOutputGain)
     {
         buffer.applyGain(currentOutputGain);
@@ -204,21 +229,27 @@ bool RingModulatorAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* RingModulatorAudioProcessor::createEditor()
 {
-    return new RingModulatorAudioProcessorEditor (*this);
+    return new RingModulatorAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
 void RingModulatorAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    auto state = parameters.copyState();
+    std::unique_ptr<XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void RingModulatorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    if (xmlState.get() != nullptr)
+    {
+        if (xmlState->hasTagName(parameters.state.getType()))
+        {
+            parameters.replaceState(ValueTree::fromXml(*xmlState));
+        }
+    }
 }
 
 //==============================================================================

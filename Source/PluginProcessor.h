@@ -59,17 +59,20 @@ public:
     void updateAngleDelta(double frequency, double sampleRate);
 
     // Gain parameter declarations
-    AudioParameterFloat* inputGain;
-    AudioParameterFloat* outputGain;
+    float* inputGain;
+    float* outputGain;
 
     // Dry / wet parameter declaration
-    AudioParameterFloat* dryWet;
+    float* dryWet;
 
     // Modulation parameter declarations
     AudioParameterChoice* modulationWaveform;
-    AudioParameterFloat* modulationFrequency;
+    float* modulationFrequency;
 
 private:
+    // for storing / retrieving parameters
+    AudioProcessorValueTreeState parameters;
+
     // variables for gain ramps
     float previousInputGain = 1.0f;
     float previousOutputGain = 1.0f;

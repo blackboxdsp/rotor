@@ -12,8 +12,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor& p, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p), processor (p), valueTreeState (vts)
 {
     // GUI variables
     int textBoxWidth = 80;
@@ -32,10 +32,10 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     dryWetSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // set slider ranges
-    inputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
+    /*inputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
     outputGainSlider.setRange(-36.0f, 0.0f, 0.5f);
     modulationFrequencySlider.setRange(10.0f, 12000.0f, 1.0f);
-    dryWetSlider.setRange(0.0f, 100.0f, 0.5f);
+    dryWetSlider.setRange(0.0f, 100.0f, 0.5f);*/
 
     // set textbox styles
     inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
@@ -56,22 +56,28 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     dryWetSlider.setTextValueSuffix(" %");
 
     // set slider values 
-    inputGainSlider.setValue(0.0f);
+    /*inputGainSlider.setValue(0.0f);
     outputGainSlider.setValue(0.0f);
     modulationFrequencySlider.setValue(500.0f);
-    dryWetSlider.setValue(50.0f);
+    dryWetSlider.setValue(50.0f);*/
 
     // add slider listeners
-    inputGainSlider.addListener(this);
+    /*inputGainSlider.addListener(this);
     outputGainSlider.addListener(this);
     modulationFrequencySlider.addListener(this);
-    dryWetSlider.addListener(this);
+    dryWetSlider.addListener(this);*/
 
     // set double click return values
     inputGainSlider.setDoubleClickReturnValue(true, 0.0f);
     outputGainSlider.setDoubleClickReturnValue(true, 0.0f);
     modulationFrequencySlider.setDoubleClickReturnValue(true, 500.0f);
     dryWetSlider.setDoubleClickReturnValue(true, 50.0f);
+
+    // attach valueTreeState attachments
+    inputGainAttachment.reset(new SliderAttachment(valueTreeState, "inputGain", inputGainSlider));
+    outputGainAttachment.reset(new SliderAttachment(valueTreeState, "outputGain", outputGainSlider));
+    dryWetAttachment.reset(new SliderAttachment(valueTreeState, "dryWet", dryWetSlider));
+    modulationFrequencyAttachment.reset(new SliderAttachment(valueTreeState, "modulationFrequency", modulationFrequencySlider));
 
     // set any skew options
     modulationFrequencySlider.setSkewFactorFromMidPoint(500.0f);
@@ -114,12 +120,12 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     inputGainSlider.onValueChange = [this]
     {
         auto currentSliderValue = pow(2, inputGainSlider.getValue() / 6);
-        processor.inputGain->setValueNotifyingHost(currentSliderValue);
+        *processor.inputGain = currentSliderValue;
     };
     outputGainSlider.onValueChange = [this]
     {
         auto currentSliderValue = pow(2, outputGainSlider.getValue() / 6);
-        processor.outputGain->setValueNotifyingHost(currentSliderValue);
+        *processor.outputGain = currentSliderValue;
     };
     // if freq changes, call custom method in processor
     modulationFrequencySlider.onValueChange = [this]
@@ -132,13 +138,13 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
                 frequency,
                 currentSampleRate
             );
-            processor.modulationFrequency->setValueNotifyingHost(frequency);
+            *processor.modulationFrequency = frequency;
         }
     };
     // set processor's dryWet parameter value
     dryWetSlider.onValueChange = [this]
     {
-        processor.dryWet->setValueNotifyingHost(dryWetSlider.getValue() / 100.0f);
+        *processor.dryWet = dryWetSlider.getValue() / 100.0f;
     };
 }
 
@@ -172,8 +178,4 @@ void RingModulatorAudioProcessorEditor::resized()
     modulationFrequencySlider.setBounds(area.removeFromLeft(quarterWidth));
     outputGainSlider.setBounds(area.removeFromLeft(quarterWidth));
     dryWetSlider.setBounds(area.removeFromLeft(quarterWidth));
-}
-
-void RingModulatorAudioProcessorEditor::sliderValueChanged(Slider* slider) 
-{
 }

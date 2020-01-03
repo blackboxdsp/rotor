@@ -13,14 +13,15 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
+typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+
 //==============================================================================
 /**
 */
-class RingModulatorAudioProcessorEditor  : public AudioProcessorEditor,
-                                           private Slider::Listener
+class RingModulatorAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor&);
+    RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor&, AudioProcessorValueTreeState&);
     ~RingModulatorAudioProcessorEditor();
 
     //==============================================================================
@@ -32,7 +33,8 @@ private:
     // access the processor object that created it.
     RingModulatorAudioProcessor& processor;
 
-    void sliderValueChanged(Slider* slider) override;
+    // Reference to value tree state for quick access
+    AudioProcessorValueTreeState& valueTreeState;
 
     // slider declarations for parameters
     Slider inputGainSlider;
@@ -45,6 +47,12 @@ private:
     Label outputGainLabel;
     Label modulationFrequencyLabel;
     Label dryWetLabel;
+
+    // attachment declarations
+    std::unique_ptr<SliderAttachment> inputGainAttachment;
+    std::unique_ptr<SliderAttachment> outputGainAttachment;
+    std::unique_ptr<SliderAttachment> dryWetAttachment;
+    std::unique_ptr<SliderAttachment> modulationFrequencyAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };
