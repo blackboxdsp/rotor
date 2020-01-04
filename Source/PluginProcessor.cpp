@@ -306,13 +306,21 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
             break;
         case 1:
             // TRIANGLE
-            for (int i = 0; i < wavetableSize; i++)
+            for (int i = 0; i < wavetableSize / 2; i++)
             {
-                wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
+                wavetable.insert(i, (float)(MathConstants<double>::twoPi * i / wavetableSize));
+            }
+            for (int i = wavetableSize / 2; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, wavetable[-i - 1]);
             }
             break;
         case 2:
             // SAWTOOTH
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, (float) (MathConstants<double>::twoPi * i / wavetableSize));
+            }
             break;
         case 3:
             // SQUARE

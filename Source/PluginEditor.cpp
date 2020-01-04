@@ -108,7 +108,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     
     // ONVALUECHANGE DEFINITIONS ========================================
 
-    // frequency
+    // update the phase delta whenever frequency slider is updated
     modulationFrequencySlider.onValueChange = [this]
     {
         auto currentSampleRate = processor.getSampleRate();
@@ -118,6 +118,8 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
             processor.updatePhaseDelta(frequency, currentSampleRate, processor.getWavetableSize());
         }
     };
+
+    // write a new wavetable whenever new item is selected
     modulationWaveformComboBox.onChange = [this]
     {
         processor.writeWavetable(modulationWaveformComboBox.getSelectedItemIndex());
