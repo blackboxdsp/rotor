@@ -51,14 +51,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
         })
 {
     // Parameter definitions
-    const StringArray waveformChoices =
-    {
-        "Sine",
-        "Sawtooth",
-        "Square",
-        "Triangle"
-    };
-    addParameter(modulationWaveform = new AudioParameterChoice("modulationWaveform", "Modulation Frequency", waveformChoices, 0));
+    addParameter(modulationWaveform = new AudioParameterChoice("modulationWaveform", "Modulation Waveform", waveformChoices, 0));
 
     // add parameters to state value tree
     inputGain = parameters.getRawParameterValue("inputGain");
@@ -141,7 +134,9 @@ void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     previousOutputGain = *outputGain;
 
     // handle frequency parameter stuff
-    updateAngleDelta(*modulationFrequency, sampleRate);
+    wavetableSize = samplesPerBlock;
+    updatePhaseDelta(*modulationFrequency, sampleRate, wavetableSize);
+    writeWavetable();
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -197,6 +192,9 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     {
         // Get pointer for channel from buffer method
         auto* channelData = buffer.getWritePointer (channel);
+
+        // set current phase to previous block's last sample value (for continuity)
+        currentPhase = previousPhase;
         
         // Loop through samples and do the processing...
         for (int sample = 0; sample < buffer.getNumSamples(); sample += 1)
@@ -205,13 +203,14 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             auto sampleData = channelData[sample], previousSampleData = channelData[sample];
 
             // processing here...
-            previousSampleData *= (float) std::sin(currentAngle);
-            currentAngle += angleDelta;
+            previousSampleData *= wavetable[(int) currentPhase];
+            currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
             auto currentDryWet = *dryWet / 100.0f;
             channelData[sample] = (previousSampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
         }
+        previousPhase = currentPhase;
     }
 
     // get current output gain and update if needed then apply it
@@ -266,14 +265,32 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 // updates angle delta provided a frequency value from slider
-void RingModulatorAudioProcessor::updateAngleDelta(double frequency, double sampleRate)
+void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate, double tableSize)
 {
     auto cyclesPerSample = frequency / sampleRate;
-    angleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
+    phaseDelta = cyclesPerSample * tableSize;
 }
 
 // returns skew factor that is skewed from the midpoint
 float RingModulatorAudioProcessor::getSkewFactor(float start, float end, float center)
 {
     return std::log((0.5f)) / std::log((center - start) / (end - start));
+}
+
+// return integer indicating number of samples in wavetable
+int RingModulatorAudioProcessor::getWavetableSize()
+{
+    return wavetableSize;
+}
+
+void RingModulatorAudioProcessor::writeWavetable()
+{
+    // clear the wavetable
+    wavetable.clear();
+
+    // iterate through wavetable and insert values corresponding to waveform
+    for (int i = 0; i < wavetableSize; i++)
+    {
+        wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
+    }
 }

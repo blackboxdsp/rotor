@@ -94,7 +94,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
         if (currentSampleRate > 0.0)
         {
             auto frequency = modulationFrequencySlider.getValue();
-            processor.updateAngleDelta(frequency, currentSampleRate);
+            processor.updatePhaseDelta(frequency, currentSampleRate, processor.getWavetableSize());
         }
     };
 }
