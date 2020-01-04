@@ -205,16 +205,27 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
         for (int sample = 0; sample < buffer.getNumSamples(); sample += 1)
         {
             // create two variables (original and processed)
-            auto sampleData = channelData[sample], previousSampleData = channelData[sample];
+            auto sampleData = channelData[sample], processedSampleData = channelData[sample];
 
-            // processing here...
-            previousSampleData *= wavetable[(int) currentPhase];
+            // multiply wavetable value by original signal and update phase value
+            processedSampleData *= wavetable[(int) currentPhase];
             currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
             auto currentDryWet = *dryWet / 100.0f;
-            channelData[sample] = (previousSampleData * currentDryWet) + (sampleData * (1.0f - currentDryWet));
+            
+            // calculate according to current dry / wet value
+            processedSampleData *= currentDryWet;
+            sampleData *= (1.0f - currentDryWet);
+
+            // add two sample values and check if > 1.0f
+            auto sampleSum = processedSampleData + sampleData;
+
+            // add the two signals and write to buffer
+            channelData[sample] = sampleSum;
         }
+
+        // update previous phase value to avoid discontinuities
         previousPhase = currentPhase;
     }
 
@@ -296,45 +307,47 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
     // check values and compute accordingly
     switch (waveformIndex)
     {
+        // SINE
         default:
         case 0:
-            // SINE
             for (int i = 0; i < wavetableSize; i++)
             {
                 wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
             }
             break;
+        // TRIANGLE
         case 1:
-            // TRIANGLE
             for (int i = 0; i < wavetableSize / 2; i++)
             {
-                wavetable.insert(i, MathConstants<double>::twoPi * i / wavetableSize);
+                float waveformValue = (MathConstants<float>::twoPi * i) / (wavetableSize / 2);
+                wavetable.insert(i, waveformValue);
             }
             for (int i = wavetableSize / 2; i < wavetableSize; i++)
             {
-                wavetable.insert(i, wavetable[-i - 1]);
+                wavetable.insert(i, wavetable[-1 * (i + 1)]);
             }
             break;
+        // SAWTOOTH
         case 2:
-            // SAWTOOTH
             for (int i = 0; i < wavetableSize; i++)
             {
-                wavetable.insert(i, MathConstants<double>::twoPi * i / wavetableSize);
+                float waveformValue = (MathConstants<float>::twoPi * i) / wavetableSize;
+                wavetable.insert(i, waveformValue);
             }
             break;
+        // SQUARE
         case 3:
-            // SQUARE
             for (int i = 0; i < wavetableSize / 2; i++)
             {
-                wavetable.insert(i, MathConstants<float>::twoPi * 1.0f);
+                wavetable.insert(i, 1.0f);
             }
             for (int i = wavetableSize / 2; i < wavetableSize; i++)
             {
                 wavetable.insert(i, 0.0f);
             }
             break;
+        // NOISE
         case 4:
-            // NOISE
             for (int i = 0; i < wavetableSize; i++)
             {
                 wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
