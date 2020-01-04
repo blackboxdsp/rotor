@@ -59,7 +59,7 @@ public:
     void updatePhaseDelta(double frequency, double sampleRate, double tableSize);
     float getSkewFactor(float start, float end, float center);
     int getWavetableSize();
-    void writeWavetable();
+    void writeWavetable(int waveformIndex);
 
     // Gain parameter declarations
     float* inputGain;
@@ -69,8 +69,18 @@ public:
     float* dryWet;
 
     // Modulation parameter declarations
-    AudioParameterChoice* modulationWaveform;
     float* modulationFrequency;
+    int* modulationWaveform;
+
+    // variable for waveform choices
+    const StringArray waveformChoices =
+    {
+        "Sine",
+        "Triangle",
+        "Sawtooth",
+        "Square",
+        "Noise"
+    };
 
 private:
     // for storing / retrieving parameters
@@ -86,13 +96,6 @@ private:
     double currentPhase = 0.0;
     double previousPhase = 0.0;
     double phaseDelta = 0.0;
-    const StringArray waveformChoices =
-    {
-        "Sine",
-        "Sawtooth",
-        "Square",
-        "Triangle"
-    };
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessor)

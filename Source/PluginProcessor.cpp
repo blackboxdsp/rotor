@@ -47,17 +47,19 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
                                                                             1.0f, 
                                                                             getSkewFactor(10.0f, 12000.0f, 500.0f),
                                                                             false),
-                                                   500.0f)
+                                                   500.0f),
+            std::make_unique<AudioParameterChoice>("modulationWaveform",
+                                                   "Modulation Waveform",
+                                                   waveformChoices,
+                                                   0)
         })
 {
-    // Parameter definitions
-    addParameter(modulationWaveform = new AudioParameterChoice("modulationWaveform", "Modulation Waveform", waveformChoices, 0));
-
     // add parameters to state value tree
     inputGain = parameters.getRawParameterValue("inputGain");
     outputGain = parameters.getRawParameterValue("outputGain");
     dryWet = parameters.getRawParameterValue("dryWet");
     modulationFrequency = parameters.getRawParameterValue("modulationFrequency");
+    modulationWaveform = (int*) parameters.getRawParameterValue("modulationWaveform");
 }
 
 RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
@@ -133,10 +135,13 @@ void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     previousInputGain = *inputGain;
     previousOutputGain = *outputGain;
 
-    // handle frequency parameter stuff
+    // set frequency variables
     wavetableSize = samplesPerBlock;
     updatePhaseDelta(*modulationFrequency, sampleRate, wavetableSize);
-    writeWavetable();
+
+    // set wavetable variables
+    *modulationWaveform = (int) *parameters.getRawParameterValue("modulationWaveform");
+    writeWavetable(*modulationWaveform);
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -283,14 +288,41 @@ int RingModulatorAudioProcessor::getWavetableSize()
     return wavetableSize;
 }
 
-void RingModulatorAudioProcessor::writeWavetable()
+void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
 {
     // clear the wavetable
     wavetable.clear();
 
-    // iterate through wavetable and insert values corresponding to waveform
-    for (int i = 0; i < wavetableSize; i++)
+    // check values and compute accordingly
+    switch (waveformIndex)
     {
-        wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
+        default:
+        case 0:
+            // SINE
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
+            }
+            break;
+        case 1:
+            // TRIANGLE
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
+            }
+            break;
+        case 2:
+            // SAWTOOTH
+            break;
+        case 3:
+            // SQUARE
+            break;
+        case 4:
+            // NOISE
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
+            }
+            break;
     }
 }
