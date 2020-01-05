@@ -1,10 +1,7 @@
 /*
   ==============================================================================
-
     This file was auto-generated!
-
     It contains the basic framework code for a JUCE plugin processor.
-
   ==============================================================================
 */
 
@@ -15,7 +12,7 @@
 //==============================================================================
 /**
 */
-class RingModulatorAudioProcessor  : public AudioProcessor
+class RingModulatorAudioProcessor : public AudioProcessor
 {
 public:
     //==============================================================================
@@ -23,14 +20,14 @@ public:
     ~RingModulatorAudioProcessor();
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
-    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+#ifndef JucePlugin_PreferredChannelConfigurations
+    bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
+#endif
 
-    void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
+    void processBlock(AudioBuffer<float>&, MidiBuffer&) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
@@ -47,13 +44,13 @@ public:
     //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+    void setCurrentProgram(int index) override;
+    const String getProgramName(int index) override;
+    void changeProgramName(int index, const String& newName) override;
 
     //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     // custom methods
     void updatePhaseDelta(double frequency, double sampleRate, double tableSize);
@@ -74,7 +71,7 @@ public:
 private:
     // for storing / retrieving parameters
     AudioProcessorValueTreeState parameters;
-    
+
     // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^
     float previousGain;
 
@@ -86,5 +83,5 @@ private:
     double phaseDelta = 0.0;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RingModulatorAudioProcessor)
 };

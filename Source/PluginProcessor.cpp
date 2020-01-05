@@ -1,10 +1,7 @@
 /*
   ==============================================================================
-
     This file was auto-generated!
-
     It contains the basic framework code for a JUCE plugin processor.
-
   ==============================================================================
 */
 
@@ -37,14 +34,14 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
                                                    50.0f),
             std::make_unique<AudioParameterFloat>("modulationFrequency",
                                                    "Modulation Frequency",
-                                                   NormalisableRange<float>(10.0f, 
-                                                                            12000.0f, 
-                                                                            1.0f, 
+                                                   NormalisableRange<float>(10.0f,
+                                                                            12000.0f,
+                                                                            1.0f,
                                                                             getSkewFactor(10.0f, 12000.0f, 500.0f),
                                                                             false),
                                                    500.0f),
             std::make_unique<AudioParameterInt>("modulationWaveform",
-                                                "Modulation Waveform", 
+                                                "Modulation Waveform",
                                                 0,
                                                 4,
                                                 0)
@@ -54,7 +51,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
     gain = parameters.getRawParameterValue("gain");
     dryWet = parameters.getRawParameterValue("dryWet");
     modulationFrequency = parameters.getRawParameterValue("modulationFrequency");
-    modulationWaveform = (int*) parameters.getRawParameterValue("modulationWaveform");
+    modulationWaveform = (int*)parameters.getRawParameterValue("modulationWaveform");
 }
 
 RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
@@ -69,29 +66,29 @@ const String RingModulatorAudioProcessor::getName() const
 
 bool RingModulatorAudioProcessor::acceptsMidi() const
 {
-   #if JucePlugin_WantsMidiInput
+#if JucePlugin_WantsMidiInput
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
 bool RingModulatorAudioProcessor::producesMidi() const
 {
-   #if JucePlugin_ProducesMidiOutput
+#if JucePlugin_ProducesMidiOutput
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
 bool RingModulatorAudioProcessor::isMidiEffect() const
 {
-   #if JucePlugin_IsMidiEffect
+#if JucePlugin_IsMidiEffect
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
 double RingModulatorAudioProcessor::getTailLengthSeconds() const
@@ -110,21 +107,21 @@ int RingModulatorAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void RingModulatorAudioProcessor::setCurrentProgram (int index)
+void RingModulatorAudioProcessor::setCurrentProgram(int index)
 {
 }
 
-const String RingModulatorAudioProcessor::getProgramName (int index)
+const String RingModulatorAudioProcessor::getProgramName(int index)
 {
     return {};
 }
 
-void RingModulatorAudioProcessor::changeProgramName (int index, const String& newName)
+void RingModulatorAudioProcessor::changeProgramName(int index, const String& newName)
 {
 }
 
 //==============================================================================
-void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // initialize previous gain value
     previousGain = *gain;
@@ -134,7 +131,7 @@ void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     updatePhaseDelta(*modulationFrequency, sampleRate, wavetableSize);
 
     // set wavetable variables
-    *modulationWaveform = (int) *parameters.getRawParameterValue("modulationWaveform");
+    *modulationWaveform = (int)*parameters.getRawParameterValue("modulationWaveform");
     writeWavetable(*modulationWaveform);
 }
 
@@ -145,44 +142,44 @@ void RingModulatorAudioProcessor::releaseResources()
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool RingModulatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool RingModulatorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
-    ignoreUnused (layouts);
+#if JucePlugin_IsMidiEffect
+    ignoreUnused(layouts);
     return true;
-  #else
+#else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+        && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
         return false;
 
     // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
+#if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
-   #endif
+#endif
 
     return true;
-  #endif
+#endif
 }
 #endif
 
-void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
-    const auto totalNumInputChannels  = getTotalNumInputChannels();
+    const auto totalNumInputChannels = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // loop through channels...
     for (int channel = 0; channel < totalNumInputChannels; channel += 1)
     {
         // Get pointer for channel from buffer method
-        auto* channelData = buffer.getWritePointer (channel);
+        auto* channelData = buffer.getWritePointer(channel);
 
         // set current phase to previous block's last sample value (for continuity)
         currentPhase = previousPhase;
-        
+
         // Loop through samples and do the processing...
         for (int sample = 0; sample < buffer.getNumSamples(); sample += 1)
         {
@@ -190,12 +187,12 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
             auto sampleData = channelData[sample], processedSampleData = channelData[sample];
 
             // multiply wavetable value by original signal and update phase value
-            processedSampleData *= wavetable[(int) currentPhase];
+            processedSampleData *= wavetable[(int)currentPhase];
             currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
             auto currentDryWet = *dryWet / 100.0f;
-            
+
             // calculate according to current dry / wet value
             processedSampleData *= currentDryWet;
             sampleData *= (1.0f - currentDryWet);
@@ -232,18 +229,18 @@ bool RingModulatorAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* RingModulatorAudioProcessor::createEditor()
 {
-    return new RingModulatorAudioProcessorEditor (*this, parameters);
+    return new RingModulatorAudioProcessorEditor(*this, parameters);
 }
 
 //==============================================================================
-void RingModulatorAudioProcessor::getStateInformation (MemoryBlock& destData)
+void RingModulatorAudioProcessor::getStateInformation(MemoryBlock& destData)
 {
     auto state = parameters.copyState();
     std::unique_ptr<XmlElement> xml(state.createXml());
     copyXmlToBinary(*xml, destData);
 }
 
-void RingModulatorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void RingModulatorAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     std::unique_ptr<XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
     if (xmlState.get() != nullptr)
@@ -290,50 +287,51 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
     switch (waveformIndex)
     {
         // SINE
-        default:
-        case 0:
-            for (int i = 0; i < wavetableSize; i++)
-            {
-                wavetable.insert(i, sin((MathConstants<double>::twoPi * i) / wavetableSize));
-            }
-            break;
+    default:
+    case 0:
+        for (int i = 0; i < wavetableSize; i++)
+        {
+            auto waveformValue = sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
+            wavetable.insert(i, waveformValue);
+        }
+        break;
         // TRIANGLE
-        case 1:
-            for (int i = 0; i < wavetableSize / 2; i++)
-            {
-                float waveformValue = (MathConstants<float>::twoPi * i) / (wavetableSize / 2);
-                wavetable.insert(i, waveformValue);
-            }
-            for (int i = wavetableSize / 2; i < wavetableSize; i++)
-            {
-                wavetable.insert(i, wavetable[-1 * (i + 1)]);
-            }
-            break;
+    case 1:
+        for (int i = 0; i < wavetableSize / 2; i++)
+        {
+            float waveformValue = (float) i / (wavetableSize / 2);
+            wavetable.insert(i, waveformValue);
+        }
+        for (int i = wavetableSize / 2; i < wavetableSize; i++)
+        {
+            wavetable.insert(i, wavetable[-1 * (i + 1)]);
+        }
+        break;
         // SAWTOOTH
-        case 2:
-            for (int i = 0; i < wavetableSize; i++)
-            {
-                float waveformValue = (MathConstants<float>::twoPi * i) / wavetableSize;
-                wavetable.insert(i, waveformValue);
-            }
-            break;
+    case 2:
+        for (int i = 0; i < wavetableSize; i++)
+        {
+            float waveformValue = (float) i / wavetableSize;
+            wavetable.insert(i, waveformValue);
+        }
+        break;
         // SQUARE
-        case 3:
-            for (int i = 0; i < wavetableSize / 2; i++)
-            {
-                wavetable.insert(i, 1.0f);
-            }
-            for (int i = wavetableSize / 2; i < wavetableSize; i++)
-            {
-                wavetable.insert(i, 0.0f);
-            }
-            break;
+    case 3:
+        for (int i = 0; i < wavetableSize / 2; i++)
+        {
+            wavetable.insert(i, 1.0f);
+        }
+        for (int i = wavetableSize / 2; i < wavetableSize; i++)
+        {
+            wavetable.insert(i, 0.0f);
+        }
+        break;
         // NOISE
-        case 4:
-            for (int i = 0; i < wavetableSize; i++)
-            {
-                wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
-            }
-            break;
+    case 4:
+        for (int i = 0; i < wavetableSize; i++)
+        {
+            wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
+        }
+        break;
     }
 }
