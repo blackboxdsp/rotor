@@ -72,16 +72,6 @@ public:
     float* modulationFrequency;
     int* modulationWaveform;
 
-    // variable for waveform choices
-    const StringArray waveformChoices =
-    {
-        "Sine",
-        "Triangle",
-        "Sawtooth",
-        "Square",
-        "Noise"
-    };
-
 private:
     // for storing / retrieving parameters
     AudioProcessorValueTreeState parameters;

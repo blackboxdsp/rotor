@@ -14,7 +14,6 @@
 #include "PluginProcessor.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
-typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
 
 //==============================================================================
 /**
@@ -29,9 +28,6 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    // custom methods
-    void fillWaveformComboBox();
-
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -45,9 +41,7 @@ private:
     Slider outputGainSlider;
     Slider dryWetSlider;
     Slider modulationFrequencySlider;
-
-    // waveform combo box
-    ComboBox modulationWaveformComboBox;
+    Slider modulationWaveformSlider;
 
     // declare labels
     Label inputGainLabel;
@@ -61,7 +55,7 @@ private:
     std::unique_ptr<SliderAttachment> outputGainAttachment;
     std::unique_ptr<SliderAttachment> dryWetAttachment;
     std::unique_ptr<SliderAttachment> modulationFrequencyAttachment;
-    std::unique_ptr<ComboBoxAttachment> modulationWaveformAttachment;
+    std::unique_ptr<SliderAttachment> modulationWaveformAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };

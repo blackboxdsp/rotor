@@ -48,10 +48,11 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
                                                                             getSkewFactor(10.0f, 12000.0f, 500.0f),
                                                                             false),
                                                    500.0f),
-            std::make_unique<AudioParameterChoice>("modulationWaveform",
-                                                   "Modulation Waveform",
-                                                   waveformChoices,
-                                                   0)
+            std::make_unique<AudioParameterInt>("modulationWaveform",
+                                                "Modulation Waveform", 
+                                                0,
+                                                4,
+                                                0)
         })
 {
     // add parameters to state value tree
@@ -312,7 +313,7 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
         case 0:
             for (int i = 0; i < wavetableSize; i++)
             {
-                wavetable.insert(i, sin(MathConstants<double>::twoPi * i / wavetableSize));
+                wavetable.insert(i, sin((MathConstants<double>::twoPi * i) / wavetableSize));
             }
             break;
         // TRIANGLE

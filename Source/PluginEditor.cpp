@@ -21,7 +21,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (480, 360);
+    setSize (480, 960);
 
     // SLIDERS =================================================================
 
@@ -29,12 +29,14 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     inputGainSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     outputGainSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationFrequencySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationWaveformSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     dryWetSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // set textbox styles
     inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     outputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     modulationFrequencySlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    modulationWaveformSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     dryWetSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
 
     // set text value suffixes
@@ -47,34 +49,22 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     inputGainSlider.setDoubleClickReturnValue(true, 0.0f);
     outputGainSlider.setDoubleClickReturnValue(true, 0.0f);
     modulationFrequencySlider.setDoubleClickReturnValue(true, 500.0f);
+    modulationWaveformSlider.setDoubleClickReturnValue(true, 1);
     dryWetSlider.setDoubleClickReturnValue(true, 50.0f);
 
     // attach valueTreeState attachments
     inputGainAttachment.reset(new SliderAttachment(valueTreeState, "inputGain", inputGainSlider));
     outputGainAttachment.reset(new SliderAttachment(valueTreeState, "outputGain", outputGainSlider));
     modulationFrequencyAttachment.reset(new SliderAttachment(valueTreeState, "modulationFrequency", modulationFrequencySlider));
+    modulationWaveformAttachment.reset(new SliderAttachment(valueTreeState, "modulationWaveform", modulationWaveformSlider));
     dryWetAttachment.reset(new SliderAttachment(valueTreeState, "dryWet", dryWetSlider));
 
     // add all sliders and make visible 
     addAndMakeVisible(&inputGainSlider);
     addAndMakeVisible(&outputGainSlider);
     addAndMakeVisible(&modulationFrequencySlider);
+    addAndMakeVisible(&modulationWaveformSlider);
     addAndMakeVisible(&dryWetSlider);
-
-    // COMBO BOX ===============================================================
-
-    // call method to fill combo box from string array (kept in the processor)
-    fillWaveformComboBox();
-
-    // handle attachment
-    modulationWaveformAttachment.reset(new ComboBoxAttachment(valueTreeState, "modulationWaveform", modulationWaveformComboBox));
-
-    // get the selected waveform index from value tree state and set the combo box
-    const int currentWaveform = *processor.modulationWaveform;
-    modulationWaveformComboBox.setSelectedId(currentWaveform, NotificationType::dontSendNotification);
-
-    // JUCE boilerplate
-    addAndMakeVisible(&modulationWaveformComboBox);
 
     // LABELS ==================================================================
 
@@ -89,7 +79,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     inputGainLabel.attachToComponent(&inputGainSlider, false);
     outputGainLabel.attachToComponent(&outputGainSlider, false);
     modulationFrequencyLabel.attachToComponent(&modulationFrequencySlider, false);
-    modulationWaveformLabel.attachToComponent(&modulationWaveformComboBox, false);
+    modulationWaveformLabel.attachToComponent(&modulationWaveformSlider, false);
     dryWetLabel.attachToComponent(&dryWetSlider, false);
 
     // set label justification types
@@ -120,9 +110,9 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     };
 
     // write a new wavetable whenever new item is selected
-    modulationWaveformComboBox.onChange = [this]
+    modulationWaveformSlider.onValueChange = [this]
     {
-        processor.writeWavetable(modulationWaveformComboBox.getSelectedItemIndex());
+        processor.writeWavetable(modulationWaveformSlider.getValueObject().getValue());
     };
 }
 
@@ -155,16 +145,7 @@ void RingModulatorAudioProcessorEditor::resized()
     inputGainSlider.setBounds(area.removeFromLeft(quarterWidth));
     auto modulationArea = area.removeFromLeft(quarterWidth);
     modulationFrequencySlider.setBounds(modulationArea.removeFromTop(modulationArea.getHeight() / 2));
-    modulationWaveformComboBox.setBounds(modulationArea.removeFromBottom(modulationArea.getHeight() / 2));
+    modulationWaveformSlider.setBounds(modulationArea);
     outputGainSlider.setBounds(area.removeFromLeft(quarterWidth));
     dryWetSlider.setBounds(area.removeFromLeft(quarterWidth));
-}
-
-void RingModulatorAudioProcessorEditor::fillWaveformComboBox()
-{
-    int amountOfWaveforms = processor.waveformChoices.size();
-    for (int i = 0; i < amountOfWaveforms; i++)
-    {
-        modulationWaveformComboBox.addItem(processor.waveformChoices[i], i + 1);
-    }
 }
