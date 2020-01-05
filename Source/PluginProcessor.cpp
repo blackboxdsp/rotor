@@ -25,13 +25,8 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
 #endif
     parameters(*this, nullptr, Identifier("RingModulator"),
         {
-            std::make_unique<AudioParameterFloat>("inputGain",
-                                                   "Input Gain",
-                                                   -36.0f,
-                                                   0.0f,
-                                                   0.0f),
-            std::make_unique<AudioParameterFloat>("outputGain",
-                                                   "Output Gain",
+            std::make_unique<AudioParameterFloat>("gain",
+                                                   "Gain",
                                                    -36.0f,
                                                    0.0f,
                                                    0.0f),
@@ -56,8 +51,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
         })
 {
     // add parameters to state value tree
-    inputGain = parameters.getRawParameterValue("inputGain");
-    outputGain = parameters.getRawParameterValue("outputGain");
+    gain = parameters.getRawParameterValue("gain");
     dryWet = parameters.getRawParameterValue("dryWet");
     modulationFrequency = parameters.getRawParameterValue("modulationFrequency");
     modulationWaveform = (int*) parameters.getRawParameterValue("modulationWaveform");
@@ -132,9 +126,8 @@ void RingModulatorAudioProcessor::changeProgramName (int index, const String& ne
 //==============================================================================
 void RingModulatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // initialize previous gain values
-    previousInputGain = *inputGain;
-    previousOutputGain = *outputGain;
+    // initialize previous gain value
+    previousGain = *gain;
 
     // set frequency variables
     wavetableSize = samplesPerBlock;
@@ -181,18 +174,6 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     const auto totalNumInputChannels  = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // get current input gain (in 0.0 - 1.0) and update if needed then apply it
-    auto currentInputGain = pow(2, *inputGain / 6);
-    if (previousInputGain == currentInputGain)
-    {
-        buffer.applyGain(currentInputGain);
-    }
-    else
-    {
-        buffer.applyGainRamp(0, buffer.getNumSamples(), previousInputGain, currentInputGain);
-        previousInputGain = currentInputGain;
-    }
-
     // loop through channels...
     for (int channel = 0; channel < totalNumInputChannels; channel += 1)
     {
@@ -231,15 +212,15 @@ void RingModulatorAudioProcessor::processBlock (AudioBuffer<float>& buffer, Midi
     }
 
     // get current output gain and update if needed then apply it
-    auto currentOutputGain = pow(2, *outputGain / 6);
-    if (previousOutputGain == currentOutputGain)
+    auto currentGain = pow(2, *gain / 6);
+    if (previousGain == currentGain)
     {
-        buffer.applyGain(currentOutputGain);
+        buffer.applyGain(currentGain);
     }
     else
     {
-        buffer.applyGainRamp(0, buffer.getNumSamples(), previousOutputGain, currentOutputGain);
-        previousOutputGain = currentOutputGain;
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousGain, currentGain);
+        previousGain = currentGain;
     }
 }
 
@@ -284,7 +265,7 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 // updates angle delta provided a frequency value from slider
 void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate, double tableSize)
 {
-    auto cyclesPerSample = sampleRate / frequency;
+    auto cyclesPerSample = frequency / sampleRate;
     phaseDelta = cyclesPerSample * tableSize;
 }
 

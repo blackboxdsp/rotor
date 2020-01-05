@@ -37,22 +37,19 @@ private:
     AudioProcessorValueTreeState& valueTreeState;
 
     // slider declarations for parameters
-    Slider inputGainSlider;
-    Slider outputGainSlider;
+    Slider gainSlider;
     Slider dryWetSlider;
     Slider modulationFrequencySlider;
     Slider modulationWaveformSlider;
 
     // declare labels
-    Label inputGainLabel;
-    Label outputGainLabel;
+    Label gainLabel;
     Label dryWetLabel;
     Label modulationFrequencyLabel;
     Label modulationWaveformLabel;
 
     // attachment declarations
-    std::unique_ptr<SliderAttachment> inputGainAttachment;
-    std::unique_ptr<SliderAttachment> outputGainAttachment;
+    std::unique_ptr<SliderAttachment> gainAttachment;
     std::unique_ptr<SliderAttachment> dryWetAttachment;
     std::unique_ptr<SliderAttachment> modulationFrequencyAttachment;
     std::unique_ptr<SliderAttachment> modulationWaveformAttachment;

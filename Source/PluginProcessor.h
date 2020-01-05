@@ -62,8 +62,7 @@ public:
     void writeWavetable(int waveformIndex);
 
     // Gain parameter declarations
-    float* inputGain;
-    float* outputGain;
+    float* gain;
 
     // Dry / wet parameter declaration
     float* dryWet;
@@ -76,9 +75,8 @@ private:
     // for storing / retrieving parameters
     AudioProcessorValueTreeState parameters;
     
-    // variables for gain ramps --- 0.0f to 1.0f (same for current gain in .cpp ^)
-    float previousInputGain;
-    float previousOutputGain;
+    // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^
+    float previousGain;
 
     // wavetable variables
     Array<float> wavetable;
