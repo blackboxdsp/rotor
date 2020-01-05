@@ -284,7 +284,7 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 // updates angle delta provided a frequency value from slider
 void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate, double tableSize)
 {
-    auto cyclesPerSample = frequency / sampleRate;
+    auto cyclesPerSample = sampleRate / frequency;
     phaseDelta = cyclesPerSample * tableSize;
 }
 
