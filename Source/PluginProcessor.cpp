@@ -22,8 +22,8 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
 #endif
     parameters(*this, nullptr, Identifier("RingModulator"),
         {
-            std::make_unique<AudioParameterFloat>("gain",
-                                                   "Gain",
+            std::make_unique<AudioParameterFloat>("level",
+                                                   "Level",
                                                    -36.0f,
                                                    0.0f,
                                                    0.0f),
@@ -44,14 +44,20 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
                                                 "Modulation Waveform",
                                                 0,
                                                 4,
-                                                0)
+                                                0),
+            std::make_unique<AudioParameterFloat>("modulationInversion",
+                                                "Modulation Inversion",
+                                                0.0f,
+                                                1.0f,
+                                                0.0f)
         })
 {
-    // add parameters to state value tree
-    gain = parameters.getRawParameterValue("gain");
-    dryWet = parameters.getRawParameterValue("dryWet");
+    // init parameters from valueTreeState
+    level = parameters.getRawParameterValue("level");
+    mix = parameters.getRawParameterValue("dryWet");
     modulationFrequency = parameters.getRawParameterValue("modulationFrequency");
-    modulationWaveform = (int*)parameters.getRawParameterValue("modulationWaveform");
+    modulationWaveform = (int*) parameters.getRawParameterValue("modulationWaveform");
+    inversionFactor = new float(1.0f);
 }
 
 RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
@@ -124,14 +130,13 @@ void RingModulatorAudioProcessor::changeProgramName(int index, const String& new
 void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // initialize previous gain value
-    previousGain = *gain;
+    previousGain = powf(2, *level / 6);
 
     // set frequency variables
-    wavetableSize = samplesPerBlock;
-    updatePhaseDelta(*modulationFrequency, sampleRate, wavetableSize);
+    wavetableSize = 2048;
+    updatePhaseDelta((double) *modulationFrequency, sampleRate);
 
-    // set wavetable variables
-    *modulationWaveform = (int)*parameters.getRawParameterValue("modulationWaveform");
+    // write the wavetable according to current waveform    
     writeWavetable(*modulationWaveform);
 }
 
@@ -187,11 +192,11 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
             auto sampleData = channelData[sample], processedSampleData = channelData[sample];
 
             // multiply wavetable value by original signal and update phase value
-            processedSampleData *= wavetable[(int)currentPhase];
+            processedSampleData *= (wavetable[(int)currentPhase] * *inversionFactor);
             currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
-            auto currentDryWet = *dryWet / 100.0f;
+            auto currentDryWet = *mix / 100.0f;
 
             // calculate according to current dry / wet value
             processedSampleData *= currentDryWet;
@@ -209,7 +214,7 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
     }
 
     // get current output gain and update if needed then apply it
-    auto currentGain = pow(2, *gain / 6);
+    auto currentGain = powf(2, *level / 6);
     if (previousGain == currentGain)
     {
         buffer.applyGain(currentGain);
@@ -260,10 +265,10 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 // updates angle delta provided a frequency value from slider
-void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate, double tableSize)
+void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate)
 {
     auto cyclesPerSample = frequency / sampleRate;
-    phaseDelta = cyclesPerSample * tableSize;
+    phaseDelta = cyclesPerSample * (double) wavetableSize;
 }
 
 // returns skew factor that is skewed from the midpoint
@@ -334,4 +339,14 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
         }
         break;
     }
+}
+
+void RingModulatorAudioProcessor::changeModulationInversion(bool toggleStateOn)
+{
+    if (toggleStateOn)
+    {
+        *inversionFactor = -1.0f;
+    }
+    else
+        *inversionFactor = 1.0f;
 }

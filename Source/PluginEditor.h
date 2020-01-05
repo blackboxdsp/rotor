@@ -14,6 +14,7 @@
 #include "PluginProcessor.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 
 //==============================================================================
 /**
@@ -37,22 +38,27 @@ private:
     AudioProcessorValueTreeState& valueTreeState;
 
     // slider declarations for parameters
-    Slider gainSlider;
-    Slider dryWetSlider;
+    Slider levelSlider;
+    Slider mixSlider;
     Slider modulationFrequencySlider;
     Slider modulationWaveformSlider;
 
+    // buttons for modulator inversion
+    ToggleButton modulationInversionButton;
+
     // declare labels
-    Label gainLabel;
-    Label dryWetLabel;
+    Label levelLabel;
+    Label mixLabel;
     Label modulationFrequencyLabel;
     Label modulationWaveformLabel;
+    Label modulationInversionLabel;
 
     // attachment declarations
-    std::unique_ptr<SliderAttachment> gainAttachment;
-    std::unique_ptr<SliderAttachment> dryWetAttachment;
+    std::unique_ptr<SliderAttachment> levelAttachment;
+    std::unique_ptr<SliderAttachment> mixAttachment;
     std::unique_ptr<SliderAttachment> modulationFrequencyAttachment;
     std::unique_ptr<SliderAttachment> modulationWaveformAttachment;
+    std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };

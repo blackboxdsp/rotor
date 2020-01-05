@@ -21,70 +21,87 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (480, 960);
+    setSize (480, 360);
 
     // SLIDERS =================================================================
 
     // set slider styles
-    gainSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationFrequencySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationWaveformSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    dryWetSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    mixSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // set textbox styles
-    gainSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    levelSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     modulationFrequencySlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     modulationWaveformSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
-    dryWetSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    mixSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
 
     // set text value suffixes
-    gainSlider.setTextValueSuffix(" dB");
+    levelSlider.setTextValueSuffix(" dB");
     modulationFrequencySlider.setTextValueSuffix(" Hz");
-    dryWetSlider.setTextValueSuffix(" %");
+    mixSlider.setTextValueSuffix(" %");
 
     // set double click return values
-    gainSlider.setDoubleClickReturnValue(true, 0.0f);
+    levelSlider.setDoubleClickReturnValue(true, 0.0f);
     modulationFrequencySlider.setDoubleClickReturnValue(true, 500.0f);
     modulationWaveformSlider.setDoubleClickReturnValue(true, 1);
-    dryWetSlider.setDoubleClickReturnValue(true, 50.0f);
+    mixSlider.setDoubleClickReturnValue(true, 50.0f);
 
     // attach valueTreeState attachments
-    gainAttachment.reset(new SliderAttachment(valueTreeState, "gain", gainSlider));
+    levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
     modulationFrequencyAttachment.reset(new SliderAttachment(valueTreeState, "modulationFrequency", modulationFrequencySlider));
     modulationWaveformAttachment.reset(new SliderAttachment(valueTreeState, "modulationWaveform", modulationWaveformSlider));
-    dryWetAttachment.reset(new SliderAttachment(valueTreeState, "dryWet", dryWetSlider));
+    mixAttachment.reset(new SliderAttachment(valueTreeState, "dryWet", mixSlider));
 
     // add all sliders and make visible 
-    addAndMakeVisible(&gainSlider);
+    addAndMakeVisible(&levelSlider);
     addAndMakeVisible(&modulationFrequencySlider);
     addAndMakeVisible(&modulationWaveformSlider);
-    addAndMakeVisible(&dryWetSlider);
+    addAndMakeVisible(&mixSlider);
+
+    // BUTTONS =================================================================
+
+    // juce boilerplate
+    modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "modulationInversion", modulationInversionButton));
+    addAndMakeVisible(&modulationInversionButton);
+    processor.changeModulationInversion(modulationInversionButton.getToggleState());
+
+    // define onclick for inversion button
+    modulationInversionButton.onClick = [this]
+    {
+        processor.changeModulationInversion(modulationInversionButton.getToggleState());
+    };
 
     // LABELS ==================================================================
 
     // set label text values
-    gainLabel.setText("Output Gain", NotificationType::dontSendNotification);
+    levelLabel.setText("Output Gain", NotificationType::dontSendNotification);
     modulationFrequencyLabel.setText("Mod Frequency", NotificationType::dontSendNotification);
     modulationWaveformLabel.setText("Mod Waveform", NotificationType::dontSendNotification);
-    dryWetLabel.setText("Dry / Wet", NotificationType::dontSendNotification);
+    modulationInversionLabel.setText("Mod Inversion", NotificationType::dontSendNotification);
+    mixLabel.setText("Dry / Wet", NotificationType::dontSendNotification);
 
     // attach labels to components
-    gainLabel.attachToComponent(&gainSlider, false);
+    levelLabel.attachToComponent(&levelSlider, false);
     modulationFrequencyLabel.attachToComponent(&modulationFrequencySlider, false);
     modulationWaveformLabel.attachToComponent(&modulationWaveformSlider, false);
-    dryWetLabel.attachToComponent(&dryWetSlider, false);
+    modulationInversionLabel.attachToComponent(&modulationInversionButton, false);
+    mixLabel.attachToComponent(&mixSlider, false);
 
     // set label justification types
-    gainLabel.setJustificationType(Justification::centredTop);
+    levelLabel.setJustificationType(Justification::centredTop);
     modulationFrequencyLabel.setJustificationType(Justification::centredTop);
     modulationWaveformLabel.setJustificationType(Justification::centredBottom);
-    dryWetLabel.setJustificationType(Justification::centredTop);
+    modulationInversionLabel.setJustificationType(Justification::centredTop);
+    mixLabel.setJustificationType(Justification::centredTop);
 
     // add all labels
-    addAndMakeVisible(&gainLabel);
+    addAndMakeVisible(&levelLabel);
     addAndMakeVisible(&modulationFrequencyLabel);
     addAndMakeVisible(&modulationWaveformLabel);
-    addAndMakeVisible(&dryWetLabel);
+    addAndMakeVisible(&modulationInversionLabel);
+    addAndMakeVisible(&mixLabel);
     
     // ONVALUECHANGE DEFINITIONS ========================================
 
@@ -95,7 +112,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
         if (currentSampleRate > 0.0)
         {
             auto frequency = modulationFrequencySlider.getValue();
-            processor.updatePhaseDelta(frequency, currentSampleRate, processor.getWavetableSize());
+            processor.updatePhaseDelta(frequency, currentSampleRate);
         }
     };
 
@@ -133,7 +150,10 @@ void RingModulatorAudioProcessorEditor::resized()
 
     // position sliders
     modulationFrequencySlider.setBounds(area.removeFromLeft(quarterWidth));
-    modulationWaveformSlider.setBounds(area.removeFromLeft(quarterWidth));
-    gainSlider.setBounds(area.removeFromLeft(quarterWidth));
-    dryWetSlider.setBounds(area.removeFromLeft(quarterWidth));
+
+    auto tempArea = area.removeFromLeft(quarterWidth);
+    modulationWaveformSlider.setBounds(tempArea.removeFromBottom(area.getHeight() / 2));
+    modulationInversionButton.setBounds(tempArea.removeFromBottom(area.getHeight() / 2));
+    levelSlider.setBounds(area.removeFromLeft(quarterWidth));
+    mixSlider.setBounds(area.removeFromLeft(quarterWidth));
 }
