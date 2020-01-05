@@ -52,7 +52,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
     modulationFrequencyAttachment.reset(new SliderAttachment(valueTreeState, "modulationFrequency", modulationFrequencySlider));
     modulationWaveformAttachment.reset(new SliderAttachment(valueTreeState, "modulationWaveform", modulationWaveformSlider));
-    mixAttachment.reset(new SliderAttachment(valueTreeState, "dryWet", mixSlider));
+    mixAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
 
     // add all sliders and make visible 
     addAndMakeVisible(&levelSlider);
@@ -76,11 +76,11 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     // LABELS ==================================================================
 
     // set label text values
-    levelLabel.setText("Output Gain", NotificationType::dontSendNotification);
-    modulationFrequencyLabel.setText("Mod Frequency", NotificationType::dontSendNotification);
-    modulationWaveformLabel.setText("Mod Waveform", NotificationType::dontSendNotification);
-    modulationInversionLabel.setText("Mod Inversion", NotificationType::dontSendNotification);
-    mixLabel.setText("Dry / Wet", NotificationType::dontSendNotification);
+    levelLabel.setText("Level", NotificationType::dontSendNotification);
+    modulationFrequencyLabel.setText("Frequency", NotificationType::dontSendNotification);
+    modulationWaveformLabel.setText("Waveform", NotificationType::dontSendNotification);
+    modulationInversionLabel.setText("Invert", NotificationType::dontSendNotification);
+    mixLabel.setText("Mix", NotificationType::dontSendNotification);
 
     // attach labels to components
     levelLabel.attachToComponent(&levelSlider, false);
