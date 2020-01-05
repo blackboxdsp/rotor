@@ -102,7 +102,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     // write a new wavetable whenever new item is selected
     modulationWaveformSlider.onValueChange = [this]
     {
-        processor.writeWavetable(modulationWaveformSlider.getValueObject().getValue());
+        processor.writeWavetable((int) modulationWaveformSlider.getValue());
     };
 }
 
