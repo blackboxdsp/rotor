@@ -57,18 +57,20 @@ public:
     float getSkewFactor(float start, float end, float center);
     int getWavetableSize();
     void writeWavetable(int waveformIndex);
-    void changeModulationInversion(bool toggleState);
+    void changeModulationInversionFactor(bool toggleState);
 
 private:
     // for storing / retrieving parameters
     AudioProcessorValueTreeState parameters;
 
     // parameter variables
+    float* modulationRate;
+    int* modulationWaveform;
+    float* modulationInversionFactor; // most pronounced when mix is at 50%
+    float* pulseWidth;
+
     float* level;
     float* mix;
-    float* modulationFrequency;
-    int* modulationWaveform;
-    float* inversionFactor; // most pronounced when mix is at 50%
 
     // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^
     float previousGain;

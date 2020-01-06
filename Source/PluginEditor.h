@@ -40,8 +40,9 @@ private:
     // slider declarations for parameters
     Slider levelSlider;
     Slider mixSlider;
-    Slider modulationFrequencySlider;
+    Slider modulationRate;
     Slider modulationWaveformSlider;
+    Slider modulationPulseWidthSlider;
 
     // buttons for modulator inversion
     ToggleButton modulationInversionButton;
@@ -49,16 +50,18 @@ private:
     // declare labels
     Label levelLabel;
     Label mixLabel;
-    Label modulationFrequencyLabel;
+    Label modulationRateLabel;
     Label modulationWaveformLabel;
     Label modulationInversionLabel;
+    Label modulationPulseWidthLabel;
 
     // attachment declarations
     std::unique_ptr<SliderAttachment> levelAttachment;
     std::unique_ptr<SliderAttachment> mixAttachment;
-    std::unique_ptr<SliderAttachment> modulationFrequencyAttachment;
+    std::unique_ptr<SliderAttachment> modulationRateAttachment;
     std::unique_ptr<SliderAttachment> modulationWaveformAttachment;
     std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
+    std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };

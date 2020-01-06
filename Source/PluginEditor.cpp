@@ -26,92 +26,111 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     // SLIDERS =================================================================
 
     // set slider styles
-    levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationFrequencySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationRate.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationWaveformSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
     mixSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // set textbox styles
-    levelSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
-    modulationFrequencySlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    modulationRate.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
     modulationWaveformSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    modulationPulseWidthSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    
     mixSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    levelSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
 
     // set text value suffixes
-    levelSlider.setTextValueSuffix(" dB");
-    modulationFrequencySlider.setTextValueSuffix(" Hz");
+    modulationRate.setTextValueSuffix(" Hz");
+
     mixSlider.setTextValueSuffix(" %");
+    levelSlider.setTextValueSuffix(" dB");
 
     // set double click return values
-    levelSlider.setDoubleClickReturnValue(true, 0.0f);
-    modulationFrequencySlider.setDoubleClickReturnValue(true, 500.0f);
+    modulationRate.setDoubleClickReturnValue(true, 500.0f);
     modulationWaveformSlider.setDoubleClickReturnValue(true, 1);
+    modulationPulseWidthSlider.setDoubleClickReturnValue(true, 0.5f);
+
     mixSlider.setDoubleClickReturnValue(true, 50.0f);
+    levelSlider.setDoubleClickReturnValue(true, 0.0f);
 
     // attach valueTreeState attachments
-    levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
-    modulationFrequencyAttachment.reset(new SliderAttachment(valueTreeState, "modulationFrequency", modulationFrequencySlider));
-    modulationWaveformAttachment.reset(new SliderAttachment(valueTreeState, "modulationWaveform", modulationWaveformSlider));
+    modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRate));
+    modulationWaveformAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationWaveformSlider));
+    modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
+
     mixAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
+    levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
 
     // add all sliders and make visible 
-    addAndMakeVisible(&levelSlider);
-    addAndMakeVisible(&modulationFrequencySlider);
+    addAndMakeVisible(&modulationRate);
     addAndMakeVisible(&modulationWaveformSlider);
+    addAndMakeVisible(&modulationPulseWidthSlider);
+
     addAndMakeVisible(&mixSlider);
+    addAndMakeVisible(&levelSlider);
 
     // BUTTONS =================================================================
 
     // juce boilerplate
-    modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "modulationInversion", modulationInversionButton));
+    modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
     addAndMakeVisible(&modulationInversionButton);
-    processor.changeModulationInversion(modulationInversionButton.getToggleState());
+    processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
 
     // define onclick for inversion button
     modulationInversionButton.onClick = [this]
     {
-        processor.changeModulationInversion(modulationInversionButton.getToggleState());
+        processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
     };
 
     // LABELS ==================================================================
 
     // set label text values
-    levelLabel.setText("Level", NotificationType::dontSendNotification);
-    modulationFrequencyLabel.setText("Frequency", NotificationType::dontSendNotification);
-    modulationWaveformLabel.setText("Waveform", NotificationType::dontSendNotification);
-    modulationInversionLabel.setText("Invert", NotificationType::dontSendNotification);
-    mixLabel.setText("Mix", NotificationType::dontSendNotification);
+    modulationRateLabel.setText("rate", NotificationType::dontSendNotification);
+    modulationWaveformLabel.setText("shape", NotificationType::dontSendNotification);
+    modulationInversionLabel.setText("invert", NotificationType::dontSendNotification);
+    modulationPulseWidthLabel.setText("pulse width", NotificationType::dontSendNotification);
+
+    mixLabel.setText("mix", NotificationType::dontSendNotification);
+    levelLabel.setText("level", NotificationType::dontSendNotification);
 
     // attach labels to components
-    levelLabel.attachToComponent(&levelSlider, false);
-    modulationFrequencyLabel.attachToComponent(&modulationFrequencySlider, false);
+    modulationRateLabel.attachToComponent(&modulationRate, false);
     modulationWaveformLabel.attachToComponent(&modulationWaveformSlider, false);
     modulationInversionLabel.attachToComponent(&modulationInversionButton, false);
+    modulationPulseWidthLabel.attachToComponent(&modulationPulseWidthSlider, false);
+
     mixLabel.attachToComponent(&mixSlider, false);
+    levelLabel.attachToComponent(&levelSlider, false);
 
     // set label justification types
-    levelLabel.setJustificationType(Justification::centredTop);
-    modulationFrequencyLabel.setJustificationType(Justification::centredTop);
+    modulationRateLabel.setJustificationType(Justification::centredTop);
     modulationWaveformLabel.setJustificationType(Justification::centredBottom);
     modulationInversionLabel.setJustificationType(Justification::centredTop);
+    modulationPulseWidthLabel.setJustificationType(Justification::centredBottom);
+
     mixLabel.setJustificationType(Justification::centredTop);
+    levelLabel.setJustificationType(Justification::centredTop);
 
     // add all labels
-    addAndMakeVisible(&levelLabel);
-    addAndMakeVisible(&modulationFrequencyLabel);
+    addAndMakeVisible(&modulationRateLabel);
     addAndMakeVisible(&modulationWaveformLabel);
     addAndMakeVisible(&modulationInversionLabel);
+    addAndMakeVisible(&modulationPulseWidthLabel);
+
     addAndMakeVisible(&mixLabel);
+    addAndMakeVisible(&levelLabel);
     
     // ONVALUECHANGE DEFINITIONS ========================================
 
     // update the phase delta whenever frequency slider is updated
-    modulationFrequencySlider.onValueChange = [this]
+    modulationRate.onValueChange = [this]
     {
         auto currentSampleRate = processor.getSampleRate();
         if (currentSampleRate > 0.0)
         {
-            auto frequency = modulationFrequencySlider.getValue();
+            auto frequency = modulationRate.getValue();
             processor.updatePhaseDelta(frequency, currentSampleRate);
         }
     };
@@ -120,6 +139,15 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     modulationWaveformSlider.onValueChange = [this]
     {
         processor.writeWavetable((int) modulationWaveformSlider.getValue());
+    };
+
+    // write new wavetable when square is selected and pulse width slider is changed
+    modulationPulseWidthSlider.onValueChange = [this]
+    {
+        if ((int) modulationWaveformSlider.getValue() == 3)
+        {
+            processor.writeWavetable(3);
+        }
     };
 }
 
@@ -140,20 +168,25 @@ void RingModulatorAudioProcessorEditor::resized()
     auto area = getLocalBounds();
 
     // handle header / footer area
-    auto headerHeight = area.getHeight() * 0.1;
-    area.removeFromTop(headerHeight * 2.5);
-    area.removeFromBottom(headerHeight * 2.5);
+    auto margin = area.getHeight() * 0.25;
+    area.removeFromTop(margin / 3.0);
+    area.removeFromBottom(margin / 3.0);
 
     // dimension and layout variables
-    int dialWidth = area.getWidth() / 5;
+    int dialWidth = area.getWidth() / 5.6;
     int quarterWidth = area.getWidth() / 4;
 
     // position sliders
-    modulationFrequencySlider.setBounds(area.removeFromLeft(quarterWidth));
-
     auto tempArea = area.removeFromLeft(quarterWidth);
+    modulationRate.setBounds(tempArea.removeFromTop(tempArea.getHeight() / 2));
+    tempArea.removeFromTop(margin / 3.0);
+    modulationPulseWidthSlider.setBounds(tempArea);
+
+    tempArea = area.removeFromLeft(quarterWidth);
     modulationWaveformSlider.setBounds(tempArea.removeFromBottom(area.getHeight() / 2));
+    tempArea.removeFromTop(margin / 3.0);
     modulationInversionButton.setBounds(tempArea.removeFromBottom(area.getHeight() / 2));
+    
     levelSlider.setBounds(area.removeFromLeft(quarterWidth));
     mixSlider.setBounds(area.removeFromLeft(quarterWidth));
 }
