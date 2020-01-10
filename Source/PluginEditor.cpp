@@ -19,9 +19,11 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     int textBoxWidth = 80;
     int textBoxHeight = 15;
 
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (480, 360);
+    // set aspect ratio and dimensions accordingly
+    double ratio = 0.5;
+    setResizeLimits(360, 360 / ratio, 540, 540 / ratio);
+    getConstrainer()->setFixedAspectRatio(ratio);
+    setSize (480, 480 / ratio);
 
     // SLIDERS =================================================================
 
