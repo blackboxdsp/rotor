@@ -43,8 +43,8 @@ private:
     // slider declarations for parameters
     Slider levelSlider;
     Slider mixSlider;
-    Slider modulationRate;
-    Slider modulationWaveformSlider;
+    Slider modulationRateSlider;
+    Slider modulationShapeSlider;
     Slider modulationPulseWidthSlider;
 
     // buttons for modulator inversion
@@ -54,7 +54,7 @@ private:
     std::unique_ptr<SliderAttachment> levelAttachment;
     std::unique_ptr<SliderAttachment> mixAttachment;
     std::unique_ptr<SliderAttachment> modulationRateAttachment;
-    std::unique_ptr<SliderAttachment> modulationWaveformAttachment;
+    std::unique_ptr<SliderAttachment> modulationShapeAttachment;
     std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
     std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
 

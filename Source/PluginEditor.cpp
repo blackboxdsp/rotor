@@ -32,46 +32,46 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     // SLIDERS =================================================================
 
     // set slider styles
-    modulationRate.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationWaveformSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationRateSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationShapeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     mixSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // set textbox styles
-    modulationRate.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
-    modulationWaveformSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
+    modulationRateSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
     modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     
     mixSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     levelSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
 
     // set text value suffixes
-    modulationRate.setTextValueSuffix(" Hz");
+    modulationRateSlider.setTextValueSuffix(" Hz");
 
     mixSlider.setTextValueSuffix(" %");
     levelSlider.setTextValueSuffix(" dB");
 
     // set double click return values
-    modulationRate.setDoubleClickReturnValue(true, 500.0f);
-    modulationWaveformSlider.setDoubleClickReturnValue(true, 1);
+    modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
+    modulationShapeSlider.setDoubleClickReturnValue(true, 1);
     modulationPulseWidthSlider.setDoubleClickReturnValue(true, 0.5f);
 
     mixSlider.setDoubleClickReturnValue(true, 50.0f);
     levelSlider.setDoubleClickReturnValue(true, 0.0f);
 
     // attach valueTreeState attachments
-    modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRate));
-    modulationWaveformAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationWaveformSlider));
+    modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRateSlider));
+    modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
     modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
 
     mixAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
     levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
 
     // add all sliders and make visible 
-    addAndMakeVisible(&modulationRate);
-    addAndMakeVisible(&modulationWaveformSlider);
+    addAndMakeVisible(&modulationRateSlider);
+    addAndMakeVisible(&modulationShapeSlider);
     addAndMakeVisible(&modulationPulseWidthSlider);
 
     addAndMakeVisible(&mixSlider);
@@ -93,26 +93,26 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     // ONVALUECHANGE DEFINITIONS ========================================
 
     // update the phase delta whenever frequency slider is updated
-    modulationRate.onValueChange = [this]
+    modulationRateSlider.onValueChange = [this]
     {
         auto currentSampleRate = processor.getSampleRate();
         if (currentSampleRate > 0.0)
         {
-            auto frequency = modulationRate.getValue();
+            auto frequency = modulationRateSlider.getValue();
             processor.updatePhaseDelta(frequency, currentSampleRate);
         }
     };
 
     // write a new wavetable whenever new item is selected
-    modulationWaveformSlider.onValueChange = [this]
+    modulationShapeSlider.onValueChange = [this]
     {
-        processor.writeWavetable((int) modulationWaveformSlider.getValue());
+        processor.writeWavetable((int) modulationShapeSlider.getValue());
     };
 
     // write new wavetable when square is selected and pulse width slider is changed
     modulationPulseWidthSlider.onValueChange = [this]
     {
-        if ((int) modulationWaveformSlider.getValue() == 3)
+        if ((int) modulationShapeSlider.getValue() == 3)
         {
             processor.writeWavetable(3);
         }
@@ -123,6 +123,14 @@ RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
 {
     // handle gl context
     glContext.detach();
+
+    // nullify attachments
+    modulationRateAttachment = nullptr;
+    modulationShapeAttachment = nullptr;
+    modulationPulseWidthAttachment = nullptr;
+    modulationInversionAttachment = nullptr;
+    mixAttachment = nullptr;
+    levelAttachment = nullptr;
 }
 
 //==============================================================================
@@ -184,7 +192,7 @@ void RingModulatorAudioProcessorEditor::resized()
 
     // SHAPE
     secondaryArea.removeFromLeft(smallDialSize / 2);
-    modulationWaveformSlider.setBounds(secondaryArea.removeFromLeft(smallDialSize));
+    modulationShapeSlider.setBounds(secondaryArea.removeFromLeft(smallDialSize));
 
     // RATE
     modulatorArea.removeFromBottom(sectionSize * 7 / 24);
@@ -192,5 +200,5 @@ void RingModulatorAudioProcessorEditor::resized()
     auto modulatorBlankSpace = modulatorArea.getWidth() * 29 / 84;
     modulatorArea.removeFromLeft(modulatorBlankSpace);
     modulatorArea.removeFromRight(modulatorBlankSpace);
-    modulationRate.setBounds(modulatorArea);
+    modulationRateSlider.setBounds(modulatorArea);
 }
