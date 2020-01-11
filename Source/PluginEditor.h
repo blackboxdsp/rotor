@@ -63,5 +63,8 @@ private:
     std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
     std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
 
+    // assets and images
+    Image backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };
