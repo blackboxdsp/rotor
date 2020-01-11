@@ -29,70 +29,16 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     glContext.setComponentPaintingEnabled(true);
     glContext.attachTo(*this);
 
-    // SLIDERS =================================================================
-
-    // set slider styles
+    // MODULATOR ===============================================================
+    
+    // RATE
     modulationRateSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationShapeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-
-    mixSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-
-    // set textbox styles
     modulationRateSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
-    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
-    modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
-    
-    mixSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
-    levelSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
-
-    // set text value suffixes
-    modulationRateSlider.setTextValueSuffix(" Hz");
-
-    mixSlider.setTextValueSuffix(" %");
-    levelSlider.setTextValueSuffix(" dB");
-
-    // set double click return values
     modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
-    modulationShapeSlider.setDoubleClickReturnValue(true, 1);
-    modulationPulseWidthSlider.setDoubleClickReturnValue(true, 0.5f);
-
-    mixSlider.setDoubleClickReturnValue(true, 50.0f);
-    levelSlider.setDoubleClickReturnValue(true, 0.0f);
-
-    // attach valueTreeState attachments
+    modulationRateSlider.setTextValueSuffix(" Hz");
+    modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
     modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRateSlider));
-    modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
-    modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
-
-    mixAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
-    levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
-
-    // add all sliders and make visible 
     addAndMakeVisible(&modulationRateSlider);
-    addAndMakeVisible(&modulationShapeSlider);
-    addAndMakeVisible(&modulationPulseWidthSlider);
-
-    addAndMakeVisible(&mixSlider);
-    addAndMakeVisible(&levelSlider);
-
-    // BUTTONS =================================================================
-
-    // juce boilerplate
-    modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
-    addAndMakeVisible(&modulationInversionButton);
-    processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
-
-    // define onclick for inversion button
-    modulationInversionButton.onClick = [this]
-    {
-        processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
-    };
-    
-    // ONVALUECHANGE DEFINITIONS ========================================
-
-    // update the phase delta whenever frequency slider is updated
     modulationRateSlider.onValueChange = [this]
     {
         auto currentSampleRate = processor.getSampleRate();
@@ -103,13 +49,12 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
         }
     };
 
-    // write a new wavetable whenever new item is selected
-    modulationShapeSlider.onValueChange = [this]
-    {
-        processor.writeWavetable((int) modulationShapeSlider.getValue());
-    };
-
-    // write new wavetable when square is selected and pulse width slider is changed
+    // PULSE WIDTH
+    modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    modulationPulseWidthSlider.setDoubleClickReturnValue(true, 0.5f);
+    modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
+    addAndMakeVisible(&modulationPulseWidthSlider);
     modulationPulseWidthSlider.onValueChange = [this]
     {
         if ((int) modulationShapeSlider.getValue() == 3)
@@ -117,6 +62,44 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
             processor.writeWavetable(3);
         }
     };
+
+    // SHAPE
+    modulationShapeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
+    modulationShapeSlider.setDoubleClickReturnValue(true, 1);
+    modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
+    addAndMakeVisible(&modulationShapeSlider);
+    modulationShapeSlider.onValueChange = [this]
+    {
+        processor.writeWavetable((int)modulationShapeSlider.getValue());
+    };
+
+    // INVERSION
+    modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
+    addAndMakeVisible(&modulationInversionButton);
+    processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
+    modulationInversionButton.onClick = [this]
+    {
+        processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
+    };
+
+    // OUTPUT ==================================================================
+
+    // MIX
+    mixSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    mixSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    mixSlider.setTextValueSuffix(" %");
+    mixSlider.setDoubleClickReturnValue(true, 50.0f);
+    mixAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
+    addAndMakeVisible(&mixSlider);
+
+    // LEVEL
+    levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    levelSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    levelSlider.setTextValueSuffix(" dB");
+    levelSlider.setDoubleClickReturnValue(true, 0.0f);
+    levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
+    addAndMakeVisible(&levelSlider);
 }
 
 RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()

@@ -25,7 +25,7 @@ public:
     RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor&, AudioProcessorValueTreeState&);
     ~RingModulatorAudioProcessorEditor();
 
-    //==============================================================================
+    //==========================================================================
     void paint (Graphics&) override;
     void resized() override;
 
@@ -39,24 +39,25 @@ private:
 
     // for better rendering
     OpenGLContext glContext;
+    
+    // GUI COMPONENTS ================================================
 
-    // slider declarations for parameters
-    Slider levelSlider;
-    Slider mixSlider;
+    // MODULATOR
     Slider modulationRateSlider;
-    Slider modulationShapeSlider;
-    Slider modulationPulseWidthSlider;
-
-    // buttons for modulator inversion
-    ToggleButton modulationInversionButton;
-
-    // attachment declarations
-    std::unique_ptr<SliderAttachment> levelAttachment;
-    std::unique_ptr<SliderAttachment> mixAttachment;
     std::unique_ptr<SliderAttachment> modulationRateAttachment;
-    std::unique_ptr<SliderAttachment> modulationShapeAttachment;
-    std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
+    Slider modulationPulseWidthSlider;
     std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
+    Slider modulationShapeSlider;
+    std::unique_ptr<SliderAttachment> modulationShapeAttachment;
+    ToggleButton modulationInversionButton;
+    std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
 
+    // OUTPUT
+    Slider levelSlider;
+    std::unique_ptr<SliderAttachment> levelAttachment;
+    Slider mixSlider;
+    std::unique_ptr<SliderAttachment> mixAttachment;
+
+    // =========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };
