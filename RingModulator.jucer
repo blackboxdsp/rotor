@@ -6,7 +6,7 @@
               companyEmail="maxwellmattryan@gmail.com">
   <MAINGROUP id="zf8tu5" name="Ring Modulator">
     <GROUP id="{3EA94401-4576-69AE-3AE4-6946D780E20B}" name="Resources">
-      <FILE id="NfzfQn" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
+      <FILE id="l9fF3i" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
     </GROUP>
     <GROUP id="{25FB03DA-A3CB-B57D-AB94-EFDA269F30BA}" name="Source">
       <FILE id="KPlzng" name="PluginProcessor.cpp" compile="1" resource="0"

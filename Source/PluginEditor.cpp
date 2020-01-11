@@ -141,7 +141,7 @@ void RingModulatorAudioProcessorEditor::resized()
     // set layout variables 
     auto margin = getWidth() * 1 / 30;
     auto sectionSize = getHeight() / 5;
-    auto largeDialSize = getWidth() * 23 / 90;
+    auto largeDialSize = getWidth() * 13 / 45;
     auto smallDialSize = getWidth()  * 13 / 60;
 
     // remove margins from sides
@@ -153,14 +153,15 @@ void RingModulatorAudioProcessorEditor::resized()
     // designate area for drawing output's parameters' sliders
     auto outputArea = area.removeFromBottom(sectionSize);
     outputArea.removeFromBottom(margin * 2);
-    outputArea = outputArea.removeFromBottom(outputArea.getHeight() * 13 / 21);
+    outputArea = outputArea.removeFromBottom(smallDialSize);
 
     // MIX
-    outputArea.removeFromLeft(getWidth() * 5 / 36);
+    const int outputBlankSpace = getWidth() * 5 / 36;
+    outputArea.removeFromLeft(outputBlankSpace); // space between outline and slider
     mixSlider.setBounds(outputArea.removeFromLeft(smallDialSize));
 
     // LEVEL
-    outputArea.removeFromRight(getWidth() * 5 / 36);
+    outputArea.removeFromRight(outputBlankSpace);
     levelSlider.setBounds(outputArea.removeFromRight(smallDialSize));
 
     // MODULATOR ===============================================================
@@ -169,5 +170,27 @@ void RingModulatorAudioProcessorEditor::resized()
     auto modulatorArea = area.removeFromBottom(sectionSize * 2);
     modulatorArea.removeFromBottom(margin * 2);
 
-    // ... 
+    // divide modulator into sections for [rate] and [pulse width, shape, inversion]
+    auto secondaryArea = modulatorArea.removeFromBottom(smallDialSize);
+
+    // PULSE WIDTH
+    secondaryArea.removeFromLeft(margin);
+    modulationPulseWidthSlider.setBounds(secondaryArea.removeFromLeft(smallDialSize));
+
+    // INVERT
+    secondaryArea.removeFromRight(margin);
+    modulationInversionButton.setBounds(secondaryArea.removeFromRight(smallDialSize / 2));
+    secondaryArea.removeFromRight(smallDialSize / 2);
+
+    // SHAPE
+    secondaryArea.removeFromLeft(smallDialSize / 2);
+    modulationWaveformSlider.setBounds(secondaryArea.removeFromLeft(smallDialSize));
+
+    // RATE
+    modulatorArea.removeFromBottom(sectionSize * 7 / 24);
+    modulatorArea = modulatorArea.removeFromBottom(largeDialSize);
+    auto modulatorBlankSpace = modulatorArea.getWidth() * 29 / 84;
+    modulatorArea.removeFromLeft(modulatorBlankSpace);
+    modulatorArea.removeFromRight(modulatorBlankSpace);
+    modulationRate.setBounds(modulatorArea);
 }
