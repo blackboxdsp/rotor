@@ -17,13 +17,17 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
 {
     // GUI variables
     int textBoxWidth = 80;
-    int textBoxHeight = 15;
+    int textBoxHeight = 20;
 
     // set aspect ratio and dimensions accordingly
     double ratio = 0.5;
     setResizeLimits(360, 360 / ratio, 540, 540 / ratio);
     getConstrainer()->setFixedAspectRatio(ratio);
     setSize (480, 480 / ratio);
+
+    // handle open gl initializing
+    glContext.setComponentPaintingEnabled(true);
+    glContext.attachTo(*this);
 
     // SLIDERS =================================================================
 
@@ -36,12 +40,12 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // set textbox styles
-    modulationRate.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
-    modulationWaveformSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
-    modulationPulseWidthSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    modulationRate.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    modulationWaveformSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
+    modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     
-    mixSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
-    levelSlider.setTextBoxStyle(Slider::TextBoxBelow, false, textBoxWidth, textBoxHeight);
+    mixSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    levelSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
 
     // set text value suffixes
     modulationRate.setTextValueSuffix(" Hz");
@@ -85,44 +89,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     {
         processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
     };
-
-    // LABELS ==================================================================
-
-    // set label text values
-    modulationRateLabel.setText("rate", NotificationType::dontSendNotification);
-    modulationWaveformLabel.setText("shape", NotificationType::dontSendNotification);
-    modulationInversionLabel.setText("invert", NotificationType::dontSendNotification);
-    modulationPulseWidthLabel.setText("pulse width", NotificationType::dontSendNotification);
-
-    mixLabel.setText("mix", NotificationType::dontSendNotification);
-    levelLabel.setText("level", NotificationType::dontSendNotification);
-
-    // attach labels to components
-    modulationRateLabel.attachToComponent(&modulationRate, false);
-    modulationWaveformLabel.attachToComponent(&modulationWaveformSlider, false);
-    modulationInversionLabel.attachToComponent(&modulationInversionButton, false);
-    modulationPulseWidthLabel.attachToComponent(&modulationPulseWidthSlider, false);
-
-    mixLabel.attachToComponent(&mixSlider, false);
-    levelLabel.attachToComponent(&levelSlider, false);
-
-    // set label justification types
-    modulationRateLabel.setJustificationType(Justification::centredTop);
-    modulationWaveformLabel.setJustificationType(Justification::centredBottom);
-    modulationInversionLabel.setJustificationType(Justification::centredTop);
-    modulationPulseWidthLabel.setJustificationType(Justification::centredBottom);
-
-    mixLabel.setJustificationType(Justification::centredTop);
-    levelLabel.setJustificationType(Justification::centredTop);
-
-    // add all labels
-    addAndMakeVisible(&modulationRateLabel);
-    addAndMakeVisible(&modulationWaveformLabel);
-    addAndMakeVisible(&modulationInversionLabel);
-    addAndMakeVisible(&modulationPulseWidthLabel);
-
-    addAndMakeVisible(&mixLabel);
-    addAndMakeVisible(&levelLabel);
     
     // ONVALUECHANGE DEFINITIONS ========================================
 
@@ -155,12 +121,15 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
 
 RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
 {
+    // handle gl context
+    glContext.detach();
 }
 
 //==============================================================================
 void RingModulatorAudioProcessorEditor::paint (Graphics& g)
 {
-    // get background image and apply as background
+    // draw background image (this method allows for dynamic resizing)
+    Image backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
     g.drawImage(backgroundImage, getLocalBounds().toFloat());
 }
 
@@ -169,26 +138,36 @@ void RingModulatorAudioProcessorEditor::resized()
     // get canvas
     auto area = getLocalBounds();
 
-    // handle header / footer area
-    auto margin = area.getHeight() * 0.25;
-    area.removeFromTop(margin / 3.0);
-    area.removeFromBottom(margin / 3.0);
+    // set layout variables 
+    auto margin = getWidth() * 1 / 30;
+    auto sectionSize = getHeight() / 5;
+    auto largeDialSize = getWidth() * 23 / 90;
+    auto smallDialSize = getWidth()  * 13 / 60;
 
-    // dimension and layout variables
-    int dialWidth = area.getWidth() / 5.6;
-    int quarterWidth = area.getWidth() / 4;
+    // remove margins from sides
+    area.removeFromLeft(margin);
+    area.removeFromRight(margin);
 
-    // position sliders
-    auto tempArea = area.removeFromLeft(quarterWidth);
-    modulationRate.setBounds(tempArea.removeFromTop(tempArea.getHeight() / 2));
-    tempArea.removeFromTop(margin / 3.0);
-    modulationPulseWidthSlider.setBounds(tempArea);
+    // OUTPUT ==================================================================
+   
+    // designate area for drawing output's parameters' sliders
+    auto outputArea = area.removeFromBottom(sectionSize);
+    outputArea.removeFromBottom(margin * 2);
+    outputArea = outputArea.removeFromBottom(outputArea.getHeight() * 13 / 21);
 
-    tempArea = area.removeFromLeft(quarterWidth);
-    modulationWaveformSlider.setBounds(tempArea.removeFromBottom(area.getHeight() / 2));
-    tempArea.removeFromTop(margin / 3.0);
-    modulationInversionButton.setBounds(tempArea.removeFromBottom(area.getHeight() / 2));
-    
-    levelSlider.setBounds(area.removeFromLeft(quarterWidth));
-    mixSlider.setBounds(area.removeFromLeft(quarterWidth));
+    // MIX
+    outputArea.removeFromLeft(getWidth() * 5 / 36);
+    mixSlider.setBounds(outputArea.removeFromLeft(smallDialSize));
+
+    // LEVEL
+    outputArea.removeFromRight(getWidth() * 5 / 36);
+    levelSlider.setBounds(outputArea.removeFromRight(smallDialSize));
+
+    // MODULATOR ===============================================================
+
+    // designate area for drawing modulator's parameters' sliders
+    auto modulatorArea = area.removeFromBottom(sectionSize * 2);
+    modulatorArea.removeFromBottom(margin * 2);
+
+    // ... 
 }

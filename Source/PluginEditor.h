@@ -37,6 +37,9 @@ private:
     // Reference to value tree state for quick access
     AudioProcessorValueTreeState& valueTreeState;
 
+    // for better rendering
+    OpenGLContext glContext;
+
     // slider declarations for parameters
     Slider levelSlider;
     Slider mixSlider;
@@ -47,14 +50,6 @@ private:
     // buttons for modulator inversion
     ToggleButton modulationInversionButton;
 
-    // declare labels
-    Label levelLabel;
-    Label mixLabel;
-    Label modulationRateLabel;
-    Label modulationWaveformLabel;
-    Label modulationInversionLabel;
-    Label modulationPulseWidthLabel;
-
     // attachment declarations
     std::unique_ptr<SliderAttachment> levelAttachment;
     std::unique_ptr<SliderAttachment> mixAttachment;
@@ -62,9 +57,6 @@ private:
     std::unique_ptr<SliderAttachment> modulationWaveformAttachment;
     std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
     std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
-
-    // assets and images
-    Image backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
 };
