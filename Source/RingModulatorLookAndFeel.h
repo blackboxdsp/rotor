@@ -12,14 +12,13 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-
 //==============================================================================
 
 class RingModulatorLookAndFeel : public LookAndFeel_V4
 {
+public:
     //==========================================================================
 
-public:
     RingModulatorLookAndFeel();
     ~RingModulatorLookAndFeel();
 
@@ -33,8 +32,22 @@ public:
 
     //==========================================================================
 
+    void setFontSize(int newSize);
+
 private:
-    const Colour inactiveFill = Colour::fromRGBA(31, 31, 31, 0);
+    //==========================================================================
+
+    // COLOURS
+    const Colour activeFill = Colour::fromRGBA(167, 98, 255, 255);
     const Colour activeFillStart = Colour::fromRGBA(116, 42, 208, 255);
     const Colour activeFillStop = Colour::fromRGBA(144, 78, 228, 255);
+
+    // FONTS
+    float fontSize;
+    static const Font& getSliderReadoutFont(float fontSize)
+    {
+        static Font sliderReadout(Font(Typeface::createSystemTypefaceFor(BinaryData::Louis_George_Cafe_Light_ttf, BinaryData::Louis_George_Cafe_Light_ttfSize)));
+        sliderReadout.setHeight(fontSize);
+        return sliderReadout;
+    }
 };

@@ -6,7 +6,13 @@
               companyEmail="maxwellmattryan@gmail.com">
   <MAINGROUP id="zf8tu5" name="Ring Modulator">
     <GROUP id="{3EA94401-4576-69AE-3AE4-6946D780E20B}" name="Resources">
-      <FILE id="l9fF3i" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
+      <FILE id="Gpb5KS" name="Louis George Cafe Bold.ttf" compile="0" resource="1"
+            file="Assets/Louis George Cafe Bold.ttf"/>
+      <FILE id="g6KvB9" name="Louis George Cafe Light.ttf" compile="0" resource="1"
+            file="Assets/Louis George Cafe Light.ttf"/>
+      <FILE id="r0ZOAE" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
+      <FILE id="Aj4Bqv" name="Louis George Cafe.ttf" compile="0" resource="1"
+            file="Assets/Louis George Cafe.ttf"/>
     </GROUP>
     <GROUP id="{25FB03DA-A3CB-B57D-AB94-EFDA269F30BA}" name="Source">
       <FILE id="KPlzng" name="PluginProcessor.cpp" compile="1" resource="0"

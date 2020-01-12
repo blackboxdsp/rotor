@@ -35,15 +35,25 @@ void RingModulatorLookAndFeel::drawRotarySlider(
 	const float rx = centerX - radius;
 	const float ry = centerY - radius;
 	const float rw = radius * 2.0f;
+
+	// even if slider is fully zero, still display something
+	if (sliderPos == 0.0f && slider.getName() != "modulationInversionSlider") sliderPos = 0.01f;
 	const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
 
-	// draw value in middle of slider
+	// get readout value
+	const double value = slider.getValue();
+	String readoutValue = (value >= 1000.0 ? String(value / 1000.0, 1) + "k" : String(value, 1));
+	String readout = readoutValue + slider.getTextValueSuffix();
 
-	// draw slider track
-	Path arcPath;
-	arcPath.addArc(rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, true);
-	g.setColour(inactiveFill);
-	g.strokePath(arcPath, PathStrokeType(3.0f));
+	// draw the text
+	g.setColour(activeFill);
+	g.setFont(getSliderReadoutFont(fontSize));
+	g.drawText(readout,
+			   centerX - radius,                     // int x (radius for suffix offset)
+		       centerY - (fontSize * 5.0f / 12.0f),  // int y (ratio based off font size)
+		       rw,		                             // int width
+			   fontSize,		                     // int height
+		       Justification::centred);
 
 	// set color variables for gradient
 	ColourGradient sliderFill = ColourGradient(activeFillStart, (float)x, 0.0f, activeFillStop, (float)width, 0.0f, false);
@@ -63,4 +73,10 @@ void RingModulatorLookAndFeel::drawToggleButton(
 	bool shouldDrawButtonAsHighlighted, 
 	bool shouldDrawButtonAsDown = 0)
 {
+}
+
+// sets font to given new size
+void RingModulatorLookAndFeel::setFontSize(int newSize)
+{
+	fontSize = (float) newSize;
 }

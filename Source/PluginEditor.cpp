@@ -70,6 +70,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     // INVERSION
 
     // slider 
+    modulationInversionSlider.setName("modulationInversionSlider");
     modulationInversionSlider.setRange(0.0, 1.0, 1.0);
     modulationInversionSlider.setValue(modulationInversionButton.getToggleState() ? 1.0 : 0.0, NotificationType::dontSendNotification);
     modulationInversionSlider.setRotaryParameters(-1.0f * MathConstants<float>::pi, MathConstants<float>::pi, true);
@@ -164,6 +165,10 @@ void RingModulatorAudioProcessorEditor::resized()
     auto sectionSize = getHeight() / 5;
     auto largeDialSize = getWidth() * 13 / 45;
     auto smallDialSize = getWidth()  * 13 / 60;
+
+    // set font size according to GUI editor's width
+    int fontSize = getWidth() / 27; 
+    lookAndFeel.setFontSize(fontSize);
 
     // remove margins from sides
     area.removeFromLeft(margin);
