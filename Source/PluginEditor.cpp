@@ -19,16 +19,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     int textBoxWidth = 80;
     int textBoxHeight = 20;
 
-    // set aspect ratio and dimensions accordingly
-    double ratio = 0.5;
-    setResizeLimits(360, 360 / ratio, 540, 540 / ratio);
-    getConstrainer()->setFixedAspectRatio(ratio);
-    setSize (480, 480 / ratio);
-
-    // handle open gl initializing
-    glContext.setComponentPaintingEnabled(true);
-    glContext.attachTo(*this);
-
     // MODULATOR ===============================================================
     
     // RATE
@@ -38,6 +28,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     modulationRateSlider.setTextValueSuffix(" Hz");
     modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
     modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRateSlider));
+    modulationRateSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationRateSlider);
     modulationRateSlider.onValueChange = [this]
     {
@@ -54,6 +45,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationPulseWidthSlider.setDoubleClickReturnValue(true, 0.5f);
     modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
+    modulationPulseWidthSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationPulseWidthSlider);
     modulationPulseWidthSlider.onValueChange = [this]
     {
@@ -68,6 +60,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
     modulationShapeSlider.setDoubleClickReturnValue(true, 1);
     modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
+    modulationShapeSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationShapeSlider);
     modulationShapeSlider.onValueChange = [this]
     {
@@ -75,7 +68,9 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     };
 
     // INVERSION
+    //modulationInversionButton = Slider::LookAndFeelMethods::createSliderButton(?)
     modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
+    modulationInversionButton.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionButton);
     processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
     modulationInversionButton.onClick = [this]
@@ -91,6 +86,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     mixSlider.setTextValueSuffix(" %");
     mixSlider.setDoubleClickReturnValue(true, 50.0f);
     mixAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
+    mixSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&mixSlider);
 
     // LEVEL
@@ -99,13 +95,30 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     levelSlider.setTextValueSuffix(" dB");
     levelSlider.setDoubleClickReturnValue(true, 0.0f);
     levelAttachment.reset(new SliderAttachment(valueTreeState, "level", levelSlider));
+    levelSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&levelSlider);
+
+    // handle open gl initializing
+    glContext.setComponentPaintingEnabled(true);
+    glContext.attachTo(*this);
+
+    // set aspect ratio and dimensions accordingly
+    double ratio = 0.5;
+    setResizeLimits(360, 360 / ratio, 540, 540 / ratio);
+    getConstrainer()->setFixedAspectRatio(ratio);
+    setSize(480, 480 / ratio);
+
+    // set lookAndFeel configurations
+    setLookAndFeel(&lookAndFeel);
 }
 
 RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
 {
     // handle gl context
     glContext.detach();
+
+    // look and feel
+    setLookAndFeel(nullptr);
 
     // nullify attachments
     modulationRateAttachment = nullptr;

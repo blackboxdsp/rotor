@@ -11,11 +11,15 @@
     <GROUP id="{25FB03DA-A3CB-B57D-AB94-EFDA269F30BA}" name="Source">
       <FILE id="KPlzng" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
-      <FILE id="fPoun4" name="PluginProcessor.h" compile="0" resource="0"
+      <FILE id="fPoun4" name="PluginProcessor.h" compile="1" resource="0"
             file="Source/PluginProcessor.h"/>
       <FILE id="cFkmkm" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="BbIwQI" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="BbIwQI" name="PluginEditor.h" compile="1" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="LAWtAt" name="RingModulatorLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/RingModulatorLookAndFeel.cpp"/>
+      <FILE id="I3Lhbt" name="RingModulatorLookAndFeel.h" compile="1" resource="0"
+            file="Source/RingModulatorLookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
