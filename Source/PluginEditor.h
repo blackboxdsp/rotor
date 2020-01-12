@@ -53,9 +53,10 @@ private:
     std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
     Slider modulationShapeSlider;
     std::unique_ptr<SliderAttachment> modulationShapeAttachment;
-    Slider modulationInversionSlider;
     ToggleButton modulationInversionButton;
-    std::unique_ptr<ButtonAttachment> modulationInversionAttachment;
+    std::unique_ptr<ButtonAttachment> modulationInversionButtonAttachment;
+    Slider modulationInversionSlider;
+    std::unique_ptr<SliderAttachment> modulationInversionSliderAttachment;
 
     // OUTPUT
     Slider levelSlider;

@@ -38,6 +38,7 @@ private:
     //==========================================================================
 
     // COLOURS
+    const Colour inactiveFill = Colour::fromRGBA(255, 255, 255, 63);
     const Colour activeFill = Colour::fromRGBA(167, 98, 255, 255);
     const Colour activeFillStart = Colour::fromRGBA(116, 42, 208, 255);
     const Colour activeFillStop = Colour::fromRGBA(144, 78, 228, 255);

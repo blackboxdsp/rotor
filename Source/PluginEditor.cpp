@@ -56,8 +56,9 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     };
 
     // SHAPE
+    modulationShapeSlider.setName("shape");
     modulationShapeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
+    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationShapeSlider.setDoubleClickReturnValue(true, 1);
     modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
     modulationShapeSlider.setLookAndFeel(&lookAndFeel);
@@ -70,17 +71,16 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     // INVERSION
 
     // slider 
-    modulationInversionSlider.setName("modulationInversionSlider");
-    modulationInversionSlider.setRange(0.0, 1.0, 1.0);
-    modulationInversionSlider.setValue(modulationInversionButton.getToggleState() ? 1.0 : 0.0, NotificationType::dontSendNotification);
+    modulationInversionSlider.setName("inversion");
     modulationInversionSlider.setRotaryParameters(-1.0f * MathConstants<float>::pi, MathConstants<float>::pi, true);
     modulationInversionSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationInversionSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
+    modulationInversionSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    modulationInversionSliderAttachment.reset(new SliderAttachment(valueTreeState, "inversion", modulationInversionSlider));
     modulationInversionSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionSlider);
 
     // button
-    modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
+    modulationInversionButtonAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
     modulationInversionButton.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionButton);
     modulationInversionButton.onClick = [this]
@@ -142,7 +142,7 @@ RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
     modulationRateAttachment = nullptr;
     modulationShapeAttachment = nullptr;
     modulationPulseWidthAttachment = nullptr;
-    modulationInversionAttachment = nullptr;
+    modulationInversionButtonAttachment = nullptr;
     mixAttachment = nullptr;
     levelAttachment = nullptr;
 }
