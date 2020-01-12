@@ -57,7 +57,7 @@ public:
     float getSkewFactor(float start, float end, float center);
     int getWavetableSize();
     void writeWavetable(int waveformIndex);
-    void changeModulationInversionFactor(bool toggleState);
+    void setModulationInversion(bool inverted);
 
 private:
     // for storing / retrieving parameters

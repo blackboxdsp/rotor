@@ -12,8 +12,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor& p, AudioProcessorValueTreeState& vts)
-    : AudioProcessorEditor (&p), processor (p), valueTreeState (vts)
+RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulatorAudioProcessor& p, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor(&p), processor(p), valueTreeState(vts)
 {
     // GUI variables
     int textBoxWidth = 80;
@@ -68,14 +68,31 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor (RingModula
     };
 
     // INVERSION
-    //modulationInversionButton = Slider::LookAndFeelMethods::createSliderButton(?)
+
+    // slider 
+    modulationInversionSlider.setRange(0.0, 1.0, 1.0);
+    modulationInversionSlider.setValue(modulationInversionButton.getToggleState() ? 1.0 : 0.0, NotificationType::dontSendNotification);
+    modulationInversionSlider.setRotaryParameters(-1.0f * MathConstants<float>::pi, MathConstants<float>::pi, true);
+    modulationInversionSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationInversionSlider.setTextBoxStyle(Slider::NoTextBox, true, textBoxWidth, textBoxHeight);
+    modulationInversionSlider.setLookAndFeel(&lookAndFeel);
+    addAndMakeVisible(&modulationInversionSlider);
+
+    // button
     modulationInversionAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
     modulationInversionButton.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionButton);
-    processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
     modulationInversionButton.onClick = [this]
     {
-        processor.changeModulationInversionFactor(modulationInversionButton.getToggleState());
+        // update processor's inversion variable
+        auto toggleState = modulationInversionButton.getToggleState();
+        processor.setModulationInversion(toggleState);
+
+        // handle slider
+        if (toggleState)
+            modulationInversionSlider.setValue(1.0, NotificationType::dontSendNotification);
+        else
+            modulationInversionSlider.setValue(0.0, NotificationType::dontSendNotification);
     };
 
     // OUTPUT ==================================================================
@@ -183,8 +200,9 @@ void RingModulatorAudioProcessorEditor::resized()
 
     // INVERT
     secondaryArea.removeFromRight(margin);
-    modulationInversionButton.setBounds(secondaryArea.removeFromRight(smallDialSize / 2));
-    secondaryArea.removeFromRight(smallDialSize / 2);
+    auto inversionArea = secondaryArea.removeFromRight(smallDialSize);
+    modulationInversionButton.setBounds(inversionArea);
+    modulationInversionSlider.setBounds(inversionArea);
 
     // SHAPE
     secondaryArea.removeFromLeft(smallDialSize / 2);

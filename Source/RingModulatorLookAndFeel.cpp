@@ -12,10 +12,15 @@
 
 RingModulatorLookAndFeel::RingModulatorLookAndFeel()
 {
-	setColour(Slider::rotarySliderFillColourId, Colour::fromRGBA(226, 115, 0, 255));
 }
 
-void RingModulatorLookAndFeel::drawRotarySlider(Graphics& g,
+RingModulatorLookAndFeel::~RingModulatorLookAndFeel()
+{
+}
+
+// draw arc path representing slider
+void RingModulatorLookAndFeel::drawRotarySlider(
+	Graphics& g,
 	int x, int y,
 	int width, int height,
 	float sliderPos,
@@ -37,13 +42,11 @@ void RingModulatorLookAndFeel::drawRotarySlider(Graphics& g,
 	// draw slider track
 	Path arcPath;
 	arcPath.addArc(rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, true);
-	g.setColour(slider.findColour(Slider::rotarySliderOutlineColourId));
+	g.setColour(inactiveFill);
 	g.strokePath(arcPath, PathStrokeType(3.0f));
 
 	// set color variables for gradient
-	Colour sliderFillStart = Colour::fromRGBA(116, 42, 208, 255);
-	Colour sliderFillStop = Colour::fromRGBA(144, 78, 228, 255);
-	ColourGradient sliderFill = ColourGradient(sliderFillStart, (float)x, 0.0f, sliderFillStop, (float)width, 0.0f, false);
+	ColourGradient sliderFill = ColourGradient(activeFillStart, (float)x, 0.0f, activeFillStop, (float)width, 0.0f, false);
 	g.setGradientFill(sliderFill);
 
 	// draw the filled path
@@ -51,4 +54,13 @@ void RingModulatorLookAndFeel::drawRotarySlider(Graphics& g,
 	arcPathFilled.addArc(rx, ry, rw, rw, rotaryStartAngle, angle, true);
 	PathStrokeType(3.0f).createStrokedPath(arcPathFilled, arcPathFilled);
 	g.fillPath(arcPathFilled);
+}
+
+// draw nothing for toggle button
+void RingModulatorLookAndFeel::drawToggleButton(
+	Graphics& g,
+	ToggleButton& b,
+	bool shouldDrawButtonAsHighlighted, 
+	bool shouldDrawButtonAsDown = 0)
+{
 }

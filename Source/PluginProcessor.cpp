@@ -30,19 +30,19 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
                                                                             getSkewFactor(10.0f, 12000.0f, 500.0f),
                                                                             false),
                                                    500.0f),
+            std::make_unique<AudioParameterFloat>("pulseWidth",
+                                                  "Pulse Width",
+                                                  0.01f,
+                                                  0.99f,
+                                                  0.5f),
             std::make_unique<AudioParameterInt>("waveform",
                                                 "Waveform",
                                                 0,
                                                 4,
                                                 0),
             std::make_unique<AudioParameterBool>("inversion",
-                                                "Inversion",
-                                                false),
-            std::make_unique<AudioParameterFloat>("pulseWidth",
-                                                  "Pulse Width",
-                                                  0.01f,
-                                                  0.99f,
-                                                  0.5f),
+                                                  "Inversion",
+                                                  false),
             std::make_unique<AudioParameterFloat>("mix",
                                                    "Mix",
                                                    0.0f,
@@ -268,11 +268,14 @@ void RingModulatorAudioProcessor::setStateInformation(const void* data, int size
 }
 
 //==============================================================================
+
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new RingModulatorAudioProcessor();
 }
+
+//==============================================================================
 
 // updates angle delta provided a frequency value from slider
 void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate)
@@ -293,6 +296,7 @@ int RingModulatorAudioProcessor::getWavetableSize()
     return wavetableSize;
 }
 
+// writes wavetable according to currently selected waveform
 void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
 {
     // clear the wavetable
@@ -354,12 +358,11 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
     }
 }
 
-void RingModulatorAudioProcessor::changeModulationInversionFactor(bool toggleStateOn)
+// switches modulation inversion factor between values -1.0f and 1.0f
+void RingModulatorAudioProcessor::setModulationInversion(bool inverted)
 {
-    if (toggleStateOn)
-    {
+    if (inverted)
         *modulationInversionFactor = -1.0f;
-    }
     else
         *modulationInversionFactor = 1.0f;
 }
