@@ -13,14 +13,14 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 //==============================================================================
-
 class RingModulatorLookAndFeel : public LookAndFeel_V4
 {
 public:
-    //==========================================================================
 
     RingModulatorLookAndFeel();
     ~RingModulatorLookAndFeel();
+
+    //==========================================================================
 
     void drawRotarySlider(Graphics& g, int x, int y, int width, int height,
         float sliderPos, float rotaryStartAngle, float rotaryEndAngle,
@@ -29,8 +29,6 @@ public:
     void drawToggleButton(Graphics& g, ToggleButton& b, 
         bool shouldDrawButtonAsHighlighted, 
         bool shouldDrawButtonAsDown) override;
-
-    //==========================================================================
 
     void setFontSize(int newSize);
 

@@ -10,6 +10,7 @@
 
 #include "RingModulatorLookAndFeel.h"
 
+//==============================================================================
 RingModulatorLookAndFeel::RingModulatorLookAndFeel()
 {
 }
@@ -18,7 +19,7 @@ RingModulatorLookAndFeel::~RingModulatorLookAndFeel()
 {
 }
 
-// draw arc path representing slider
+//==============================================================================
 void RingModulatorLookAndFeel::drawRotarySlider(
 	Graphics& g,
 	int x, int y,
@@ -48,7 +49,54 @@ void RingModulatorLookAndFeel::drawRotarySlider(
 	// draw shape if waveform slider, text otherwise
 	if (slider.getName() == "shape")
 	{
+		// init path variables to draw wave shape
+		Path waveformPath;
+		const float waveformPathHeight = radius / 2.0f;
+		float xPos = centerX - radius / 2;
+		float xEndPos = centerX + radius / 2;
+		float yPos = centerY;
 
+		// draw particular wave shape according to slider
+		switch ((int) slider.getValue())
+		{
+			// SINE
+			default:
+			case 0:
+				break;
+
+			// TRIANGLE
+			case 1:
+				break;
+
+			// SAWTOOTH
+			case 2:
+				break;
+
+			// SQUARE
+			case 3:
+				yPos = centerY + waveformPathHeight / 2.0f;
+				waveformPath.startNewSubPath(xPos, yPos);
+				for (; xPos < centerX; xPos += 1.0f)
+					waveformPath.lineTo(xPos, yPos);
+				yPos = centerY - waveformPathHeight / 2.0f;
+				for (xPos = centerX; xPos < xEndPos; xPos += 1.0f)
+					waveformPath.lineTo(xPos, yPos);
+				break;
+
+			// NOISE
+			case 4:
+				waveformPath.startNewSubPath(xPos, yPos);
+				for (; xPos < xEndPos; xPos += 3.0f)
+				{
+					yPos = (centerY - waveformPathHeight / 2.0f) + Random::getSystemRandom().nextFloat() * waveformPathHeight;
+					waveformPath.lineTo(xPos, yPos);
+				}
+				break;
+		}
+
+		// set color and stroke path
+		g.setColour(activeFill);
+		g.strokePath(waveformPath, PathStrokeType(3.0f));
 	}
 	else
 	{
@@ -89,7 +137,6 @@ void RingModulatorLookAndFeel::drawRotarySlider(
 	g.fillPath(arcPathFilled);
 }
 
-// draw nothing for toggle button
 void RingModulatorLookAndFeel::drawToggleButton(
 	Graphics& g,
 	ToggleButton& b,
@@ -98,7 +145,7 @@ void RingModulatorLookAndFeel::drawToggleButton(
 {
 }
 
-// sets font to given new size
+//==============================================================================
 void RingModulatorLookAndFeel::setFontSize(int newSize)
 {
 	fontSize = (float) newSize;

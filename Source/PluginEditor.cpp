@@ -220,4 +220,4 @@ void RingModulatorAudioProcessorEditor::resized()
     modulatorArea.removeFromLeft(modulatorBlankSpace);
     modulatorArea.removeFromRight(modulatorBlankSpace);
     modulationRateSlider.setBounds(modulatorArea);
-}
+} 
