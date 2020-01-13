@@ -182,9 +182,13 @@ bool RingModulatorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layo
 
 void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    ScopedNoDenormals noDenormals;
     const auto totalNumInputChannels = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
+
+    // grab reference to the editor (for the analyzer)
+    RingModulatorAudioProcessorEditor* editor = static_cast<RingModulatorAudioProcessorEditor*>(getActiveEditor());
+
+    // pre analyzer stuff here...
 
     // loop through channels...
     for (int channel = 0; channel < totalNumInputChannels; channel += 1)
@@ -234,6 +238,10 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
         buffer.applyGainRamp(0, buffer.getNumSamples(), previousGain, currentGain);
         previousGain = currentGain;
     }
+
+    // push processed buffer to the post analyzer
+    if (editor)
+        editor->postAnalyzer->pushBuffer(buffer);
 }
 
 //==============================================================================

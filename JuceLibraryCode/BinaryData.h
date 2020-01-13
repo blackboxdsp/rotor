@@ -8,14 +8,14 @@
 
 namespace BinaryData
 {
+    extern const char*   background_png;
+    const int            background_pngSize = 87582;
+
     extern const char*   Louis_George_Cafe_Bold_ttf;
     const int            Louis_George_Cafe_Bold_ttfSize = 34484;
 
     extern const char*   Louis_George_Cafe_Light_ttf;
     const int            Louis_George_Cafe_Light_ttfSize = 32552;
-
-    extern const char*   background_png;
-    const int            background_pngSize = 109731;
 
     extern const char*   Louis_George_Cafe_ttf;
     const int            Louis_George_Cafe_ttfSize = 32020;

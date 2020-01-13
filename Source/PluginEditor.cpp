@@ -116,6 +116,16 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     levelSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&levelSlider);
 
+    // ANALYZER ================================================================
+
+    postAnalyzer = std::make_unique<Analyzer>();
+    addAndMakeVisible(postAnalyzer.get());
+    postAnalyzer->setColours(Colour::fromRGBA(167, 100, 251, 255),
+                             Colour::fromRGBA(144, 78, 228, 255).withAlpha(0.7f),
+                             Colour::fromRGBA(116, 42, 208, 255).withAlpha(0.7f));
+
+    //==========================================================================
+
     // handle open gl initializing
     glContext.setComponentPaintingEnabled(true);
     glContext.attachTo(*this);
@@ -220,4 +230,9 @@ void RingModulatorAudioProcessorEditor::resized()
     modulatorArea.removeFromLeft(modulatorBlankSpace);
     modulatorArea.removeFromRight(modulatorBlankSpace);
     modulationRateSlider.setBounds(modulatorArea);
+
+    // ANALYZER ================================================================
+    auto analyzerArea = area.removeFromBottom(sectionSize);
+    analyzerArea.removeFromBottom(margin);
+    postAnalyzer->setBounds(analyzerArea);
 } 

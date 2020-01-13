@@ -6,26 +6,28 @@
               companyEmail="maxwellmattryan@gmail.com">
   <MAINGROUP id="zf8tu5" name="Ring Modulator">
     <GROUP id="{3EA94401-4576-69AE-3AE4-6946D780E20B}" name="Resources">
+      <FILE id="MpULi8" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
       <FILE id="Gpb5KS" name="Louis George Cafe Bold.ttf" compile="0" resource="1"
             file="Assets/Louis George Cafe Bold.ttf"/>
       <FILE id="g6KvB9" name="Louis George Cafe Light.ttf" compile="0" resource="1"
             file="Assets/Louis George Cafe Light.ttf"/>
-      <FILE id="r0ZOAE" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
       <FILE id="Aj4Bqv" name="Louis George Cafe.ttf" compile="0" resource="1"
             file="Assets/Louis George Cafe.ttf"/>
     </GROUP>
     <GROUP id="{25FB03DA-A3CB-B57D-AB94-EFDA269F30BA}" name="Source">
-      <FILE id="KPlzng" name="PluginProcessor.cpp" compile="1" resource="0"
-            file="Source/PluginProcessor.cpp"/>
       <FILE id="fPoun4" name="PluginProcessor.h" compile="1" resource="0"
             file="Source/PluginProcessor.h"/>
+      <FILE id="KPlzng" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="BbIwQI" name="PluginEditor.h" compile="1" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="cFkmkm" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="BbIwQI" name="PluginEditor.h" compile="1" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="LAWtAt" name="RingModulatorLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/RingModulatorLookAndFeel.cpp"/>
       <FILE id="I3Lhbt" name="RingModulatorLookAndFeel.h" compile="1" resource="0"
             file="Source/RingModulatorLookAndFeel.h"/>
+      <FILE id="LAWtAt" name="RingModulatorLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/RingModulatorLookAndFeel.cpp"/>
+      <FILE id="FiJLlE" name="Analyzer.h" compile="0" resource="0" file="Source/Analyzer.h"/>
+      <FILE id="uyxfTk" name="Analyzer.cpp" compile="1" resource="0" file="Source/Analyzer.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
@@ -50,6 +52,7 @@
         <MODULEPATH id="juce_gui_basics" path="../../../frameworks/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../frameworks/JUCE/modules"/>
         <MODULEPATH id="juce_opengl" path="../../../frameworks/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../frameworks/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
     <CODEBLOCKS_WINDOWS targetFolder="Builds/CodeBlocksWindows">
@@ -72,6 +75,7 @@
         <MODULEPATH id="juce_gui_basics" path="../../../frameworks/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../frameworks/JUCE/modules"/>
         <MODULEPATH id="juce_opengl" path="../../../frameworks/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../frameworks/JUCE/modules"/>
       </MODULEPATHS>
     </CODEBLOCKS_WINDOWS>
   </EXPORTFORMATS>
@@ -86,6 +90,7 @@
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

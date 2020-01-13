@@ -12,8 +12,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "RingModulatorLookAndFeel.h"
+#include "Analyzer.h"
 #include "PluginProcessor.h"
+#include "RingModulatorLookAndFeel.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
@@ -28,8 +29,12 @@ public:
     ~RingModulatorAudioProcessorEditor();
 
     //==========================================================================
+
     void paint (Graphics&) override;
     void resized() override;
+
+    //==========================================================================
+    std::unique_ptr<Analyzer> postAnalyzer;
 
 private:
     // This reference is provided as a quick way for your editor to
