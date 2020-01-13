@@ -51,10 +51,10 @@ void RingModulatorLookAndFeel::drawRotarySlider(
 	{
 		// init path variables to draw wave shape
 		Path waveformPath;
-		const float waveformPathHeight = radius / 2.0f;
+		float waveformPathHeight = radius / 2.0f;
 		float xPos = centerX - radius / 2;
 		float xEndPos = centerX + radius / 2;
-		float yPos = centerY;
+		float yPos = centerY + waveformPathHeight / 2.0f;
 
 		// draw particular wave shape according to slider
 		switch ((int) slider.getValue())
@@ -62,29 +62,42 @@ void RingModulatorLookAndFeel::drawRotarySlider(
 			// SINE
 			default:
 			case 0:
+				yPos = centerY;
+				waveformPathHeight /= 2.0f;
+				waveformPath.startNewSubPath(xPos, yPos);
+				for (auto x = xPos; x <= xEndPos; x += 3.0f)
+				{
+					yPos = centerY + waveformPathHeight * sinf(MathConstants<float>::twoPi * (x - xPos) / (xEndPos - xPos));
+					waveformPath.lineTo(x, yPos);
+				}
 				break;
 
 			// TRIANGLE
 			case 1:
+				waveformPath.startNewSubPath(xPos, yPos);
+				waveformPath.lineTo(centerX, centerY - waveformPathHeight / 2.0f);
+				waveformPath.lineTo(xEndPos, centerY + waveformPathHeight / 2.0f);
 				break;
 
 			// SAWTOOTH
 			case 2:
+				waveformPath.startNewSubPath(xPos, yPos);
+				waveformPath.lineTo(xEndPos, centerY - waveformPathHeight / 2.0f);
+				waveformPath.lineTo(xEndPos, yPos);
 				break;
 
 			// SQUARE
 			case 3:
-				yPos = centerY + waveformPathHeight / 2.0f;
 				waveformPath.startNewSubPath(xPos, yPos);
-				for (; xPos < centerX; xPos += 1.0f)
-					waveformPath.lineTo(xPos, yPos);
+				waveformPath.lineTo(centerX, yPos);
 				yPos = centerY - waveformPathHeight / 2.0f;
-				for (xPos = centerX; xPos < xEndPos; xPos += 1.0f)
-					waveformPath.lineTo(xPos, yPos);
+				waveformPath.lineTo(centerX, yPos);
+				waveformPath.lineTo(xEndPos, yPos);
 				break;
 
 			// NOISE
 			case 4:
+				yPos = centerY;
 				waveformPath.startNewSubPath(xPos, yPos);
 				for (; xPos < xEndPos; xPos += 3.0f)
 				{
