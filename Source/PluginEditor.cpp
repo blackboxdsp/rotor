@@ -168,7 +168,7 @@ RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
 void RingModulatorAudioProcessorEditor::paint (Graphics& g)
 {
     // draw background image (this method allows for dynamic resizing)
-    Image backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
+    Image backgroundImage = ImageCache::getFromMemory(BinaryData::backgroundlight_png, BinaryData::backgroundlight_pngSize);
     g.drawImage(backgroundImage, getLocalBounds().toFloat());
 }
 

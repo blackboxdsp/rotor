@@ -8,6 +8,9 @@
 
 namespace BinaryData
 {
+    extern const char*   backgroundlight_png;
+    const int            backgroundlight_pngSize = 114498;
+
     extern const char*   background_png;
     const int            background_pngSize = 87582;
 
@@ -21,7 +24,7 @@ namespace BinaryData
     const int            Louis_George_Cafe_ttfSize = 32020;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 4;
+    const int namedResourceListSize = 5;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
