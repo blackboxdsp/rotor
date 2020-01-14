@@ -50,7 +50,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
                                                    50.0f),
             std::make_unique<AudioParameterFloat>("level",
                                                    "Level",
-                                                   -36.0f,
+                                                   -60.0f,
                                                    6.0f,
                                                    0.0f)
         })
