@@ -188,7 +188,9 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
     // grab reference to the editor (for the analyzer)
     RingModulatorAudioProcessorEditor* editor = static_cast<RingModulatorAudioProcessorEditor*>(getActiveEditor());
 
-    // pre analyzer stuff here...
+    // push unprocessed buffer to the pre analyzer
+    if (editor)
+        editor->preAnalyzer->pushBuffer(buffer);
 
     // loop through channels...
     for (int channel = 0; channel < totalNumInputChannels; channel += 1)
@@ -258,8 +260,7 @@ AudioProcessorEditor* RingModulatorAudioProcessor::createEditor()
 //==============================================================================
 void RingModulatorAudioProcessor::getStateInformation(MemoryBlock& destData)
 {
-    auto state = parameters.copyState();
-    std::unique_ptr<XmlElement> xml(state.createXml());
+    std::unique_ptr<XmlElement> xml(parameters.state.createXml());
     copyXmlToBinary(*xml, destData);
 }
 

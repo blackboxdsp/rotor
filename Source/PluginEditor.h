@@ -34,6 +34,7 @@ public:
     void resized() override;
 
     //==========================================================================
+    std::unique_ptr<Analyzer> preAnalyzer;
     std::unique_ptr<Analyzer> postAnalyzer;
 
 private:
