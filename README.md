@@ -1,6 +1,6 @@
 # NAME
 
-_Modern ring modulation_
+> Modern ring modulation
 
 <div style="text-align: center">
     <img src="./screenshot.png" alt="NAME screenshot" title="NAME running in Ableton Live 10" height="840"/>
