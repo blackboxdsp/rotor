@@ -3,7 +3,7 @@
 <JUCERPROJECT id="HvUltZ" name="Ring Modulator" projectType="audioplug" jucerVersion="5.4.5"
               pluginFormats="buildAU,buildVST3" pluginManufacturer="Maxwell Audio"
               companyName="Maxwell Audio" companyWebsite="mattmaxwell.tech"
-              companyEmail="maxwellmattryan@gmail.com" version="v1.0.0b">
+              companyEmail="maxwellmattryan@gmail.com" version="1.0.0">
   <MAINGROUP id="zf8tu5" name="Ring Modulator">
     <GROUP id="{3EA94401-4576-69AE-3AE4-6946D780E20B}" name="Resources">
       <FILE id="PGdJwS" name="louis-george-cafe.ttf" compile="0" resource="1"

@@ -52,7 +52,7 @@ namespace ProjectInfo
 {
     const char* const  projectName    = "Ring Modulator";
     const char* const  companyName    = "Maxwell Audio";
-    const char* const  versionString  = "v1.0.0b";
-    const int          versionNumber  = 0x0;
+    const char* const  versionString  = "1.0.0";
+    const int          versionNumber  = 0x10000;
 }
 #endif

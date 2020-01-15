@@ -45,7 +45,7 @@ private:
     float fontSize;
     static const Font& getSliderReadoutFont(float fontSize)
     {
-        static Font sliderReadout(Font(Typeface::createSystemTypefaceFor(BinaryData::Louis_George_Cafe_Light_ttf, BinaryData::Louis_George_Cafe_Light_ttfSize)));
+        static Font sliderReadout(Font(Typeface::createSystemTypefaceFor(BinaryData::montserrat_ttf, BinaryData::montserrat_ttfSize)));
         sliderReadout.setHeight(fontSize);
         return sliderReadout;
     }

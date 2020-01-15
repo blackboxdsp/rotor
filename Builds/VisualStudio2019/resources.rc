@@ -7,7 +7,7 @@
 #include <windows.h>
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION  v1,0,0b,0
+FILEVERSION  1,0,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
@@ -15,9 +15,9 @@ BEGIN
     BEGIN
       VALUE "CompanyName",  "Maxwell Audio\0"
       VALUE "FileDescription",  "Ring Modulator\0"
-      VALUE "FileVersion",  "v1.0.0b\0"
+      VALUE "FileVersion",  "1.0.0\0"
       VALUE "ProductName",  "Ring Modulator\0"
-      VALUE "ProductVersion",  "v1.0.0b\0"
+      VALUE "ProductVersion",  "1.0.0\0"
     END
   END
 

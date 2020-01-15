@@ -178,13 +178,13 @@ void RingModulatorAudioProcessorEditor::resized()
     auto area = getLocalBounds();
 
     // set layout variables 
-    auto margin = getWidth() * 1 / 30;
+    auto margin = getWidth() / 30;
     auto sectionSize = getHeight() / 5;
     auto largeDialSize = getWidth() * 13 / 45;
     auto smallDialSize = getWidth()  * 13 / 60;
 
     // set font size according to GUI editor's width
-    int fontSize = getWidth() / 27; 
+    int fontSize = getWidth() / 18; 
     lookAndFeel.setFontSize(fontSize);
 
     // remove margins from sides
