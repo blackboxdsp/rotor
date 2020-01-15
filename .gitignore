@@ -1,5 +1,20 @@
-# IGNORE
-/Builds
-/Planning
+# FOLDERS
+/Planning/
+/.vs/
 
-/Assets/idea-*.png
+# BUILD RESULTS
+/Builds/VisualStudio2019/.vs/
+/Builds/VisualStudio2019/x64/
+/Builds/VisualStudio2019/x86/
+
+# add MACOSX path later...
+
+# USER-SPECIFIC FILES
+*.suo 
+*.user 
+*.userosscache
+*.sln.docstates
+
+# HIDDEN FILES / FOLDERS
+.*
+!/.gitignore
