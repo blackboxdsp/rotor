@@ -4853,19 +4853,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Assets\louis-george-cafe.ttf">
+      <Filter>Ring Modulator\Resources</Filter>
+    </None>
+    <None Include="..\..\Assets\louis-george-cafe-light.ttf">
+      <Filter>Ring Modulator\Resources</Filter>
+    </None>
+    <None Include="..\..\Assets\montserrat.ttf">
+      <Filter>Ring Modulator\Resources</Filter>
+    </None>
+    <None Include="..\..\Assets\montserrat-light.ttf">
+      <Filter>Ring Modulator\Resources</Filter>
+    </None>
     <None Include="..\..\Assets\background-light.png">
       <Filter>Ring Modulator\Resources</Filter>
     </None>
     <None Include="..\..\Assets\background.png">
-      <Filter>Ring Modulator\Resources</Filter>
-    </None>
-    <None Include="..\..\Assets\Louis George Cafe Bold.ttf">
-      <Filter>Ring Modulator\Resources</Filter>
-    </None>
-    <None Include="..\..\Assets\Louis George Cafe Light.ttf">
-      <Filter>Ring Modulator\Resources</Filter>
-    </None>
-    <None Include="..\..\Assets\Louis George Cafe.ttf">
       <Filter>Ring Modulator\Resources</Filter>
     </None>
     <None Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_formats\codecs\flac\Flac Licence.txt">

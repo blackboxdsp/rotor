@@ -8,23 +8,26 @@
 
 namespace BinaryData
 {
+    extern const char*   louisgeorgecafe_ttf;
+    const int            louisgeorgecafe_ttfSize = 32020;
+
+    extern const char*   louisgeorgecafelight_ttf;
+    const int            louisgeorgecafelight_ttfSize = 32552;
+
+    extern const char*   montserrat_ttf;
+    const int            montserrat_ttfSize = 245708;
+
+    extern const char*   montserratlight_ttf;
+    const int            montserratlight_ttfSize = 242068;
+
     extern const char*   backgroundlight_png;
     const int            backgroundlight_pngSize = 114498;
 
     extern const char*   background_png;
     const int            background_pngSize = 87582;
 
-    extern const char*   Louis_George_Cafe_Bold_ttf;
-    const int            Louis_George_Cafe_Bold_ttfSize = 34484;
-
-    extern const char*   Louis_George_Cafe_Light_ttf;
-    const int            Louis_George_Cafe_Light_ttfSize = 32552;
-
-    extern const char*   Louis_George_Cafe_ttf;
-    const int            Louis_George_Cafe_ttfSize = 32020;
-
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 5;
+    const int namedResourceListSize = 6;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
