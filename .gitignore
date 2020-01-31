@@ -18,3 +18,6 @@
 # HIDDEN FILES / FOLDERS
 .*
 !/.gitignore
+
+# HTML
+VST3_SDK/doc/
