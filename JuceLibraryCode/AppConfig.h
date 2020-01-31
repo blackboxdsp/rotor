@@ -352,10 +352,10 @@
  #define JucePlugin_Enable_IAA             0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "Ring Modulator"
+ #define JucePlugin_Name                   "Rotor"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "Ring Modulator"
+ #define JucePlugin_Desc                   "Rotor"
 #endif
 #ifndef  JucePlugin_Manufacturer
  #define JucePlugin_Manufacturer           "Maxwell Audio"
@@ -412,16 +412,16 @@
  #define JucePlugin_AUSubType              JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_AUExportPrefix
- #define JucePlugin_AUExportPrefix         RingModulatorAU
+ #define JucePlugin_AUExportPrefix         RotorAU
 #endif
 #ifndef  JucePlugin_AUExportPrefixQuoted
- #define JucePlugin_AUExportPrefixQuoted   "RingModulatorAU"
+ #define JucePlugin_AUExportPrefixQuoted   "RotorAU"
 #endif
 #ifndef  JucePlugin_AUManufacturerCode
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
 #endif
 #ifndef  JucePlugin_CFBundleIdentifier
- #define JucePlugin_CFBundleIdentifier     com.MaxwellAudio.RingModulator
+ #define JucePlugin_CFBundleIdentifier     com.MaxwellAudio.Rotor
 #endif
 #ifndef  JucePlugin_RTASCategory
  #define JucePlugin_RTASCategory           0
@@ -439,7 +439,7 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.MaxwellAudio.RingModulator
+ #define JucePlugin_AAXIdentifier          com.MaxwellAudio.Rotor
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode
@@ -463,7 +463,7 @@
  #define JucePlugin_IAASubType             JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_IAAName
- #define JucePlugin_IAAName                "Maxwell Audio: Ring Modulator"
+ #define JucePlugin_IAAName                "Maxwell Audio: Rotor"
 #endif
 #ifndef  JucePlugin_VSTNumMidiInputs
  #define JucePlugin_VSTNumMidiInputs       16

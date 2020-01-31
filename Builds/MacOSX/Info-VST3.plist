@@ -8,11 +8,11 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>com.MaxwellAudio.RingModulator</string>
+    <string>com.MaxwellAudio.Rotor</string>
     <key>CFBundleName</key>
-    <string>Ring Modulator</string>
+    <string>Rotor</string>
     <key>CFBundleDisplayName</key>
-    <string>Ring Modulator</string>
+    <string>Rotor</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>

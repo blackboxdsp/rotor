@@ -13,12 +13,12 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 //==============================================================================
-class RingModulatorLookAndFeel : public LookAndFeel_V4
+class RotorLookAndFeel : public LookAndFeel_V4
 {
 public:
 
-    RingModulatorLookAndFeel();
-    ~RingModulatorLookAndFeel();
+    RotorLookAndFeel();
+    ~RotorLookAndFeel();
 
     //==========================================================================
 

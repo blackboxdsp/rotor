@@ -21,7 +21,7 @@ namespace BinaryData
     const int            montserratlight_ttfSize = 242068;
 
     extern const char*   backgroundlight_png;
-    const int            backgroundlight_pngSize = 114498;
+    const int            backgroundlight_pngSize = 98044;
 
     extern const char*   background_png;
     const int            background_pngSize = 87582;

@@ -12,7 +12,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulatorAudioProcessor& p, AudioProcessorValueTreeState& vts)
+RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor(&p), processor(p), valueTreeState(vts)
 {
     // GUI variables
@@ -114,7 +114,7 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     setLookAndFeel(&lookAndFeel);
 }
 
-RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
+RotorAudioProcessorEditor::~RotorAudioProcessorEditor()
 {
     // handle gl context
     glContext.detach();
@@ -132,14 +132,14 @@ RingModulatorAudioProcessorEditor::~RingModulatorAudioProcessorEditor()
 }
 
 //==============================================================================
-void RingModulatorAudioProcessorEditor::paint (Graphics& g)
+void RotorAudioProcessorEditor::paint (Graphics& g)
 {
     // draw background image (this method allows for dynamic resizing)
     Image backgroundImage = ImageCache::getFromMemory(BinaryData::backgroundlight_png, BinaryData::backgroundlight_pngSize);
     g.drawImage(backgroundImage, getLocalBounds().toFloat());
 }
 
-void RingModulatorAudioProcessorEditor::resized()
+void RotorAudioProcessorEditor::resized()
 {
     // get canvas
     auto area = getLocalBounds();

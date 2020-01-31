@@ -14,7 +14,7 @@
 
 #include "Analyzer.h"
 #include "PluginProcessor.h"
-#include "RingModulatorLookAndFeel.h"
+#include "RotorLookAndFeel.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
@@ -22,11 +22,11 @@ typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 //==============================================================================
 /**
 */
-class RingModulatorAudioProcessorEditor  : public AudioProcessorEditor
+class RotorAudioProcessorEditor : public AudioProcessorEditor
 {
 public:
-    RingModulatorAudioProcessorEditor (RingModulatorAudioProcessor&, AudioProcessorValueTreeState&);
-    ~RingModulatorAudioProcessorEditor();
+    RotorAudioProcessorEditor(RotorAudioProcessor&, AudioProcessorValueTreeState&);
+    ~RotorAudioProcessorEditor();
 
     //==========================================================================
 
@@ -40,7 +40,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    RingModulatorAudioProcessor& processor;
+    RotorAudioProcessor& processor;
 
     // Reference to value tree state for quick access
     AudioProcessorValueTreeState& valueTreeState;
@@ -50,7 +50,7 @@ private:
     
     // GUI COMPONENTS ================================================
 
-    RingModulatorLookAndFeel lookAndFeel;
+    RotorLookAndFeel lookAndFeel;
 
     // MODULATOR
     Slider modulationRateSlider;
@@ -71,5 +71,5 @@ private:
     std::unique_ptr<SliderAttachment> mixAttachment;
 
     // =========================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RingModulatorAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RotorAudioProcessorEditor)
 };

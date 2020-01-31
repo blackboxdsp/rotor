@@ -9,7 +9,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-RingModulatorAudioProcessor::RingModulatorAudioProcessor()
+RotorAudioProcessor::RotorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
     : parameters(*this, nullptr, Identifier("RingModulator"), createParameterLayout()),
       AudioProcessor(BusesProperties()
@@ -34,12 +34,12 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
     mix = parameters.getRawParameterValue("mix");
 }
 
-RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
+RotorAudioProcessor::~RotorAudioProcessor()
 {
 }
 
 //==============================================================================
-AudioProcessorValueTreeState::ParameterLayout RingModulatorAudioProcessor::createParameterLayout()
+AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParameterLayout()
 {
     std::vector<std::unique_ptr<RangedAudioParameter>> params;
 
@@ -86,12 +86,12 @@ AudioProcessorValueTreeState::ParameterLayout RingModulatorAudioProcessor::creat
     return { params.begin(), params.end() };
 }
 
-const String RingModulatorAudioProcessor::getName() const
+const String RotorAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool RingModulatorAudioProcessor::acceptsMidi() const
+bool RotorAudioProcessor::acceptsMidi() const
 {
 #if JucePlugin_WantsMidiInput
     return true;
@@ -100,7 +100,7 @@ bool RingModulatorAudioProcessor::acceptsMidi() const
 #endif
 }
 
-bool RingModulatorAudioProcessor::producesMidi() const
+bool RotorAudioProcessor::producesMidi() const
 {
 #if JucePlugin_ProducesMidiOutput
     return true;
@@ -109,7 +109,7 @@ bool RingModulatorAudioProcessor::producesMidi() const
 #endif
 }
 
-bool RingModulatorAudioProcessor::isMidiEffect() const
+bool RotorAudioProcessor::isMidiEffect() const
 {
 #if JucePlugin_IsMidiEffect
     return true;
@@ -118,37 +118,37 @@ bool RingModulatorAudioProcessor::isMidiEffect() const
 #endif
 }
 
-double RingModulatorAudioProcessor::getTailLengthSeconds() const
+double RotorAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int RingModulatorAudioProcessor::getNumPrograms()
+int RotorAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int RingModulatorAudioProcessor::getCurrentProgram()
+int RotorAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void RingModulatorAudioProcessor::setCurrentProgram(int index)
+void RotorAudioProcessor::setCurrentProgram(int index)
 {
 }
 
-const String RingModulatorAudioProcessor::getProgramName(int index)
+const String RotorAudioProcessor::getProgramName(int index)
 {
     return {};
 }
 
-void RingModulatorAudioProcessor::changeProgramName(int index, const String& newName)
+void RotorAudioProcessor::changeProgramName(int index, const String& newName)
 {
 }
 
 //==============================================================================
-void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+void RotorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // set the inversion factor
     *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
@@ -168,14 +168,14 @@ void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPe
     *previousPulseWidth = *pulseWidth;
 }
 
-void RingModulatorAudioProcessor::releaseResources()
+void RotorAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool RingModulatorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+bool RotorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
 #if JucePlugin_IsMidiEffect
     ignoreUnused(layouts);
@@ -198,7 +198,7 @@ bool RingModulatorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layo
 }
 #endif
 
-void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     const auto totalNumInputChannels = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -223,7 +223,7 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
     *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
 
     // grab reference to the editor (for the analyzer)
-    RingModulatorAudioProcessorEditor* editor = static_cast<RingModulatorAudioProcessorEditor*>(getActiveEditor());
+    RotorAudioProcessorEditor* editor = static_cast<RotorAudioProcessorEditor*>(getActiveEditor());
 
     // push unprocessed buffer to the pre analyzer
     if (editor)
@@ -284,24 +284,24 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
 }
 
 //==============================================================================
-bool RingModulatorAudioProcessor::hasEditor() const
+bool RotorAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* RingModulatorAudioProcessor::createEditor()
+AudioProcessorEditor* RotorAudioProcessor::createEditor()
 {
-    return new RingModulatorAudioProcessorEditor(*this, parameters);
+    return new RotorAudioProcessorEditor(*this, parameters);
 }
 
 //==============================================================================
-void RingModulatorAudioProcessor::getStateInformation(MemoryBlock& destData)
+void RotorAudioProcessor::getStateInformation(MemoryBlock& destData)
 {
     std::unique_ptr<XmlElement> xml(parameters.state.createXml());
     copyXmlToBinary(*xml, destData);
 }
 
-void RingModulatorAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
+void RotorAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     std::unique_ptr<XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
     if (xmlState.get() != nullptr)
@@ -318,19 +318,19 @@ void RingModulatorAudioProcessor::setStateInformation(const void* data, int size
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new RingModulatorAudioProcessor();
+    return new RotorAudioProcessor();
 }
 
 //==============================================================================
 
 // returns skew factor that is skewed from the midpoint
-float RingModulatorAudioProcessor::getSkewFactor(float start, float end, float center)
+float RotorAudioProcessor::getSkewFactor(float start, float end, float center)
 {
     return std::log((0.5f)) / std::log((center - start) / (end - start));
 }
 
 // switches modulation inversion factor between values -1.0f and 1.0f
-float RingModulatorAudioProcessor::getModulationInversion(bool inverted)
+float RotorAudioProcessor::getModulationInversion(bool inverted)
 {
     if (inverted)
         return -1.0f;
@@ -338,14 +338,14 @@ float RingModulatorAudioProcessor::getModulationInversion(bool inverted)
 }
 
 // updates angle delta provided a frequency value from slider
-void RingModulatorAudioProcessor::setPhaseDelta(double frequency, double sampleRate)
+void RotorAudioProcessor::setPhaseDelta(double frequency, double sampleRate)
 {
     auto cyclesPerSample = frequency / sampleRate;
     phaseDelta = cyclesPerSample * (double) wavetableSize;
 }
 
 // writes wavetable according to currently selected waveform
-void RingModulatorAudioProcessor::setWavetable(int waveformIndex)
+void RotorAudioProcessor::setWavetable(int waveformIndex)
 {
     // clear the wavetable
     wavetable.clear();

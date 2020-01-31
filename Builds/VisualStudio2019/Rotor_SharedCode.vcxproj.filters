@@ -2,14 +2,14 @@
 
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Ring Modulator\Resources">
-      <UniqueIdentifier>{745F49CD-992E-4C70-5EE7-244D28B970A4}</UniqueIdentifier>
+    <Filter Include="Rotor\Resources">
+      <UniqueIdentifier>{FD00FD25-45F9-45F1-DA4A-AE867A65AE4C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ring Modulator\Source">
-      <UniqueIdentifier>{8692DEE5-AD20-F596-597D-D94AA480D4B1}</UniqueIdentifier>
+    <Filter Include="Rotor\Source">
+      <UniqueIdentifier>{E709BDC9-34AF-E316-F44F-E485B8BA77BF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ring Modulator">
-      <UniqueIdentifier>{915927C4-2114-4F4C-23C1-9D77E7133DE0}</UniqueIdentifier>
+    <Filter Include="Rotor">
+      <UniqueIdentifier>{86580E14-AC86-869A-65CE-ECFA4F2A4150}</UniqueIdentifier>
     </Filter>
     <Filter Include="JUCE Modules\juce_audio_basics\audio_play_head">
       <UniqueIdentifier>{EB58F05A-A968-CEBE-40C4-107CDD8F240F}</UniqueIdentifier>
@@ -458,16 +458,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
-      <Filter>Ring Modulator\Source</Filter>
+      <Filter>Rotor\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PluginEditor.cpp">
-      <Filter>Ring Modulator\Source</Filter>
+      <Filter>Rotor\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\HomunculatorLookAndFeel.cpp">
-      <Filter>Ring Modulator\Source</Filter>
+    <ClCompile Include="..\..\Source\RotorLookAndFeel.cpp">
+      <Filter>Rotor\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Analyzer.cpp">
-      <Filter>Ring Modulator\Source</Filter>
+      <Filter>Rotor\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <Filter>JUCE Modules\juce_audio_basics\buffers</Filter>
@@ -2533,16 +2533,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
-      <Filter>Ring Modulator\Source</Filter>
+      <Filter>Rotor\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
-      <Filter>Ring Modulator\Source</Filter>
+      <Filter>Rotor\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\HomunculatorLookAndFeel.h">
-      <Filter>Ring Modulator\Source</Filter>
+    <ClInclude Include="..\..\Source\RotorLookAndFeel.h">
+      <Filter>Rotor\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Analyzer.h">
-      <Filter>Ring Modulator\Source</Filter>
+      <Filter>Rotor\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
@@ -4854,22 +4854,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\louis-george-cafe.ttf">
-      <Filter>Ring Modulator\Resources</Filter>
+      <Filter>Rotor\Resources</Filter>
     </None>
     <None Include="..\..\Assets\louis-george-cafe-light.ttf">
-      <Filter>Ring Modulator\Resources</Filter>
+      <Filter>Rotor\Resources</Filter>
     </None>
     <None Include="..\..\Assets\montserrat.ttf">
-      <Filter>Ring Modulator\Resources</Filter>
+      <Filter>Rotor\Resources</Filter>
     </None>
     <None Include="..\..\Assets\montserrat-light.ttf">
-      <Filter>Ring Modulator\Resources</Filter>
+      <Filter>Rotor\Resources</Filter>
     </None>
     <None Include="..\..\Assets\background-light.png">
-      <Filter>Ring Modulator\Resources</Filter>
+      <Filter>Rotor\Resources</Filter>
     </None>
     <None Include="..\..\Assets\background.png">
-      <Filter>Ring Modulator\Resources</Filter>
+      <Filter>Rotor\Resources</Filter>
     </None>
     <None Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_formats\codecs\flac\Flac Licence.txt">
       <Filter>JUCE Modules\juce_audio_formats\codecs\flac</Filter>

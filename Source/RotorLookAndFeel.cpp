@@ -8,19 +8,19 @@
   ==============================================================================
 */
 
-#include "RingModulatorLookAndFeel.h"
+#include "RotorLookAndFeel.h"
 
 //==============================================================================
-RingModulatorLookAndFeel::RingModulatorLookAndFeel()
+RotorLookAndFeel::RotorLookAndFeel()
 {
 }
 
-RingModulatorLookAndFeel::~RingModulatorLookAndFeel()
+RotorLookAndFeel::~RotorLookAndFeel()
 {
 }
 
 //==============================================================================
-void RingModulatorLookAndFeel::drawRotarySlider(
+void RotorLookAndFeel::drawRotarySlider(
 	Graphics& g,
 	int x, int y,
 	int width, int height,
@@ -150,7 +150,7 @@ void RingModulatorLookAndFeel::drawRotarySlider(
 	g.fillPath(arcPathFilled);
 }
 
-void RingModulatorLookAndFeel::drawToggleButton(
+void RotorLookAndFeel::drawToggleButton(
 	Graphics& g,
 	ToggleButton& b,
 	bool shouldDrawButtonAsHighlighted, 
@@ -159,7 +159,7 @@ void RingModulatorLookAndFeel::drawToggleButton(
 }
 
 //==============================================================================
-void RingModulatorLookAndFeel::setFontSize(int newSize)
+void RotorLookAndFeel::setFontSize(int newSize)
 {
 	fontSize = (float) newSize;
 }

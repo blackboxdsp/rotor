@@ -1,12 +1,12 @@
-# NAME
+# Rotor
 
 > Modern ring modulation
 
 <div style="text-align: center">
-    <img src="./screenshot.png" alt="NAME screenshot" title="NAME running in Ableton Live 10" height="840"/>
+    <img src="./screenshot.png" alt="Rotor screenshot" title="Rotor running in Ableton Live 10" height="840"/>
 </div>
 
-NAME is a variable waveform ring modulation plugin targeting VST3 and AU for OS X and Windows platforms. It uses wavetable synthesis to generate various simple waveforms that act as the modulation signal for the input. It is compiled using the [JUCE](https://juce.com/) framework for C++.
+Rotor is a variable waveform ring modulation plugin targeting VST3 and AU for OS X and Windows platforms. It uses wavetable synthesis to generate various simple waveforms that act as the modulation signal for the input. It is compiled using the [JUCE](https://juce.com/) framework for C++.
 
 ## Dependencies
 
@@ -15,7 +15,7 @@ NAME is a variable waveform ring modulation plugin targeting VST3 and AU for OS 
 
 ## Usage
 
-NAME is capable of running within any plugin host as long as it supports VST3 or AU. Please refer to your DAW's manual to see compatible plugin formats.
+Rotor is capable of running within any plugin host as long as it supports VST3 or AU. Please refer to your DAW's manual to see compatible plugin formats.
 
 ### Parameters
 
@@ -33,13 +33,13 @@ NAME is capable of running within any plugin host as long as it supports VST3 or
 
 ## Contributing
 
-Should you discover any bugs or undesirable behavior, please feel free to open an issue or submit a pull request. I am happy to accept them as long as they don't alter product direction, otherwise I am completely open to discuss any ideas that you may have regarding NAME.
+Should you discover any bugs or undesirable behavior, please feel free to open an issue or submit a pull request. I am happy to accept them as long as they don't alter product direction, otherwise I am completely open to discuss any ideas that you may have regarding Rotor.
 
 ### Building
 
-NAME is built using the JUCE framework, which graciously provides project files for various IDEs.
+Rotor is built using the JUCE framework, which graciously provides project files for various IDEs.
 
-For Windows users, simply navigate to `Builds/VisualStudio2019/NAME.sln` then build either of the two available configurations. Similarly, OS X users may navigate to `Builds/MACOSX/NAME.xcodeproj` and build using XCode.
+For Windows users, simply navigate to `Builds/VisualStudio2019/Rotor.sln` then build either of the two available configurations. Similarly, OS X users may navigate to `Builds/MACOSX/Rotor.xcodeproj` and build using XCode.
 
 If you have any issues building the plugin, please contact me or file an issue.
 

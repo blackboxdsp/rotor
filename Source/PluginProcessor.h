@@ -12,12 +12,12 @@
 //==============================================================================
 /**
 */
-class RingModulatorAudioProcessor : public AudioProcessor
+class RotorAudioProcessor : public AudioProcessor
 {
 public:
     //==============================================================================
-    RingModulatorAudioProcessor();
-    ~RingModulatorAudioProcessor();
+    RotorAudioProcessor();
+    ~RotorAudioProcessor();
 
     //==============================================================================
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -87,5 +87,5 @@ private:
     double phaseDelta = 0.0;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RingModulatorAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotorAudioProcessor)
 };

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="HvUltZ" name="Ring Modulator" projectType="audioplug" jucerVersion="5.4.5"
+<JUCERPROJECT id="HvUltZ" name="Rotor" projectType="audioplug" jucerVersion="5.4.5"
               pluginFormats="buildAU,buildVST3" pluginManufacturer="Maxwell Audio"
               companyName="Maxwell Audio" companyWebsite="mattmaxwell.tech"
               companyEmail="maxwellmattryan@gmail.com" version="1.0.0">
-  <MAINGROUP id="zf8tu5" name="Ring Modulator">
+  <MAINGROUP id="zf8tu5" name="Rotor">
     <GROUP id="{3EA94401-4576-69AE-3AE4-6946D780E20B}" name="Resources">
       <FILE id="PGdJwS" name="louis-george-cafe.ttf" compile="0" resource="1"
             file="Assets/louis-george-cafe.ttf"/>
@@ -25,10 +25,10 @@
       <FILE id="BbIwQI" name="PluginEditor.h" compile="1" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="cFkmkm" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="I3Lhbt" name="RingModulatorLookAndFeel.h" compile="1" resource="0"
-            file="Source/RingModulatorLookAndFeel.h"/>
-      <FILE id="LAWtAt" name="RingModulatorLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/RingModulatorLookAndFeel.cpp"/>
+      <FILE id="I3Lhbt" name="RotorLookAndFeel.h" compile="1" resource="0"
+            file="Source/RotorLookAndFeel.h"/>
+      <FILE id="LAWtAt" name="RotorLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/RotorLookAndFeel.cpp"/>
       <FILE id="FiJLlE" name="Analyzer.h" compile="1" resource="0" file="Source/Analyzer.h"/>
       <FILE id="uyxfTk" name="Analyzer.cpp" compile="1" resource="0" file="Source/Analyzer.cpp"/>
     </GROUP>
@@ -37,8 +37,9 @@
     <VS2019 targetFolder="Builds/VisualStudio2019" vst3Folder="VST3_SDK">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" enablePluginBinaryCopyStep="1" vst3BinaryLocation="C:\Program Files\Vst3plugins"
-                       vstBinaryLocation="C:\Program Files\Vstplugins"/>
-        <CONFIGURATION isDebug="0" name="Release" enablePluginBinaryCopyStep="1" vst3BinaryLocation="C:\Program Files\Vst3plugins"/>
+                       vstBinaryLocation="C:\Program Files\Vstplugins" targetName="Rotor"/>
+        <CONFIGURATION isDebug="0" name="Release" enablePluginBinaryCopyStep="1" vst3BinaryLocation="C:\Program Files\Vst3plugins"
+                       targetName="Rotor"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../frameworks/JUCE/modules"/>
@@ -60,8 +61,8 @@
     </VS2019>
     <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="VST3_SDK">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug"/>
-        <CONFIGURATION isDebug="0" name="Release"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Rotor"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Rotor"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_opengl"/>

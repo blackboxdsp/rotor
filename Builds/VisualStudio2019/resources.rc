@@ -14,9 +14,9 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "CompanyName",  "Maxwell Audio\0"
-      VALUE "FileDescription",  "Ring Modulator\0"
+      VALUE "FileDescription",  "Rotor\0"
       VALUE "FileVersion",  "1.0.0\0"
-      VALUE "ProductName",  "Ring Modulator\0"
+      VALUE "ProductName",  "Rotor\0"
       VALUE "ProductVersion",  "1.0.0\0"
     END
   END

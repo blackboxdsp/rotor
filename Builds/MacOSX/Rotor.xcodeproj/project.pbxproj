@@ -89,13 +89,13 @@
 			isa = PBXBuildFile;
 			fileRef = 6B09D22A67D42F3E7DF0616F;
 		};
-		E4B826D5F845360EFCB10B24 = {
+		52C868D4D39A076C5E66B747 = {
 			isa = PBXBuildFile;
-			fileRef = A27F1B06BA60202464E49AA2;
+			fileRef = 03E0BEE2D9A0BA179ACE8573;
 		};
-		0BEF41A2DA69765911518FE9 = {
+		D7DB2529BB0379D461A6A2F3 = {
 			isa = PBXBuildFile;
-			fileRef = D8420D96AD75BFD4C9555543;
+			fileRef = 090C3E5B25AAD38C8B603B5B;
 		};
 		9D14661CDCA4B6063D838FCA = {
 			isa = PBXBuildFile;
@@ -193,14 +193,14 @@
 			isa = PBXFileReference;
 			explicitFileType = wrapper.cfbundle;
 			includeInIndex = 0;
-			path = "Ring Modulator.vst3";
+			path = Rotor.vst3;
 			sourceTree = "BUILT_PRODUCTS_DIR";
 		};
 		00F6C025DA855759A6E257ED = {
 			isa = PBXFileReference;
 			explicitFileType = wrapper.cfbundle;
 			includeInIndex = 0;
-			path = "Ring Modulator.component";
+			path = Rotor.component;
 			sourceTree = "BUILT_PRODUCTS_DIR";
 		};
 		01D270B8B0F0C26C9BC72994 = {
@@ -222,6 +222,20 @@
 			lastKnownFileType = file.ttf;
 			name = montserrat.ttf;
 			path = ../../Assets/montserrat.ttf;
+			sourceTree = "SOURCE_ROOT";
+		};
+		03E0BEE2D9A0BA179ACE8573 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = RotorLookAndFeel.h;
+			path = ../../Source/RotorLookAndFeel.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		090C3E5B25AAD38C8B603B5B = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = RotorLookAndFeel.cpp;
+			path = ../../Source/RotorLookAndFeel.cpp;
 			sourceTree = "SOURCE_ROOT";
 		};
 		0A7F2BED5A17552C13EF63D3 = {
@@ -273,6 +287,13 @@
 			path = "../../JuceLibraryCode/include_juce_graphics.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		2FF85AD5DFFA326CC9200BC8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			name = Rotor.entitlements;
+			path = Rotor.entitlements;
+			sourceTree = "SOURCE_ROOT";
+		};
 		31B4A833F3CC092AB977B7E3 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -292,13 +313,6 @@
 			lastKnownFileType = file.ttf;
 			name = "montserrat-light.ttf";
 			path = "../../Assets/montserrat-light.ttf";
-			sourceTree = "SOURCE_ROOT";
-		};
-		3C9CD0DFCBB1AE224CE4B18A = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.xml;
-			name = "Ring Modulator.entitlements";
-			path = "Ring Modulator.entitlements";
 			sourceTree = "SOURCE_ROOT";
 		};
 		3DA1A39344CF80F982826935 = {
@@ -438,7 +452,7 @@
 			isa = PBXFileReference;
 			explicitFileType = archive.ar;
 			includeInIndex = 0;
-			path = "libRing Modulator.a";
+			path = libRotor.a;
 			sourceTree = "BUILT_PRODUCTS_DIR";
 		};
 		82B0F57E48A4E886D0D01506 = {
@@ -503,13 +517,6 @@
 			name = "juce_audio_utils";
 			path = "~/JUCE/modules/juce_audio_utils";
 			sourceTree = "<absolute>";
-		};
-		A27F1B06BA60202464E49AA2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = HomunculatorLookAndFeel.h;
-			path = ../../Source/HomunculatorLookAndFeel.h;
-			sourceTree = "SOURCE_ROOT";
 		};
 		A59AD4EE4AA689E8610AA818 = {
 			isa = PBXFileReference;
@@ -601,13 +608,6 @@
 			name = "juce_audio_processors";
 			path = "~/JUCE/modules/juce_audio_processors";
 			sourceTree = "<absolute>";
-		};
-		D8420D96AD75BFD4C9555543 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = HomunculatorLookAndFeel.cpp;
-			path = ../../Source/HomunculatorLookAndFeel.cpp;
-			sourceTree = "SOURCE_ROOT";
 		};
 		D92D1416A0BD37CCD8258D5F = {
 			isa = PBXFileReference;
@@ -720,8 +720,8 @@
 				F3C2D0A449ACE39A85329755,
 				01DCDA11C0829B0205FA0810,
 				6B09D22A67D42F3E7DF0616F,
-				A27F1B06BA60202464E49AA2,
-				D8420D96AD75BFD4C9555543,
+				03E0BEE2D9A0BA179ACE8573,
+				090C3E5B25AAD38C8B603B5B,
 				BE423DAC6AB19D13D228010A,
 				BFCCC6D7181ED68BA7535CCA,
 			);
@@ -734,7 +734,7 @@
 				21AC882B9668C4603C7829D2,
 				5678C4C2389860497E4CE724,
 			);
-			name = "Ring Modulator";
+			name = Rotor;
 			sourceTree = "<group>";
 		};
 		C884A59EE9D8CCBA2478C87D = {
@@ -900,9 +900,9 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/VST3/";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				OTHER_LDFLAGS = "-bundle -lRing\\ Modulator";
-				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.RingModulator;
-				PRODUCT_NAME = "Ring Modulator";
+				OTHER_LDFLAGS = "-bundle -lRotor";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.Rotor;
+				PRODUCT_NAME = "Rotor";
 				USE_HEADERMAP = NO;
 				WRAPPER_EXTENSION = vst3;
 			};
@@ -953,9 +953,9 @@
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				OTHER_LDFLAGS = "-bundle -lRing\\ Modulator";
-				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.RingModulator;
-				PRODUCT_NAME = "Ring Modulator";
+				OTHER_LDFLAGS = "-bundle -lRotor";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.Rotor;
+				PRODUCT_NAME = "Rotor";
 				USE_HEADERMAP = NO;
 				WRAPPER_EXTENSION = vst3;
 			};
@@ -1004,10 +1004,10 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/Components/";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				OTHER_LDFLAGS = "-bundle -lRing\\ Modulator";
+				OTHER_LDFLAGS = "-bundle -lRotor";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
-				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.RingModulator;
-				PRODUCT_NAME = "Ring Modulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.Rotor;
+				PRODUCT_NAME = "Rotor";
 				USE_HEADERMAP = NO;
 				WRAPPER_EXTENSION = component;
 			};
@@ -1058,10 +1058,10 @@
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				OTHER_LDFLAGS = "-bundle -lRing\\ Modulator";
+				OTHER_LDFLAGS = "-bundle -lRotor";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
-				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.RingModulator;
-				PRODUCT_NAME = "Ring Modulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.Rotor;
+				PRODUCT_NAME = "Rotor";
 				USE_HEADERMAP = NO;
 				WRAPPER_EXTENSION = component;
 			};
@@ -1105,8 +1105,8 @@
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.RingModulator;
-				PRODUCT_NAME = "Ring Modulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.Rotor;
+				PRODUCT_NAME = "Rotor";
 				SKIP_INSTALL = YES;
 				USE_HEADERMAP = NO;
 			};
@@ -1152,8 +1152,8 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.RingModulator;
-				PRODUCT_NAME = "Ring Modulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MaxwellAudio.Rotor;
+				PRODUCT_NAME = "Rotor";
 				SKIP_INSTALL = YES;
 				USE_HEADERMAP = NO;
 			};
@@ -1200,7 +1200,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "Ring Modulator";
+				PRODUCT_NAME = "Rotor";
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
@@ -1245,7 +1245,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PRODUCT_NAME = "Ring Modulator";
+				PRODUCT_NAME = "Rotor";
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
@@ -1291,8 +1291,8 @@
 				4C646C96452382E36307C389,
 				CB5C11C56E318A1780697284,
 			);
-			name = "Ring Modulator - All";
-			productName = "Ring Modulator";
+			name = "Rotor - All";
+			productName = Rotor;
 		};
 		9309EC25DD6C19C57F206D53 = {
 			isa = XCConfigurationList;
@@ -1350,8 +1350,8 @@
 			dependencies = (
 				CB5C11C56E318A1780697284,
 			);
-			name = "Ring Modulator - VST3";
-			productName = "Ring Modulator";
+			name = "Rotor - VST3";
+			productName = Rotor;
 			productReference = 022CD780941359F5AEFFB4BA;
 			productType = "com.apple.product-type.bundle";
 		};
@@ -1422,8 +1422,8 @@
 			dependencies = (
 				CB5C11C56E318A1780697284,
 			);
-			name = "Ring Modulator - AU";
-			productName = "Ring Modulator";
+			name = "Rotor - AU";
+			productName = Rotor;
 			productReference = 00F6C025DA855759A6E257ED;
 			productType = "com.apple.product-type.bundle";
 		};
@@ -1444,8 +1444,8 @@
 				902A6C43A0F3C7232FB2B482,
 				C8D2EF88929A7E0D933239CD,
 				E8A7B96358BD86786DD28F8A,
-				E4B826D5F845360EFCB10B24,
-				0BEF41A2DA69765911518FE9,
+				52C868D4D39A076C5E66B747,
+				D7DB2529BB0379D461A6A2F3,
 				9D14661CDCA4B6063D838FCA,
 				204707F5627F7B055D4423E1,
 				96EECD51B82E0A9AE1442629,
@@ -1476,8 +1476,8 @@
 			);
 			buildRules = ( );
 			dependencies = ( );
-			name = "Ring Modulator - Shared Code";
-			productName = "Ring Modulator";
+			name = "Rotor - Shared Code";
+			productName = Rotor;
 			productReference = 7DF41007A31B611304797E8C;
 			productType = "com.apple.product-type.library.static";
 		};
