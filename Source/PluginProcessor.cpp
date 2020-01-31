@@ -24,11 +24,12 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
 {
     // init parameters from valueTreeState
     modulationRate = parameters.getRawParameterValue("rate");
+    previousWaveform = new float(0.0f);
     modulationWaveform = parameters.getRawParameterValue("waveform");
-    previousModulationWaveform = new float(0.0f);
     modulationIsInverted = parameters.getRawParameterValue("inversion");
     modulationInversionFactor = new float(1.0f);
     pulseWidth = parameters.getRawParameterValue("pulseWidth");
+    previousPulseWidth = new float(0.5f);
     level = parameters.getRawParameterValue("level"); 
     mix = parameters.getRawParameterValue("mix");
 }
@@ -159,9 +160,12 @@ void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPe
     wavetableSize = 2048;
     setPhaseDelta((double) *modulationRate, sampleRate);
 
-    // write the wavetable according to current waveform    
-    *previousModulationWaveform = *modulationWaveform;
+    // write the wavetable according to current waveform   
+    *previousWaveform = *modulationWaveform;
     setWavetable((int) *modulationWaveform);
+
+    // set pulse width stuff
+    *previousPulseWidth = *pulseWidth;
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -199,13 +203,23 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
     const auto totalNumInputChannels = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // update parameters by calling methods directly
-    if (*previousModulationWaveform != *modulationWaveform)
+    // write new wavetable if pulse width changes
+    if (*previousPulseWidth != *pulseWidth)
     {
-        *previousModulationWaveform = *modulationWaveform;
+        *previousPulseWidth = *pulseWidth;
         setWavetable((int) *modulationWaveform);
     }
-    setPhaseDelta((double)*modulationRate, this->getSampleRate());
+
+    // write new wavetable if waveform selection change
+    if (*previousWaveform != *modulationWaveform)
+    {
+        *previousWaveform = *modulationWaveform;
+        setWavetable((int) *modulationWaveform);
+    }
+    // update phase delta for wavetable
+    setPhaseDelta((double) *modulationRate, this->getSampleRate());
+
+    // update inversion factor
     *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
 
     // grab reference to the editor (for the analyzer)

@@ -42,7 +42,6 @@ void Analyzer::paint (Graphics& g)
     const float scale = 1.0f / jmax((float)FFTSize, maxRange.getEnd());
 
     g.setColour(fillStart);
-
     for (int i = 0; i < outputSize; i++)
     {
         float x = std::log10(1 + 39 * ((i + 1.0f) / outputSize)) / std::log10(40.0f) * width;
@@ -51,7 +50,7 @@ void Analyzer::paint (Graphics& g)
         const float decibels = Decibels::gainToDecibels(magnitude);
         const float y = jmap(decibels, -90.0f, -12.0f, height, 0.0f);
 
-        g.drawVerticalLine((int)x, y, height);
+        g.drawVerticalLine((int) x, y, height);
     }
 }
 

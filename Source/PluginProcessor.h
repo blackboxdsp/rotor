@@ -66,10 +66,11 @@ private:
 
     // parameter variables
     float* modulationRate;
+    float* previousWaveform;
     float* modulationWaveform;
-    float* previousModulationWaveform;
     float* modulationInversionFactor; // most pronounced when mix is at 50%
     float* modulationIsInverted;
+    float* previousPulseWidth;
     float* pulseWidth;
 
     float* level;
