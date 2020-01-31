@@ -29,15 +29,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRateSlider));
     modulationRateSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationRateSlider);
-    /*modulationRateSlider.onValueChange = [this]
-    {
-        auto currentSampleRate = processor.getSampleRate();
-        if (currentSampleRate > 0.0)
-        {
-            auto frequency = modulationRateSlider.getValue();
-            processor.setPhaseDelta(frequency, currentSampleRate);
-        }
-    };*/
 
     // PULSE WIDTH
     modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
@@ -46,13 +37,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
     modulationPulseWidthSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationPulseWidthSlider);
-    /*modulationPulseWidthSlider.onValueChange = [this]
-    {
-        if ((int) modulationShapeSlider.getValue() == 3)
-        {
-            processor.setWavetable(3);
-        }
-    };*/
 
     // SHAPE
     modulationShapeSlider.setName("shape");
@@ -62,10 +46,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
     modulationShapeSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationShapeSlider);
-    /*modulationShapeSlider.onValueChange = [this]
-    {
-        processor.setWavetable((int)modulationShapeSlider.getValue());
-    };*/
 
     // INVERSION
 
@@ -82,18 +62,6 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationInversionButtonAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
     modulationInversionButton.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionButton);
-    //modulationInversionButton.onClick = [this]
-    //{
-    //    // update processor's inversion variable
-    //    auto toggleState = modulationInversionButton.getToggleState();
-    //    processor.setModulationInversion(toggleState);
-
-    //    // handle slider
-    //    if (toggleState)
-    //        modulationInversionSlider.setValue(1.0, NotificationType::dontSendNotification);
-    //    else
-    //        modulationInversionSlider.setValue(0.0, NotificationType::dontSendNotification);
-    //};
 
     // OUTPUT ==================================================================
 

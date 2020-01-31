@@ -25,6 +25,7 @@ RingModulatorAudioProcessor::RingModulatorAudioProcessor()
     // init parameters from valueTreeState
     modulationRate = parameters.getRawParameterValue("rate");
     modulationWaveform = parameters.getRawParameterValue("waveform");
+    previousModulationWaveform = new float(0.0f);
     modulationIsInverted = parameters.getRawParameterValue("inversion");
     modulationInversionFactor = new float(1.0f);
     pulseWidth = parameters.getRawParameterValue("pulseWidth");
@@ -52,7 +53,9 @@ AudioProcessorValueTreeState::ParameterLayout RingModulatorAudioProcessor::creat
 
     // PULSE WIDTH
     auto p_pulseWidth = std::make_unique<AudioParameterFloat>(
-        "pulseWidth", "Pulse Width", 0.01f, 0.99f, 0.5f);
+        "pulseWidth", "Pulse Width",
+        NormalisableRange<float>(0.01f, 0.99f, 0.1f), // any lower than 0.1f gets mehh performance...
+        0.5f);
     params.push_back(std::move(p_pulseWidth));
 
     // WAVEFORM
@@ -157,6 +160,7 @@ void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPe
     setPhaseDelta((double) *modulationRate, sampleRate);
 
     // write the wavetable according to current waveform    
+    *previousModulationWaveform = *modulationWaveform;
     setWavetable((int) *modulationWaveform);
 }
 
@@ -196,9 +200,13 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // update parameters by calling methods directly
-    setPhaseDelta((double) *modulationRate, this->getSampleRate());
-    setWavetable((int) *modulationWaveform);
-    getModulationInversion((bool) *modulationIsInverted);
+    if (*previousModulationWaveform != *modulationWaveform)
+    {
+        *previousModulationWaveform = *modulationWaveform;
+        setWavetable((int) *modulationWaveform);
+    }
+    setPhaseDelta((double)*modulationRate, this->getSampleRate());
+    *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
 
     // grab reference to the editor (for the analyzer)
     RingModulatorAudioProcessorEditor* editor = static_cast<RingModulatorAudioProcessorEditor*>(getActiveEditor());
@@ -335,51 +343,51 @@ void RingModulatorAudioProcessor::setWavetable(int waveformIndex)
     switch (waveformIndex)
     {
         // SINE
-    default:
-    case 0:
-        for (int i = 0; i < wavetableSize; i++)
-        {
-            auto waveformValue = sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
-            wavetable.insert(i, waveformValue);
-        }
-        break;
+        default:
+        case 0:
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                auto waveformValue = sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
+                wavetable.insert(i, waveformValue);
+            }
+            break;
         // TRIANGLE
-    case 1:
-        for (int i = 0; i < wavetableSize / 2; i++)
-        {
-            float waveformValue = (float) i / (wavetableSize / 2);
-            wavetable.insert(i, waveformValue);
-        }
-        for (int i = wavetableSize / 2; i < wavetableSize; i++)
-        {
-            wavetable.insert(i, wavetable[-1 * (i + 1)]);
-        }
-        break;
+        case 1:
+            for (int i = 0; i < wavetableSize / 2; i++)
+            {
+                float waveformValue = (float) i / (wavetableSize / 2);
+                wavetable.insert(i, waveformValue);
+            }
+            for (int i = wavetableSize / 2; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, wavetable[-1 * (i + 1)]);
+            }
+            break;
         // SAWTOOTH
-    case 2:
-        for (int i = 0; i < wavetableSize; i++)
-        {
-            float waveformValue = (float) i / wavetableSize;
-            wavetable.insert(i, waveformValue);
-        }
-        break;
+        case 2:
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                float waveformValue = (float) i / wavetableSize;
+                wavetable.insert(i, waveformValue);
+            }
+            break;
         // SQUARE
-    case 3:
-        for (int i = 0; i < pulseWidthSize; i++)
-        {
-            wavetable.insert(i, 1.0f);
-        }
-        for (int i = pulseWidthSize; i < wavetableSize; i++)
-        {
-            wavetable.insert(i, 0.0f);
-        }
-        break;
+        case 3:
+            for (int i = 0; i < pulseWidthSize; i++)
+            {
+                wavetable.insert(i, 1.0f);
+            }
+            for (int i = pulseWidthSize; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, 0.0f);
+            }
+            break;
         // NOISE
-    case 4:
-        for (int i = 0; i < wavetableSize; i++)
-        {
-            wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
-        }
-        break;
+        case 4:
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
+            }
+            break;
     }
 }

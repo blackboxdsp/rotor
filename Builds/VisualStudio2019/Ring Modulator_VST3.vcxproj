@@ -147,6 +147,9 @@
     <Lib>
       <AdditionalDependencies>Ring Modulator.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>copy /Y &quot;$(OutDir)$(TargetFileName)&quot; &quot;C:\Program Files\Vst3plugins\$(TargetFileName)&quot;</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_plugin_client_VST3.cpp"/>
