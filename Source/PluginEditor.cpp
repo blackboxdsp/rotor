@@ -26,19 +26,18 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationRateSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
     modulationRateSlider.setTextValueSuffix(" Hz");
-    modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
     modulationRateAttachment.reset(new SliderAttachment(valueTreeState, "rate", modulationRateSlider));
     modulationRateSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationRateSlider);
-    modulationRateSlider.onValueChange = [this]
+    /*modulationRateSlider.onValueChange = [this]
     {
         auto currentSampleRate = processor.getSampleRate();
         if (currentSampleRate > 0.0)
         {
             auto frequency = modulationRateSlider.getValue();
-            processor.updatePhaseDelta(frequency, currentSampleRate);
+            processor.setPhaseDelta(frequency, currentSampleRate);
         }
-    };
+    };*/
 
     // PULSE WIDTH
     modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
@@ -47,13 +46,13 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
     modulationPulseWidthSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationPulseWidthSlider);
-    modulationPulseWidthSlider.onValueChange = [this]
+    /*modulationPulseWidthSlider.onValueChange = [this]
     {
         if ((int) modulationShapeSlider.getValue() == 3)
         {
-            processor.writeWavetable(3);
+            processor.setWavetable(3);
         }
-    };
+    };*/
 
     // SHAPE
     modulationShapeSlider.setName("shape");
@@ -63,19 +62,19 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
     modulationShapeSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationShapeSlider);
-    modulationShapeSlider.onValueChange = [this]
+    /*modulationShapeSlider.onValueChange = [this]
     {
-        processor.writeWavetable((int)modulationShapeSlider.getValue());
-    };
+        processor.setWavetable((int)modulationShapeSlider.getValue());
+    };*/
 
     // INVERSION
 
     // slider 
     modulationInversionSlider.setName("inversion");
-    modulationInversionSlider.setRotaryParameters(-1.0f * MathConstants<float>::pi, MathConstants<float>::pi, true);
     modulationInversionSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationInversionSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationInversionSliderAttachment.reset(new SliderAttachment(valueTreeState, "inversion", modulationInversionSlider));
+    modulationInversionSlider.setRotaryParameters(0.0f, MathConstants<float>::twoPi, true);
     modulationInversionSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionSlider);
 
@@ -83,18 +82,18 @@ RingModulatorAudioProcessorEditor::RingModulatorAudioProcessorEditor(RingModulat
     modulationInversionButtonAttachment.reset(new ButtonAttachment(valueTreeState, "inversion", modulationInversionButton));
     modulationInversionButton.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationInversionButton);
-    modulationInversionButton.onClick = [this]
-    {
-        // update processor's inversion variable
-        auto toggleState = modulationInversionButton.getToggleState();
-        processor.setModulationInversion(toggleState);
+    //modulationInversionButton.onClick = [this]
+    //{
+    //    // update processor's inversion variable
+    //    auto toggleState = modulationInversionButton.getToggleState();
+    //    processor.setModulationInversion(toggleState);
 
-        // handle slider
-        if (toggleState)
-            modulationInversionSlider.setValue(1.0, NotificationType::dontSendNotification);
-        else
-            modulationInversionSlider.setValue(0.0, NotificationType::dontSendNotification);
-    };
+    //    // handle slider
+    //    if (toggleState)
+    //        modulationInversionSlider.setValue(1.0, NotificationType::dontSendNotification);
+    //    else
+    //        modulationInversionSlider.setValue(0.0, NotificationType::dontSendNotification);
+    //};
 
     // OUTPUT ==================================================================
 

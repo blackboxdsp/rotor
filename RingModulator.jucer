@@ -29,7 +29,7 @@
             file="Source/RingModulatorLookAndFeel.h"/>
       <FILE id="LAWtAt" name="RingModulatorLookAndFeel.cpp" compile="1" resource="0"
             file="Source/RingModulatorLookAndFeel.cpp"/>
-      <FILE id="FiJLlE" name="Analyzer.h" compile="0" resource="0" file="Source/Analyzer.h"/>
+      <FILE id="FiJLlE" name="Analyzer.h" compile="1" resource="0" file="Source/Analyzer.h"/>
       <FILE id="uyxfTk" name="Analyzer.cpp" compile="1" resource="0" file="Source/Analyzer.cpp"/>
     </GROUP>
   </MAINGROUP>

@@ -11,57 +11,25 @@
 //==============================================================================
 RingModulatorAudioProcessor::RingModulatorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-    : AudioProcessor(BusesProperties()
+    : parameters(*this, nullptr, Identifier("RingModulator"), createParameterLayout()),
+      AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
 #if ! JucePlugin_IsSynth
         .withInput("Input", AudioChannelSet::stereo(), true)
 #endif
         .withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
-    ),
+    )
 #endif
-    parameters(*this, nullptr, Identifier("RingModulator"),
-        {
-            std::make_unique<AudioParameterFloat>("rate",
-                                                   "Rate",
-                                                   NormalisableRange<float>(10.0f,
-                                                                            12000.0f,
-                                                                            1.0f,
-                                                                            getSkewFactor(10.0f, 12000.0f, 500.0f),
-                                                                            false),
-                                                   500.0f),
-            std::make_unique<AudioParameterFloat>("pulseWidth",
-                                                  "Pulse Width",
-                                                  0.01f,
-                                                  0.99f,
-                                                  0.5f),
-            std::make_unique<AudioParameterInt>("waveform",
-                                                "Waveform",
-                                                0,
-                                                4,
-                                                0),
-            std::make_unique<AudioParameterBool>("inversion",
-                                                  "Inversion",
-                                                  false),
-            std::make_unique<AudioParameterFloat>("mix",
-                                                   "Mix",
-                                                   0.0f,
-                                                   100.0f,
-                                                   50.0f),
-            std::make_unique<AudioParameterFloat>("level",
-                                                   "Level",
-                                                   -45.0f,
-                                                   6.0f,
-                                                   0.0f)
-        })
 {
     // init parameters from valueTreeState
-    level = parameters.getRawParameterValue("level");
-    mix = parameters.getRawParameterValue("mix");
     modulationRate = parameters.getRawParameterValue("rate");
-    modulationWaveform = (int*) parameters.getRawParameterValue("waveform");
+    modulationWaveform = parameters.getRawParameterValue("waveform");
+    modulationIsInverted = parameters.getRawParameterValue("inversion");
     modulationInversionFactor = new float(1.0f);
     pulseWidth = parameters.getRawParameterValue("pulseWidth");
+    level = parameters.getRawParameterValue("level"); 
+    mix = parameters.getRawParameterValue("mix");
 }
 
 RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
@@ -69,6 +37,51 @@ RingModulatorAudioProcessor::~RingModulatorAudioProcessor()
 }
 
 //==============================================================================
+AudioProcessorValueTreeState::ParameterLayout RingModulatorAudioProcessor::createParameterLayout()
+{
+    std::vector<std::unique_ptr<RangedAudioParameter>> params;
+
+    // MODULATOR ===============================================================
+
+    // RATE
+    auto p_modulationRate = std::make_unique<AudioParameterFloat>(
+        "rate", "Rate",
+        NormalisableRange<float>(10.0f, 12000.0f, 1.0f, getSkewFactor(10.0f, 12000.0f, 500.0f), false), 
+        500.0f);
+    params.push_back(std::move(p_modulationRate));
+
+    // PULSE WIDTH
+    auto p_pulseWidth = std::make_unique<AudioParameterFloat>(
+        "pulseWidth", "Pulse Width", 0.01f, 0.99f, 0.5f);
+    params.push_back(std::move(p_pulseWidth));
+
+    // WAVEFORM
+    auto p_modulationWaveform = std::make_unique<AudioParameterInt>(
+        "waveform", "Waveform", 0, 4, 0);
+    params.push_back(std::move(p_modulationWaveform));
+
+    // INVERSION
+    auto p_modulationIsInverted = std::make_unique<AudioParameterBool>(
+        "inversion",
+        "Inversion",
+        false);
+    params.push_back(std::move(p_modulationIsInverted));
+
+    // OUTPUT ==================================================================
+
+    // MIX
+    auto p_mix = std::make_unique<AudioParameterFloat>(
+        "mix", "Mix", 0.0f, 100.0f, 50.0f);
+    params.push_back(std::move(p_mix));
+
+    // LEVEL
+    auto p_level = std::make_unique<AudioParameterFloat>(
+        "level", "Level", -45.0f, 6.0f, 0.0f);
+    params.push_back(std::move(p_level));
+
+    return { params.begin(), params.end() };
+}
+
 const String RingModulatorAudioProcessor::getName() const
 {
     return JucePlugin_Name;
@@ -133,21 +146,18 @@ void RingModulatorAudioProcessor::changeProgramName(int index, const String& new
 //==============================================================================
 void RingModulatorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    // set the inversion factor
+    *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
+
     // initialize previous gain value
-    previousGain = powf(2, *level / 6);
+    previousLevel = powf(2, *level / 6);
 
     // set frequency variables
     wavetableSize = 2048;
-    updatePhaseDelta((double) *modulationRate, sampleRate);
+    setPhaseDelta((double) *modulationRate, sampleRate);
 
     // write the wavetable according to current waveform    
-    *modulationWaveform = (int) *parameters.getRawParameterValue("waveform"); 
-    writeWavetable(*modulationWaveform);
-
-    // set the inversion factor
-    *modulationInversionFactor = 1.0f;
-    if (*parameters.getRawParameterValue("inversion") > 0.5f)
-        *modulationInversionFactor = -1.0f;
+    setWavetable((int) *modulationWaveform);
 }
 
 void RingModulatorAudioProcessor::releaseResources()
@@ -185,6 +195,11 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
     const auto totalNumInputChannels = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    // update parameters by calling methods directly
+    setPhaseDelta((double) *modulationRate, this->getSampleRate());
+    setWavetable((int) *modulationWaveform);
+    getModulationInversion((bool) *modulationIsInverted);
+
     // grab reference to the editor (for the analyzer)
     RingModulatorAudioProcessorEditor* editor = static_cast<RingModulatorAudioProcessorEditor*>(getActiveEditor());
 
@@ -208,7 +223,7 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
             auto sampleData = channelData[sample], processedSampleData = channelData[sample];
 
             // multiply wavetable value by original signal and update phase value
-            processedSampleData *= (wavetable[(int)currentPhase] * *modulationInversionFactor);
+            processedSampleData *= (wavetable[(int) currentPhase] * *modulationInversionFactor);
             currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
             // write sampleData to specific sample in channelData adding wet (left) and dry (right)
@@ -231,14 +246,14 @@ void RingModulatorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiB
 
     // get current output gain and update if needed then apply it
     auto currentGain = powf(2, *level / 6);
-    if (previousGain == currentGain)
+    if (previousLevel == currentGain)
     {
         buffer.applyGain(currentGain);
     }
     else
     {
-        buffer.applyGainRamp(0, buffer.getNumSamples(), previousGain, currentGain);
-        previousGain = currentGain;
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousLevel, currentGain);
+        previousLevel = currentGain;
     }
 
     // push processed buffer to the post analyzer
@@ -286,27 +301,29 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 //==============================================================================
 
-// updates angle delta provided a frequency value from slider
-void RingModulatorAudioProcessor::updatePhaseDelta(double frequency, double sampleRate)
-{
-    auto cyclesPerSample = frequency / sampleRate;
-    phaseDelta = cyclesPerSample * (double) wavetableSize;
-}
-
 // returns skew factor that is skewed from the midpoint
 float RingModulatorAudioProcessor::getSkewFactor(float start, float end, float center)
 {
     return std::log((0.5f)) / std::log((center - start) / (end - start));
 }
 
-// return integer indicating number of samples in wavetable
-int RingModulatorAudioProcessor::getWavetableSize()
+// switches modulation inversion factor between values -1.0f and 1.0f
+float RingModulatorAudioProcessor::getModulationInversion(bool inverted)
 {
-    return wavetableSize;
+    if (inverted)
+        return -1.0f;
+    return 1.0f;
+}
+
+// updates angle delta provided a frequency value from slider
+void RingModulatorAudioProcessor::setPhaseDelta(double frequency, double sampleRate)
+{
+    auto cyclesPerSample = frequency / sampleRate;
+    phaseDelta = cyclesPerSample * (double) wavetableSize;
 }
 
 // writes wavetable according to currently selected waveform
-void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
+void RingModulatorAudioProcessor::setWavetable(int waveformIndex)
 {
     // clear the wavetable
     wavetable.clear();
@@ -365,13 +382,4 @@ void RingModulatorAudioProcessor::writeWavetable(int waveformIndex)
         }
         break;
     }
-}
-
-// switches modulation inversion factor between values -1.0f and 1.0f
-void RingModulatorAudioProcessor::setModulationInversion(bool inverted)
-{
-    if (inverted)
-        *modulationInversionFactor = -1.0f;
-    else
-        *modulationInversionFactor = 1.0f;
 }
