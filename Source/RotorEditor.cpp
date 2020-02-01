@@ -8,8 +8,8 @@
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
-#include "PluginEditor.h"
+#include "./RotorEditor.h"
+#include "./RotorProcessor.h"
 
 //==============================================================================
 RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, AudioProcessorValueTreeState& vts)
@@ -85,13 +85,13 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
 
     // ANALYZERS ===============================================================
 
-    preAnalyzer = std::make_unique<Analyzer>();
+    preAnalyzer = std::make_unique<RotorAnalyzer>();
     addAndMakeVisible(preAnalyzer.get());
     preAnalyzer->setColours(Colour::fromRGBA(126, 105, 251, 255),
                             Colour::fromRGBA(67, 42, 208, 255).withAlpha(0.7f),
                             Colour::fromRGBA(99, 78, 228, 255).withAlpha(0.7f));
 
-    postAnalyzer = std::make_unique<Analyzer>();
+    postAnalyzer = std::make_unique<RotorAnalyzer>();
     addAndMakeVisible(postAnalyzer.get());
     postAnalyzer->setColours(Colour::fromRGBA(167, 100, 251, 255),
                              Colour::fromRGBA(144, 78, 228, 255).withAlpha(0.7f),

@@ -15,12 +15,12 @@
 //==============================================================================
 /*
 */
-class Analyzer : public Component,
+class RotorAnalyzer : public Component,
                  private Timer
 {
 public:
-    Analyzer();
-    ~Analyzer();
+    RotorAnalyzer();
+    ~RotorAnalyzer();
 
     //==========================================================================
     void paint(Graphics&) override;
@@ -57,5 +57,5 @@ private:
     Colour strokeColour = Colours::white;
 
     //==========================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Analyzer)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotorAnalyzer)
 };

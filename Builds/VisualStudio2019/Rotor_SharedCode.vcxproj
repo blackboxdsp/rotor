@@ -136,10 +136,10 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\PluginProcessor.cpp"/>
-    <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
+    <ClCompile Include="..\..\Source\RotorProcessor.cpp"/>
+    <ClCompile Include="..\..\Source\RotorEditor.cpp"/>
     <ClCompile Include="..\..\Source\RotorLookAndFeel.cpp"/>
-    <ClCompile Include="..\..\Source\Analyzer.cpp"/>
+    <ClCompile Include="..\..\Source\RotorAnalyzer.cpp"/>
     <ClCompile Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -2045,10 +2045,10 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_opengl.cpp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\PluginProcessor.h"/>
-    <ClInclude Include="..\..\Source\PluginEditor.h"/>
+    <ClInclude Include="..\..\Source\RotorProcessor.h"/>
+    <ClInclude Include="..\..\Source\RotorEditor.h"/>
     <ClInclude Include="..\..\Source\RotorLookAndFeel.h"/>
-    <ClInclude Include="..\..\Source\Analyzer.h"/>
+    <ClInclude Include="..\..\Source\RotorAnalyzer.h"/>
     <ClInclude Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>
     <ClInclude Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>

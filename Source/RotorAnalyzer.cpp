@@ -3,16 +3,16 @@
 
     Analyzer.cpp
     Created: 13 Jan 2020 10:50:34am
-    Author:  Matt
+    Author:  Matthew Maxwelll
 
   ==============================================================================
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "Analyzer.h"
+#include "./RotorAnalyzer.h"
 
 //==============================================================================
-Analyzer::Analyzer()
+RotorAnalyzer::RotorAnalyzer()
     : forwardFFT(FFTOrder),
       window(FFTSize, dsp::WindowingFunction<float>::hann)
 {
@@ -21,13 +21,13 @@ Analyzer::Analyzer()
     startTimerHz(30);
 }
 
-Analyzer::~Analyzer()
+RotorAnalyzer::~RotorAnalyzer()
 {
     stopTimer();
 }
 
 //==============================================================================
-void Analyzer::paint (Graphics& g)
+void RotorAnalyzer::paint (Graphics& g)
 {
     // get dimensions
     const float width = (float) getWidth();
@@ -54,11 +54,11 @@ void Analyzer::paint (Graphics& g)
     }
 }
 
-void Analyzer::resized()
+void RotorAnalyzer::resized()
 {
 }
 
-void Analyzer::timerCallback()
+void RotorAnalyzer::timerCallback()
 {
     if (nextFFTBlockReady)
     {
@@ -83,7 +83,7 @@ void Analyzer::timerCallback()
 }
 
 //==============================================================================
-void Analyzer::pushBuffer(AudioSampleBuffer& buffer) 
+void RotorAnalyzer::pushBuffer(AudioSampleBuffer& buffer) 
 {
     if (buffer.getNumChannels() > 0)
     {
@@ -94,7 +94,7 @@ void Analyzer::pushBuffer(AudioSampleBuffer& buffer)
     }
 }
 
-inline void Analyzer::pushNextSample(float sample)
+inline void RotorAnalyzer::pushNextSample(float sample)
 {
     // if current index is at the end of array
     if (FFTQueueIndex == FFTSize)
@@ -112,7 +112,7 @@ inline void Analyzer::pushNextSample(float sample)
     FFTQueue[FFTQueueIndex++] = sample;
 }
 
-void Analyzer::setColours(Colour stroke, Colour start, Colour stop)
+void RotorAnalyzer::setColours(Colour stroke, Colour start, Colour stop)
 {
     strokeColour = stroke;
     fillStart = start;

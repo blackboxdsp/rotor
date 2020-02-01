@@ -457,16 +457,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\PluginProcessor.cpp">
+    <ClCompile Include="..\..\Source\RotorProcessor.cpp">
       <Filter>Rotor\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\PluginEditor.cpp">
+    <ClCompile Include="..\..\Source\RotorEditor.cpp">
       <Filter>Rotor\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\RotorLookAndFeel.cpp">
       <Filter>Rotor\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Analyzer.cpp">
+    <ClCompile Include="..\..\Source\RotorAnalyzer.cpp">
       <Filter>Rotor\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
@@ -2532,16 +2532,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\PluginProcessor.h">
+    <ClInclude Include="..\..\Source\RotorProcessor.h">
       <Filter>Rotor\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\PluginEditor.h">
+    <ClInclude Include="..\..\Source\RotorEditor.h">
       <Filter>Rotor\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\RotorLookAndFeel.h">
       <Filter>Rotor\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Analyzer.h">
+    <ClInclude Include="..\..\Source\RotorAnalyzer.h">
       <Filter>Rotor\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">

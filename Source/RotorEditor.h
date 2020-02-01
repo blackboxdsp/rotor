@@ -12,9 +12,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "Analyzer.h"
-#include "PluginProcessor.h"
-#include "RotorLookAndFeel.h"
+#include "./RotorAnalyzer.h"
+#include "./RotorLookAndFeel.h"
+#include "./RotorProcessor.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
@@ -34,8 +34,8 @@ public:
     void resized() override;
 
     //==========================================================================
-    std::unique_ptr<Analyzer> preAnalyzer;
-    std::unique_ptr<Analyzer> postAnalyzer;
+    std::unique_ptr<RotorAnalyzer> preAnalyzer;
+    std::unique_ptr<RotorAnalyzer> postAnalyzer;
 
 private:
     // This reference is provided as a quick way for your editor to
