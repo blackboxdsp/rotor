@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    RingModulatorLookAndFeel.cpp
+    RotorLookAndFeel.cpp
     Created: 11 Jan 2020 6:39:54pm
-    Author:  Matt
+    Author:  Matthew Maxwell
 
   ==============================================================================
 */
@@ -99,10 +99,10 @@ void RotorLookAndFeel::drawRotarySlider(
 			case 4:
 				yPos = centerY;
 				waveformPath.startNewSubPath(xPos, yPos);
-				for (; xPos < xEndPos; xPos += 3.0f)
+				for (auto currentXPos = xPos; currentXPos <= xEndPos; currentXPos += 3.0f)
 				{
-					yPos = (centerY - waveformPathHeight / 2.0f) + Random::getSystemRandom().nextFloat() * waveformPathHeight;
-					waveformPath.lineTo(xPos, yPos);
+					yPos = centerY + Random::getSystemRandom().nextFloat() * sinf(MathConstants<float>::twoPi * ((currentXPos - xPos) / (xEndPos - xPos))) * waveformPathHeight;
+					waveformPath.lineTo(currentXPos, yPos);
 				}
 				break;
 		}
@@ -131,11 +131,12 @@ void RotorLookAndFeel::drawRotarySlider(
 		
 		// draw text accordingly
 		g.setFont(getSliderReadoutFont(fontSize));
-		g.drawText(readout,
-			centerX - radius,                     // int x (radius for suffix offset)
-			centerY - (fontSize * 5.0f / 12.0f),  // int y (ratio based off font size)
-			rw,		                             // int width
-			fontSize,		                     // int height
+		g.drawText(
+			readout,
+			centerX - radius,						// int x (radius for suffix offset)
+			centerY - (fontSize * 5.0f / 12.0f),	// int y (ratio based off font size)
+			rw,										// int width
+			fontSize,								// int height
 			Justification::centred);
 	}
 

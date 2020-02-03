@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    Analyzer.h
+    RotorAnalyzer.h
     Created: 13 Jan 2020 10:50:34am
-    Author:  Matt
+    Author:  Matthew Maxwell
 
   ==============================================================================
 */
@@ -16,7 +16,7 @@
 /*
 */
 class RotorAnalyzer : public Component,
-                 private Timer
+                      private Timer
 {
 public:
     RotorAnalyzer();

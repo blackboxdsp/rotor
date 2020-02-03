@@ -157,7 +157,7 @@ void RotorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     previousLevel = powf(2, *level / 6);
 
     // set frequency variables
-    wavetableSize = 2048;
+    wavetableSize = 1024;
     setPhaseDelta((double) *modulationRate, sampleRate);
 
     // write the wavetable according to current waveform   
@@ -200,9 +200,6 @@ bool RotorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) con
 
 void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    const auto totalNumInputChannels = getTotalNumInputChannels();
-    const auto totalNumOutputChannels = getTotalNumOutputChannels();
-
     // write new wavetable if pulse width changes
     if (*previousPulseWidth != *pulseWidth)
     {
@@ -229,38 +226,34 @@ void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
     if (editor)
         editor->preAnalyzer->pushBuffer(buffer);
 
-    // loop through channels...
-    for (int channel = 0; channel < totalNumInputChannels; channel += 1)
+    for (auto sample = 0; sample < buffer.getNumSamples(); sample++)
     {
-        // Get pointer for channel from buffer method
-        auto* channelData = buffer.getWritePointer(channel);
-
         // set current phase to previous block's last sample value (for continuity)
         currentPhase = previousPhase;
 
-        // Loop through samples and do the processing...
-        for (int sample = 0; sample < buffer.getNumSamples(); sample += 1)
-        {
-            // create two variables (original and processed)
-            auto sampleData = channelData[sample], processedSampleData = channelData[sample];
+        // get write pointer to buffer samples
+        auto* samples = buffer.getWritePointer(0);
 
-            // multiply wavetable value by original signal and update phase value
-            processedSampleData *= (wavetable[(int) currentPhase] * *modulationInversionFactor);
-            currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
+        // read first sample value into two variables (original [o_sampleData] and processed [p_sampleData])
+        auto o_sampleData = samples[sample], p_sampleData = samples[sample];
 
-            // write sampleData to specific sample in channelData adding wet (left) and dry (right)
-            auto currentDryWet = *mix / 100.0f;
+        // multiply wavetable value by original signal and update phase value
+        p_sampleData *= (wavetable[(int) currentPhase] * *modulationInversionFactor);
+        currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
-            // calculate according to current dry / wet value
-            processedSampleData *= currentDryWet;
-            sampleData *= (1.0f - currentDryWet);
+        // read current mix ratio value and scale between 0.0f and 1.0f (** DOES NOT CHECK IF MIX IS > 100.0f **)
+        auto currentDryWet = *mix / 100.0f;
 
-            // add two sample values and check if > 1.0f
-            auto sampleSum = processedSampleData + sampleData;
+        // calculate values of dry and wet signals according to currentDryWet
+        p_sampleData *= currentDryWet;
+        o_sampleData *= (1.0f - currentDryWet);
 
-            // add the two signals and write to buffer
-            channelData[sample] = sampleSum;
-        }
+        // calculate result sample value (r_sampleData)
+        auto r_sampleData = p_sampleData + o_sampleData;
+
+        // loop through channels and set samples accordingly
+        for (auto channel = 0; channel < buffer.getNumChannels(); channel++)
+            buffer.setSample(channel, sample, r_sampleData);
 
         // update previous phase value to avoid discontinuities
         previousPhase = currentPhase;
@@ -400,7 +393,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
         case 4:
             for (int i = 0; i < wavetableSize; i++)
             {
-                wavetable.insert(i, Random::getSystemRandom().nextFloat() - Random::getSystemRandom().nextFloat());
+                wavetable.insert(i, Random::getSystemRandom().nextFloat() * sinf(MathConstants<float>::twoPi * (float)i / wavetableSize));
             }
             break;
     }

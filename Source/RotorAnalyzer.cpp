@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    Analyzer.cpp
+    RotorAnalyzer.cpp
     Created: 13 Jan 2020 10:50:34am
     Author:  Matthew Maxwelll
 

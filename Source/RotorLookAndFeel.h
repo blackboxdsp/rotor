@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    RingModulatorLookAndFeel.h
+    RotorLookAndFeel.h
     Created: 11 Jan 2020 6:40:05pm
-    Author:  Matt
+    Author:  Matthew Maxwell
 
   ==============================================================================
 */
