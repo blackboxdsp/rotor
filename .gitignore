@@ -2,11 +2,12 @@
 /Predev/
 /.vs/
 
-# BUILD RESULTS
+# WINDOWS BUILD(S)
 /Builds/VisualStudio2019/.vs/
 /Builds/VisualStudio2019/x64/
 /Builds/VisualStudio2019/x86/
 
+# MACOSX BUILD(S)
 /Builds/MacOSX/build/
 
 # PLUGIN FORMATS
