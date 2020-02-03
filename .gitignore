@@ -7,7 +7,11 @@
 /Builds/VisualStudio2019/x64/
 /Builds/VisualStudio2019/x86/
 
-# add MACOSX path later...
+/Builds/MacOSX/build/
+
+# PLUGIN FORMATS
+*.vst3
+*.component
 
 # USER-SPECIFIC FILES
 *.suo 
