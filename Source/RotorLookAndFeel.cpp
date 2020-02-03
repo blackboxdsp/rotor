@@ -67,7 +67,7 @@ void RotorLookAndFeel::drawRotarySlider(
 				waveformPath.startNewSubPath(xPos, yPos);
 				for (auto x = xPos; x <= xEndPos; x += 3.0f)
 				{
-					yPos = centerY + waveformPathHeight * sinf(MathConstants<float>::twoPi * (x - xPos) / (xEndPos - xPos));
+					yPos = centerY + waveformPathHeight * -sinf(MathConstants<float>::twoPi * (x - xPos) / (xEndPos - xPos));
 					waveformPath.lineTo(x, yPos);
 				}
 				break;
@@ -88,9 +88,10 @@ void RotorLookAndFeel::drawRotarySlider(
 
 			// SQUARE
 			case 3:
+				yPos = centerY - waveformPathHeight / 2.0f;
 				waveformPath.startNewSubPath(xPos, yPos);
 				waveformPath.lineTo(centerX, yPos);
-				yPos = centerY - waveformPathHeight / 2.0f;
+				yPos = centerY + waveformPathHeight / 2.0f;
 				waveformPath.lineTo(centerX, yPos);
 				waveformPath.lineTo(xEndPos, yPos);
 				break;
@@ -99,10 +100,13 @@ void RotorLookAndFeel::drawRotarySlider(
 			case 4:
 				yPos = centerY;
 				waveformPath.startNewSubPath(xPos, yPos);
-				for (auto currentXPos = xPos; currentXPos <= xEndPos; currentXPos += 3.0f)
+				for (auto x = xPos; x <= xEndPos; x += 3.0f)
 				{
-					yPos = centerY + Random::getSystemRandom().nextFloat() * sinf(MathConstants<float>::twoPi * ((currentXPos - xPos) / (xEndPos - xPos))) * waveformPathHeight;
-					waveformPath.lineTo(currentXPos, yPos);
+					yPos = centerY;
+					auto randPos = Random::getSystemRandom().nextFloat();
+					auto sinePos = -sinf(MathConstants<float>::twoPi * (x - xPos) / (xEndPos - xPos));
+					yPos = centerY + randPos * sinePos * waveformPathHeight;
+					waveformPath.lineTo(x, yPos);
 				}
 				break;
 		}
@@ -141,7 +145,7 @@ void RotorLookAndFeel::drawRotarySlider(
 	}
 
 	// set color variables for gradient
-	ColourGradient sliderFill = ColourGradient(activeFillStart, (float)x, 0.0f, activeFillStop, (float)width, 0.0f, false);
+	ColourGradient sliderFill = ColourGradient(activeFillStart, (float) x, 0.0f, activeFillStop, (float) width, 0.0f, false);
 	g.setGradientFill(sliderFill);
 
 	// draw the filled path

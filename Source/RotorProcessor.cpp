@@ -248,6 +248,9 @@ void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
         p_sampleData *= currentDryWet;
         o_sampleData *= (1.0f - currentDryWet);
 
+        // NOISE MODIFIER GOES HERE... make variable for n_sampleData
+        // p_sampleData *= Random::getSystemRandom().nextFloat();
+
         // calculate result sample value (r_sampleData)
         auto r_sampleData = p_sampleData + o_sampleData;
 
@@ -393,7 +396,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
         case 4:
             for (int i = 0; i < wavetableSize; i++)
             {
-                wavetable.insert(i, Random::getSystemRandom().nextFloat() * sinf(MathConstants<float>::twoPi * (float)i / wavetableSize));
+                wavetable.insert(i, Random::getSystemRandom().nextFloat() * sinf(MathConstants<float>::twoPi * (float) i / wavetableSize));
             }
             break;
     }
