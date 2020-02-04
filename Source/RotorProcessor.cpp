@@ -366,7 +366,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
         case 0:
             for (int i = 0; i < wavetableSize; i++)
             {
-                auto waveformValue = sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
+                auto waveformValue = 1.0f + 0.5f * sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
                 wavetable.insert(i, waveformValue);
             }
             break;
@@ -409,10 +409,8 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
         case 4:
             for (int i = 0; i < wavetableSize; i++)
             {
-                auto waveformValue = -1.0f + (-2.0f * sinf(MathConstants<float>::pi * (float) i / wavetableSize));
+                auto waveformValue = sinf(MathConstants<float>::pi * (float) i / wavetableSize);
                 wavetable.insert(i, waveformValue);
-                if (waveformValue > 1.0f)
-                    DBG(waveformValue);
             }
             break;
     }
