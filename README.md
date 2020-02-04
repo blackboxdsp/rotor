@@ -1,11 +1,11 @@
 # Rotor
-
+  
 > Modern ring modulation
-
+  
 <div style="text-align: center">
     <img src="./screenshot.png" alt="Rotor screenshot" title="Rotor running in Ableton Live 10" height="840"/>
 </div>
-
+  
 Rotor is a variable waveform ring modulation plugin targeting VST3 and AU for OS X and Windows platforms. It uses wavetable synthesis to generate various simple waveforms that act as the modulation signal for the input. It is compiled using the [JUCE](https://juce.com/) framework for C++.
 
 ## Dependencies
