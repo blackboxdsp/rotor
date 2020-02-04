@@ -86,7 +86,9 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
 
     // LEVEL
     auto p_level = std::make_unique<AudioParameterFloat>(
-        "level", "Level", -45.0f, 6.0f, 0.0f);
+        "level", "Level",
+        NormalisableRange<float>(-60.0f, 18.0f, 0.0f, getSkewFactor(-60.0f, 18.0f, 0.0f), false),
+        0.0f);
     params.push_back(std::move(p_level));
 
     return { params.begin(), params.end() };
