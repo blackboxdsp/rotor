@@ -46,7 +46,7 @@ void RotorLookAndFeel::drawRotarySlider(
 	String readoutValue = (value >= 1000.0 ? String(value / 1000.0, 1) + "k" : String(value, 1));
 	String readout = readoutValue + slider.getTextValueSuffix();
 
-	// draw shape if waveform slider, text otherwise
+	// draw shape if waveform slider, text otherwise --- SHOULD BE SWITCH STATEMENT ?
 	if (slider.getName() == "shape")
 	{
 		// init path variables to draw wave shape
@@ -94,20 +94,6 @@ void RotorLookAndFeel::drawRotarySlider(
 				yPos = centerY + waveformPathHeight / 2.0f;
 				waveformPath.lineTo(centerX, yPos);
 				waveformPath.lineTo(xEndPos, yPos);
-				break;
-
-			// NOISE
-			case 4:
-				yPos = centerY;
-				waveformPath.startNewSubPath(xPos, yPos);
-				for (auto x = xPos; x <= xEndPos; x += 3.0f)
-				{
-					yPos = centerY;
-					auto randPos = Random::getSystemRandom().nextFloat();
-					auto sinePos = -sinf(MathConstants<float>::twoPi * (x - xPos) / (xEndPos - xPos));
-					yPos = centerY + randPos * sinePos * waveformPathHeight;
-					waveformPath.lineTo(x, yPos);
-				}
 				break;
 		}
 

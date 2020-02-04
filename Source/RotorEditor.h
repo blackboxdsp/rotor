@@ -53,22 +53,30 @@ private:
     RotorLookAndFeel lookAndFeel;
 
     // MODULATOR
-    Slider modulationRateSlider;
-    std::unique_ptr<SliderAttachment> modulationRateAttachment;
-    Slider modulationPulseWidthSlider;
-    std::unique_ptr<SliderAttachment> modulationPulseWidthAttachment;
-    Slider modulationShapeSlider;
-    std::unique_ptr<SliderAttachment> modulationShapeAttachment;
-    ToggleButton modulationInversionButton;
-    std::unique_ptr<ButtonAttachment> modulationInversionButtonAttachment;
-    Slider modulationInversionSlider;
-    std::unique_ptr<SliderAttachment> modulationInversionSliderAttachment;
+    Slider                              modulationShapeSlider;
+    std::unique_ptr<SliderAttachment>   modulationShapeAttachment;
+
+    Slider                              modulationRateSlider;
+    std::unique_ptr<SliderAttachment>   modulationRateAttachment;
+
+    Slider                              modulationNoiseSlider;
+    std::unique_ptr<SliderAttachment>   modulationNoiseAttachment;
+
+    Slider                              modulationPulseWidthSlider;
+    std::unique_ptr<SliderAttachment>   modulationPulseWidthAttachment;
+
+    ToggleButton                        modulationInversionButton;
+    std::unique_ptr<ButtonAttachment>   modulationInversionButtonAttachment;
+
+    Slider                              modulationInversionSlider;
+    std::unique_ptr<SliderAttachment>   modulationInversionSliderAttachment;
 
     // OUTPUT
-    Slider levelSlider;
-    std::unique_ptr<SliderAttachment> levelAttachment;
-    Slider mixSlider;
-    std::unique_ptr<SliderAttachment> mixAttachment;
+    Slider                              levelSlider;
+    std::unique_ptr<SliderAttachment>   levelAttachment;
+
+    Slider                              mixSlider;
+    std::unique_ptr<SliderAttachment>   mixAttachment;
 
     // =========================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RotorAudioProcessorEditor)

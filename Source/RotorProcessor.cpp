@@ -23,15 +23,16 @@ RotorAudioProcessor::RotorAudioProcessor()
 #endif
 {
     // init parameters from valueTreeState
-    modulationRate = parameters.getRawParameterValue("rate");
-    previousWaveform = new float(0.0f);
-    modulationWaveform = parameters.getRawParameterValue("waveform");
-    modulationIsInverted = parameters.getRawParameterValue("inversion");
-    modulationInversionFactor = new float(1.0f);
-    pulseWidth = parameters.getRawParameterValue("pulseWidth");
-    previousPulseWidth = new float(0.5f);
-    level = parameters.getRawParameterValue("level"); 
-    mix = parameters.getRawParameterValue("mix");
+    previousShape               = new float(0.0f);
+    modulationShape             = parameters.getRawParameterValue("waveform");
+    modulationRate              = parameters.getRawParameterValue("rate");
+    modulationNoise             = parameters.getRawParameterValue("noise");
+    modulationIsInverted        = parameters.getRawParameterValue("inversion");
+    modulationInversionFactor   = new float(1.0f);
+    pulseWidth                  = parameters.getRawParameterValue("pulseWidth");
+    previousPulseWidth          = new float(0.5f);
+    level                       = parameters.getRawParameterValue("level"); 
+    mix                         = parameters.getRawParameterValue("mix");
 }
 
 RotorAudioProcessor::~RotorAudioProcessor()
@@ -45,6 +46,11 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
 
     // MODULATOR ===============================================================
 
+    // WAVEFORM
+    auto p_modulationShape = std::make_unique<AudioParameterInt>(
+        "waveform", "Waveform", 0, 3, 0);
+    params.push_back(std::move(p_modulationShape));
+
     // RATE
     auto p_modulationRate = std::make_unique<AudioParameterFloat>(
         "rate", "Rate",
@@ -52,17 +58,17 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
         500.0f);
     params.push_back(std::move(p_modulationRate));
 
+    // NOISE
+    auto p_modulationNoise = std::make_unique<AudioParameterFloat>(
+        "noise", "Noise", 0.0f, 1.0f, 0.0f);
+    params.push_back(std::move(p_modulationNoise));
+
     // PULSE WIDTH
     auto p_pulseWidth = std::make_unique<AudioParameterFloat>(
         "pulseWidth", "Pulse Width",
         NormalisableRange<float>(0.01f, 0.99f, 0.1f), // any lower than 0.1f gets mehh performance...
         0.5f);
     params.push_back(std::move(p_pulseWidth));
-
-    // WAVEFORM
-    auto p_modulationWaveform = std::make_unique<AudioParameterInt>(
-        "waveform", "Waveform", 0, 4, 0);
-    params.push_back(std::move(p_modulationWaveform));
 
     // INVERSION
     auto p_modulationIsInverted = std::make_unique<AudioParameterBool>(
@@ -161,8 +167,8 @@ void RotorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     setPhaseDelta((double) *modulationRate, sampleRate);
 
     // write the wavetable according to current waveform   
-    *previousWaveform = *modulationWaveform;
-    setWavetable((int) *modulationWaveform);
+    *previousShape = *modulationShape;
+    setWavetable((int) *modulationShape);
 
     // set pulse width stuff
     *previousPulseWidth = *pulseWidth;
@@ -204,14 +210,14 @@ void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
     if (*previousPulseWidth != *pulseWidth)
     {
         *previousPulseWidth = *pulseWidth;
-        setWavetable((int) *modulationWaveform);
+        setWavetable((int) *modulationShape);
     }
 
     // write new wavetable if waveform selection change
-    if (*previousWaveform != *modulationWaveform)
+    if (*previousShape != *modulationShape)
     {
-        *previousWaveform = *modulationWaveform;
-        setWavetable((int) *modulationWaveform);
+        *previousShape = *modulationShape;
+        setWavetable((int) *modulationShape);
     }
     // update phase delta for wavetable
     setPhaseDelta((double) *modulationRate, this->getSampleRate());
@@ -248,8 +254,11 @@ void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
         p_sampleData *= currentDryWet;
         o_sampleData *= (1.0f - currentDryWet);
 
-        // NOISE MODIFIER GOES HERE... make variable for n_sampleData
-        // p_sampleData *= Random::getSystemRandom().nextFloat();
+        // calculate random noise and udpate p_sampleData accordingly to noise parameter
+        auto n_sampleData = p_sampleData * Random::getSystemRandom().nextFloat();
+        n_sampleData *= *modulationNoise;
+        p_sampleData *= (1.0f - *modulationNoise);
+        p_sampleData += n_sampleData;
 
         // calculate result sample value (r_sampleData)
         auto r_sampleData = p_sampleData + o_sampleData;
@@ -390,13 +399,6 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
             for (int i = pulseWidthSize; i < wavetableSize; i++)
             {
                 wavetable.insert(i, 0.0f);
-            }
-            break;
-        // NOISE
-        case 4:
-            for (int i = 0; i < wavetableSize; i++)
-            {
-                wavetable.insert(i, Random::getSystemRandom().nextFloat() * sinf(MathConstants<float>::twoPi * (float) i / wavetableSize));
             }
             break;
     }

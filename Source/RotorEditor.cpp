@@ -20,6 +20,15 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     int textBoxHeight = 20;
 
     // MODULATOR ===============================================================
+
+    // SHAPE
+    modulationShapeSlider.setName("shape");
+    modulationShapeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    modulationShapeSlider.setDoubleClickReturnValue(true, 1);
+    modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
+    modulationShapeSlider.setLookAndFeel(&lookAndFeel);
+    addAndMakeVisible(&modulationShapeSlider);
     
     // RATE
     modulationRateSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
@@ -30,6 +39,14 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     modulationRateSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationRateSlider);
 
+    // NOISE
+    modulationNoiseSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    modulationNoiseSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
+    modulationNoiseSlider.setDoubleClickReturnValue(true, 0.0f);
+    modulationNoiseAttachment.reset(new SliderAttachment(valueTreeState, "noise", modulationNoiseSlider));
+    modulationNoiseSlider.setLookAndFeel(&lookAndFeel);
+    addAndMakeVisible(&modulationNoiseSlider);
+
     // PULSE WIDTH
     modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
@@ -37,15 +54,6 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     modulationPulseWidthAttachment.reset(new SliderAttachment(valueTreeState, "pulseWidth", modulationPulseWidthSlider));
     modulationPulseWidthSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationPulseWidthSlider);
-
-    // SHAPE
-    modulationShapeSlider.setName("shape");
-    modulationShapeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationShapeSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
-    modulationShapeSlider.setDoubleClickReturnValue(true, 1);
-    modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
-    modulationShapeSlider.setLookAndFeel(&lookAndFeel);
-    addAndMakeVisible(&modulationShapeSlider);
 
     // INVERSION
 
@@ -135,7 +143,7 @@ RotorAudioProcessorEditor::~RotorAudioProcessorEditor()
 void RotorAudioProcessorEditor::paint (Graphics& g)
 {
     // draw background image (this method allows for dynamic resizing)
-    Image backgroundImage = ImageCache::getFromMemory(BinaryData::backgroundlight_png, BinaryData::backgroundlight_pngSize);
+    Image backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
     g.drawImage(backgroundImage, getLocalBounds().toFloat());
 }
 
@@ -179,31 +187,37 @@ void RotorAudioProcessorEditor::resized()
     // designate area for drawing modulator's parameters' sliders
     auto modulatorArea = area.removeFromBottom(sectionSize * 2);
     modulatorArea.removeFromBottom(margin * 2);
+    modulatorArea.removeFromTop(getWidth() * 13 / 90);
 
-    // divide modulator into sections for [rate] and [pulse width, shape, inversion]
-    auto secondaryArea = modulatorArea.removeFromBottom(smallDialSize);
+    // divide modulator into sections for [shape, rate, and noise] and [pulse width, and invert]
+    auto modulatorAreaTop = modulatorArea.removeFromTop(largeDialSize);
+    auto modulatorAreaBottom = modulatorArea.removeFromBottom(smallDialSize);
 
     // PULSE WIDTH
-    secondaryArea.removeFromLeft(margin);
-    modulationPulseWidthSlider.setBounds(secondaryArea.removeFromLeft(smallDialSize));
+    modulatorAreaBottom.removeFromLeft(outputBlankSpace);
+    modulationPulseWidthSlider.setBounds(modulatorAreaBottom.removeFromLeft(smallDialSize));
 
     // INVERT
-    secondaryArea.removeFromRight(margin);
-    auto inversionArea = secondaryArea.removeFromRight(smallDialSize);
+    modulatorAreaBottom.removeFromRight(outputBlankSpace);
+    auto inversionArea = modulatorAreaBottom.removeFromRight(smallDialSize);
     modulationInversionButton.setBounds(inversionArea);
     modulationInversionSlider.setBounds(inversionArea);
 
-    // SHAPE
-    secondaryArea.removeFromLeft(smallDialSize / 2);
-    modulationShapeSlider.setBounds(secondaryArea.removeFromLeft(smallDialSize));
-
     // RATE
-    modulatorArea.removeFromBottom(sectionSize * 7 / 24);
-    modulatorArea = modulatorArea.removeFromBottom(largeDialSize);
-    auto modulatorBlankSpace = modulatorArea.getWidth() * 29 / 84;
-    modulatorArea.removeFromLeft(modulatorBlankSpace);
-    modulatorArea.removeFromRight(modulatorBlankSpace);
-    modulationRateSlider.setBounds(modulatorArea);
+    auto copyArea = modulatorAreaTop;
+    copyArea.removeFromLeft(area.getWidth() * 29 / 90);
+    copyArea.removeFromRight(area.getWidth() * 29 / 90);
+    modulationRateSlider.setBounds(copyArea);
+
+    // SHAPE
+    modulatorAreaTop.removeFromLeft(margin);
+    auto shapeArea = modulatorAreaTop.removeFromLeft(smallDialSize);
+    modulationShapeSlider.setBounds(shapeArea.removeFromTop(smallDialSize));
+
+    // NOISE
+    modulatorAreaTop.removeFromRight(margin);
+    auto noiseArea = modulatorAreaTop.removeFromRight(smallDialSize);
+    modulationNoiseSlider.setBounds(noiseArea.removeFromTop(smallDialSize));
 
     // ANALYZER ================================================================
     auto analyzerArea = area.removeFromBottom(sectionSize);

@@ -52,9 +52,8 @@ public:
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    // custom methods
+   
     float getSkewFactor(float start, float end, float center);
-
     float getModulationInversion(bool inverted);
     void setPhaseDelta(double frequency, double sampleRate);
     void setWavetable(int waveformIndex);
@@ -64,17 +63,18 @@ private:
     AudioProcessorValueTreeState parameters;
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
-    // parameter variables
-    float* modulationRate;
-    float* previousWaveform;
-    float* modulationWaveform;
-    float* modulationInversionFactor; // most pronounced when mix is at 50%
-    float* modulationIsInverted;
+    // declare parameters and extra parameter variables
+    float* previousShape;
+    float* modulationShape;             // PARAM
+    float* modulationRate;              // PARAM
+    float* modulationNoise;             // PARAM
+    float* modulationInversionFactor;
+    float* modulationIsInverted;        // PARAM
     float* previousPulseWidth;
-    float* pulseWidth;
+    float* pulseWidth;                  // PARAM
 
-    float* level;
-    float* mix;
+    float* level;                       // PARAM
+    float* mix;                         // PARAM
 
     // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^
     float previousLevel;
