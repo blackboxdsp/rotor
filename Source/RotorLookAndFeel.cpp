@@ -120,7 +120,7 @@ void RotorLookAndFeel::drawRotarySlider(
 
 		// set string properties according to slider
 		auto name = slider.getName();
-		if(name == "rate")
+		if (name == "rate")
 		{
 			String readoutValue = (value >= 1000.0 ? String(value / 1000.0, 1) + "k" : String(value, 1));
 			readout = readoutValue + slider.getTextValueSuffix();
@@ -139,6 +139,10 @@ void RotorLookAndFeel::drawRotarySlider(
 		{
 			readout = "ON";
 			g.setColour(slider.getValue() > 0.5f ? activeFill : inactiveFill);
+		}
+		else if (name == "pulseWidth" && !slider.isEnabled())
+		{
+			g.setColour(inactiveFill);
 		}
 		else
 		{
@@ -159,6 +163,8 @@ void RotorLookAndFeel::drawRotarySlider(
 	// set color variables for gradient
 	ColourGradient sliderFill = ColourGradient(activeFillStart, (float) x, 0.0f, activeFillStop, (float) width, 0.0f, false);
 	g.setGradientFill(sliderFill);
+	if (slider.getName() == "pulseWidth" && !slider.isEnabled())
+		g.setColour(inactiveFill);
 
 	// draw the filled path
 	Path arcPathFilled;

@@ -29,6 +29,12 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     modulationShapeAttachment.reset(new SliderAttachment(valueTreeState, "waveform", modulationShapeSlider));
     modulationShapeSlider.setLookAndFeel(&lookAndFeel);
     addAndMakeVisible(&modulationShapeSlider);
+    modulationShapeSlider.onValueChange = [this] {
+        if (modulationShapeSlider.getValue() == 3)
+            modulationPulseWidthSlider.setEnabled(true);
+        else
+            modulationPulseWidthSlider.setEnabled(false);
+    };
     
     // RATE
     modulationRateSlider.setName("rate");
