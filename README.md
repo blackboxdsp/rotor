@@ -10,7 +10,7 @@ Rotor is a variable waveform ring modulation plugin targeting VST3 and AU for OS
 
 ## Dependencies
 
-- JUCE (v5.4.5)
+- JUCE (v5.4.6)
 - VST3 SDK (v3.6.14)
 
 ## Usage

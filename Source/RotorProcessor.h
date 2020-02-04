@@ -64,19 +64,19 @@ private:
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     // declare parameters and extra parameter variables
-    float* previousShape;
-    float* modulationShape;             // PARAM
-    float* modulationRate;              // PARAM
-    float* modulationNoise;             // PARAM
-    float* modulationInversionFactor;
-    float* modulationIsInverted;        // PARAM
-    float* previousPulseWidth;
-    float* pulseWidth;                  // PARAM
+    float*              previousShape;
+    std::atomic<float>* modulationShape;             // PARAM
+    std::atomic<float>* modulationRate;              // PARAM
+    std::atomic<float>* modulationNoise;             // PARAM
+    float*              modulationInversionFactor;
+    std::atomic<float>* modulationIsInverted;        // PARAM
+    float*              previousPulseWidth;
+    std::atomic<float>* pulseWidth;                  // PARAM
 
-    float* level;                       // PARAM
-    float* mix;                         // PARAM
+    std::atomic<float>* level;                       // PARAM
+    std::atomic<float>* mix;                         // PARAM
 
-    // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^
+    // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^)
     float previousLevel;
 
     // wavetable variables

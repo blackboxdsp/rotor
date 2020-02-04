@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="HvUltZ" name="Rotor" projectType="audioplug" jucerVersion="5.4.5"
+<JUCERPROJECT id="HvUltZ" name="Rotor" projectType="audioplug" jucerVersion="5.4.6"
               pluginFormats="buildAU,buildVST3" pluginManufacturer="Maxwell Audio"
               companyName="Maxwell Audio" companyWebsite="mattmaxwell.tech"
               companyEmail="maxwellmattryan@gmail.com" version="1.0.0">
