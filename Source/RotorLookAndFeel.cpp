@@ -65,7 +65,7 @@ void RotorLookAndFeel::drawRotarySlider(
 				yPos = centerY;
 				waveformPathHeight /= 2.0f;
 				waveformPath.startNewSubPath(xPos, yPos);
-				for (auto x = xPos; x <= xEndPos; x += 3.0f)
+				for (auto x = xPos; x <= xEndPos; x++)
 				{
 					yPos = centerY + waveformPathHeight * -sinf(MathConstants<float>::twoPi * (x - xPos) / (xEndPos - xPos));
 					waveformPath.lineTo(x, yPos);
@@ -94,6 +94,17 @@ void RotorLookAndFeel::drawRotarySlider(
 				yPos = centerY + waveformPathHeight / 2.0f;
 				waveformPath.lineTo(centerX, yPos);
 				waveformPath.lineTo(xEndPos, yPos);
+				break;
+
+			// SEMI-SINE
+			case 4:
+				waveformPathHeight /= 2.0f;
+				waveformPath.startNewSubPath(xPos, yPos);
+				for (auto x = xPos; x <= xEndPos; x++)
+				{
+					auto newY = yPos + waveformPathHeight * -2.0f * sinf(MathConstants<float>::pi * (x - xPos) / (xEndPos - xPos));
+					waveformPath.lineTo(x, newY);
+				}
 				break;
 		}
 

@@ -523,13 +523,6 @@
 			path = "~/JUCE/modules/juce_dsp";
 			sourceTree = "<absolute>";
 		};
-		B6812C78571E1D8B216B3491 = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.png;
-			name = "background-light.png";
-			path = "../../Assets/background-light.png";
-			sourceTree = "SOURCE_ROOT";
-		};
 		B7CF016EC27488505A408EA9 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -691,7 +684,6 @@
 				5CD5033A9F311EBF8C789B8B,
 				030DC707C5810BE202C4A995,
 				3B46502A3D0D1558AC6972B3,
-				B6812C78571E1D8B216B3491,
 				D92D1416A0BD37CCD8258D5F,
 			);
 			name = Resources;

@@ -13,8 +13,6 @@
       <FILE id="XK9vqP" name="montserrat.ttf" compile="0" resource="1" file="Assets/montserrat.ttf"/>
       <FILE id="ctRJe0" name="montserrat-light.ttf" compile="0" resource="1"
             file="Assets/montserrat-light.ttf"/>
-      <FILE id="gn3VUP" name="background-light.png" compile="0" resource="1"
-            file="Assets/background-light.png"/>
       <FILE id="MpULi8" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
     </GROUP>
     <GROUP id="{25FB03DA-A3CB-B57D-AB94-EFDA269F30BA}" name="Source">

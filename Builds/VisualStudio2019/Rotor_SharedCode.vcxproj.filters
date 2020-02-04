@@ -4865,9 +4865,6 @@
     <None Include="..\..\Assets\montserrat-light.ttf">
       <Filter>Rotor\Resources</Filter>
     </None>
-    <None Include="..\..\Assets\background-light.png">
-      <Filter>Rotor\Resources</Filter>
-    </None>
     <None Include="..\..\Assets\background.png">
       <Filter>Rotor\Resources</Filter>
     </None>

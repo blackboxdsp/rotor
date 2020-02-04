@@ -2824,7 +2824,6 @@
     <None Include="..\..\Assets\louis-george-cafe-light.ttf"/>
     <None Include="..\..\Assets\montserrat.ttf"/>
     <None Include="..\..\Assets\montserrat-light.ttf"/>
-    <None Include="..\..\Assets\background-light.png"/>
     <None Include="..\..\Assets\background.png"/>
     <None Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_formats\codecs\flac\Flac Licence.txt"/>
     <None Include="..\..\..\..\..\frameworks\JUCE\modules\juce_audio_formats\codecs\oggvorbis\Ogg Vorbis Licence.txt"/>

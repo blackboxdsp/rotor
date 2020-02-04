@@ -20,14 +20,11 @@ namespace BinaryData
     extern const char*   montserratlight_ttf;
     const int            montserratlight_ttfSize = 242068;
 
-    extern const char*   backgroundlight_png;
-    const int            backgroundlight_pngSize = 98044;
-
     extern const char*   background_png;
     const int            background_pngSize = 106829;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 6;
+    const int namedResourceListSize = 5;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

@@ -48,7 +48,7 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
 
     // WAVEFORM
     auto p_modulationShape = std::make_unique<AudioParameterInt>(
-        "waveform", "Waveform", 0, 3, 0);
+        "waveform", "Waveform", 0, 4, 0);
     params.push_back(std::move(p_modulationShape));
 
     // RATE
@@ -370,6 +370,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
                 wavetable.insert(i, waveformValue);
             }
             break;
+
         // TRIANGLE
         case 1:
             for (int i = 0; i < wavetableSize / 2; i++)
@@ -382,6 +383,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
                 wavetable.insert(i, wavetable[-1 * (i + 1)]);
             }
             break;
+
         // SAWTOOTH
         case 2:
             for (int i = 0; i < wavetableSize; i++)
@@ -390,6 +392,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
                 wavetable.insert(i, waveformValue);
             }
             break;
+
         // SQUARE
         case 3:
             for (int i = 0; i < pulseWidthSize; i++)
@@ -399,6 +402,17 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
             for (int i = pulseWidthSize; i < wavetableSize; i++)
             {
                 wavetable.insert(i, 0.0f);
+            }
+            break;
+
+        // SEMI-SINE
+        case 4:
+            for (int i = 0; i < wavetableSize; i++)
+            {
+                auto waveformValue = -1.0f + (-2.0f * sinf(MathConstants<float>::pi * (float) i / wavetableSize));
+                wavetable.insert(i, waveformValue);
+                if (waveformValue > 1.0f)
+                    DBG(waveformValue);
             }
             break;
     }
