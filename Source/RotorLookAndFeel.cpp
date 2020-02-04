@@ -38,7 +38,7 @@ void RotorLookAndFeel::drawRotarySlider(
 	const float rw = radius * 2.0f;
 
 	// even if slider is fully zero, still display something
-	if (sliderPos == 0.0f && slider.getName() != "inversion") sliderPos = 0.01f;
+	//if (sliderPos == 0.0f && slider.getName() != "inversion") sliderPos = 0.01f;
 	const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
 
 	// get readout value
@@ -114,13 +114,28 @@ void RotorLookAndFeel::drawRotarySlider(
 	}
 	else
 	{
-		// get slider data and format
+		// get needed variables for displaying slider value
+		String readout;
 		const double value = slider.getValue();
-		String readoutValue = (value >= 1000.0 ? String(value / 1000.0, 1) + "k" : String(value, 1));
-		String readout = readoutValue + slider.getTextValueSuffix();
 
-		// handle text colouring 
-		if (slider.getName() == "inversion")
+		// set string properties according to slider
+		auto name = slider.getName();
+		if(name == "rate")
+		{
+			String readoutValue = (value >= 1000.0 ? String(value / 1000.0, 1) + "k" : String(value, 1));
+			readout = readoutValue + slider.getTextValueSuffix();
+		}
+		else if (name == "mix" || name == "level")
+		{
+			readout = String(value, 1) + slider.getTextValueSuffix();
+		}
+		else
+		{
+			readout = String(value, 2) + slider.getTextValueSuffix();
+		}
+
+		// handle slider coloring (esp invert button / slider)
+		if (name == "inversion")
 		{
 			readout = "ON";
 			g.setColour(slider.getValue() > 0.5f ? activeFill : inactiveFill);

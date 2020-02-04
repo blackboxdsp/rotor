@@ -31,6 +31,7 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     addAndMakeVisible(&modulationShapeSlider);
     
     // RATE
+    modulationRateSlider.setName("rate");
     modulationRateSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationRateSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationRateSlider.setDoubleClickReturnValue(true, 500.0f);
@@ -40,6 +41,7 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     addAndMakeVisible(&modulationRateSlider);
 
     // NOISE
+    modulationNoiseSlider.setName("noise");
     modulationNoiseSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationNoiseSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationNoiseSlider.setDoubleClickReturnValue(true, 0.0f);
@@ -48,6 +50,7 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     addAndMakeVisible(&modulationNoiseSlider);
 
     // PULSE WIDTH
+    modulationPulseWidthSlider.setName("pulseWidth");
     modulationPulseWidthSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     modulationPulseWidthSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     modulationPulseWidthSlider.setDoubleClickReturnValue(true, 0.5f);
@@ -74,6 +77,7 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     // OUTPUT ==================================================================
 
     // MIX
+    mixSlider.setName("mix");
     mixSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     mixSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     mixSlider.setTextValueSuffix(" %");
@@ -83,6 +87,7 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     addAndMakeVisible(&mixSlider);
 
     // LEVEL
+    levelSlider.setName("level");
     levelSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     levelSlider.setTextBoxStyle(Slider::NoTextBox, false, textBoxWidth, textBoxHeight);
     levelSlider.setTextValueSuffix(" dB");
@@ -96,14 +101,14 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
     preAnalyzer = std::make_unique<RotorAnalyzer>();
     addAndMakeVisible(preAnalyzer.get());
     preAnalyzer->setColours(Colour::fromRGBA(126, 105, 251, 255),
-                            Colour::fromRGBA(67, 42, 208, 255).withAlpha(0.7f),
-                            Colour::fromRGBA(99, 78, 228, 255).withAlpha(0.7f));
+                            Colour::fromRGBA( 67,  42, 208, 255).withAlpha(0.7f),
+                            Colour::fromRGBA( 99,  78, 228, 255).withAlpha(0.7f));
 
     postAnalyzer = std::make_unique<RotorAnalyzer>();
     addAndMakeVisible(postAnalyzer.get());
     postAnalyzer->setColours(Colour::fromRGBA(167, 100, 251, 255),
-                             Colour::fromRGBA(144, 78, 228, 255).withAlpha(0.7f),
-                             Colour::fromRGBA(116, 42, 208, 255).withAlpha(0.7f));
+                             Colour::fromRGBA(144,  78, 228, 255).withAlpha(0.7f),
+                             Colour::fromRGBA(116,  42, 208, 255).withAlpha(0.7f));
     preAnalyzer->toBehind(postAnalyzer.get());
 
     //==========================================================================

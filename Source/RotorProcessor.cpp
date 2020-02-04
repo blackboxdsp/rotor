@@ -66,7 +66,7 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
     // PULSE WIDTH
     auto p_pulseWidth = std::make_unique<AudioParameterFloat>(
         "pulseWidth", "Pulse Width",
-        NormalisableRange<float>(0.01f, 0.99f, 0.1f), // any lower than 0.1f gets mehh performance...
+        NormalisableRange<float>(0.01f, 0.99f, 0.01f), // any lower than 0.1f gets mehh performance...
         0.5f);
     params.push_back(std::move(p_pulseWidth));
 
@@ -87,7 +87,7 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
     // LEVEL
     auto p_level = std::make_unique<AudioParameterFloat>(
         "level", "Level",
-        NormalisableRange<float>(-60.0f, 18.0f, 0.0f, getSkewFactor(-60.0f, 18.0f, 0.0f), false),
+        NormalisableRange<float>(-48.0f, 12.0f, 0.0f, getSkewFactor(-48.0f, 12.0f, 0.0f), false),
         0.0f);
     params.push_back(std::move(p_level));
 
