@@ -31,6 +31,7 @@ public:
         bool shouldDrawButtonAsDown) override;
 
     void setFontSize(int newSize);
+    void setStrokeWidth(int currentWindowWidth);
 
 private:
     //==========================================================================
@@ -40,6 +41,9 @@ private:
     const Colour activeFill = Colour::fromRGBA(167, 98, 255, 255);
     const Colour activeFillStart = Colour::fromRGBA(116, 42, 208, 255);
     const Colour activeFillStop = Colour::fromRGBA(144, 78, 228, 255);
+
+    // SLIDERS
+    float strokeWidth;
 
     // FONTS
     float fontSize;

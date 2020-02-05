@@ -125,9 +125,9 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
 
     // set aspect ratio and dimensions accordingly
     double ratio = 0.5;
-    setResizeLimits(360, 360 / ratio, 540, 540 / ratio);
+    setResizeLimits(324, 324 / ratio, 540, 540 / ratio);
     getConstrainer()->setFixedAspectRatio(ratio);
-    setSize(480, 480 / ratio);
+    setSize(360, 360 / ratio);
 
     // set lookAndFeel configurations
     setLookAndFeel(&lookAndFeel);
@@ -172,6 +172,9 @@ void RotorAudioProcessorEditor::resized()
     // set font size according to GUI editor's width
     int fontSize = getWidth() / 18; 
     lookAndFeel.setFontSize(fontSize);
+
+    // update slider path stroke width
+    lookAndFeel.setStrokeWidth(getWidth());
 
     // remove margins from sides
     area.removeFromLeft(margin);

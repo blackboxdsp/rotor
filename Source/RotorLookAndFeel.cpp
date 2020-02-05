@@ -110,7 +110,7 @@ void RotorLookAndFeel::drawRotarySlider(
 
 		// set color and stroke path
 		g.setColour(activeFill);
-		g.strokePath(waveformPath, PathStrokeType(3.0f));
+		g.strokePath(waveformPath, PathStrokeType(strokeWidth));
 	}
 	else
 	{
@@ -185,4 +185,9 @@ void RotorLookAndFeel::drawToggleButton(
 void RotorLookAndFeel::setFontSize(int newSize)
 {
 	fontSize = (float) newSize;
+}
+
+void RotorLookAndFeel::setStrokeWidth(int currentWindowWidth)
+{
+	strokeWidth = (float) currentWindowWidth * 3.0f / 640.0f;
 }
