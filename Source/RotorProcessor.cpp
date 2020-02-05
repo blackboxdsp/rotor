@@ -22,17 +22,20 @@ RotorAudioProcessor::RotorAudioProcessor()
     )
 #endif
 {
-    // init parameters from valueTreeState
-    previousShape               = new float(0.0f);
+    // initialize value tree state parameters
     modulationShape             = parameters.getRawParameterValue("waveform");
     modulationRate              = parameters.getRawParameterValue("rate");
     modulationNoise             = parameters.getRawParameterValue("noise");
     modulationIsInverted        = parameters.getRawParameterValue("inversion");
-    modulationInversionFactor   = new float(1.0f);
     pulseWidth                  = parameters.getRawParameterValue("pulseWidth");
-    previousPulseWidth          = new float(0.5f);
     level                       = parameters.getRawParameterValue("level"); 
     mix                         = parameters.getRawParameterValue("mix");
+
+    // previous parameter values' initializations
+    previousShape               = *modulationShape;
+    modulationInversionFactor   = getModulationInversion((bool) *modulationIsInverted);
+    previousPulseWidth          = *pulseWidth;
+    previousLevel               = *level;
 }
 
 RotorAudioProcessor::~RotorAudioProcessor()
@@ -158,22 +161,12 @@ void RotorAudioProcessor::changeProgramName(int index, const String& newName)
 //==============================================================================
 void RotorAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    // set the inversion factor
-    *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
-
-    // initialize previous gain value
-    previousLevel = powf(2, *level / 6);
-
     // set frequency variables
     wavetableSize = 1024;
     setPhaseDelta((double) *modulationRate, sampleRate);
 
     // write the wavetable according to current waveform   
-    *previousShape = *modulationShape;
     setWavetable((int) *modulationShape);
-
-    // set pulse width stuff
-    *previousPulseWidth = *pulseWidth;
 }
 
 void RotorAudioProcessor::releaseResources()
@@ -209,23 +202,23 @@ bool RotorAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) con
 void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     // write new wavetable if pulse width changes
-    if (*previousPulseWidth != *pulseWidth)
+    if (previousPulseWidth != *pulseWidth)
     {
-        *previousPulseWidth = *pulseWidth;
+        previousPulseWidth = *pulseWidth;
         setWavetable((int) *modulationShape);
     }
 
     // write new wavetable if waveform selection change
-    if (*previousShape != *modulationShape)
+    if (previousShape != *modulationShape)
     {
-        *previousShape = *modulationShape;
+        previousShape = *modulationShape;
         setWavetable((int) *modulationShape);
     }
     // update phase delta for wavetable
     setPhaseDelta((double) *modulationRate, this->getSampleRate());
 
     // update inversion factor
-    *modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
+    modulationInversionFactor = getModulationInversion((bool) *modulationIsInverted);
 
     // grab reference to the editor (for the analyzer)
     RotorAudioProcessorEditor* editor = static_cast<RotorAudioProcessorEditor*>(getActiveEditor());
@@ -246,7 +239,7 @@ void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
         auto o_sampleData = samples[sample], p_sampleData = samples[sample];
 
         // multiply wavetable value by original signal and update phase value
-        p_sampleData *= (wavetable[(int) currentPhase] * *modulationInversionFactor);
+        p_sampleData *= (wavetable[(int) currentPhase] * modulationInversionFactor);
         currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
         // read current mix ratio value and scale between 0.0f and 1.0f (** DOES NOT CHECK IF MIX IS > 100.0f **)
@@ -368,7 +361,7 @@ void RotorAudioProcessor::setWavetable(int waveformIndex)
         case 0:
             for (int i = 0; i < wavetableSize; i++)
             {
-                auto waveformValue = 1.0f + 0.5f * sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
+                auto waveformValue = 0.5f + 0.5f * sinf(MathConstants<float>::twoPi * (float) i / wavetableSize);
                 wavetable.insert(i, waveformValue);
             }
             break;

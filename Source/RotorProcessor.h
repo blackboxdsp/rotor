@@ -59,25 +59,28 @@ public:
     void setWavetable(int waveformIndex);
 
 private:
-    // for storing / retrieving parameters
+    //==========================================================================
     AudioProcessorValueTreeState parameters;
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
-    // declare parameters and extra parameter variables
-    float*              previousShape;
-    std::atomic<float>* modulationShape;             // PARAM
-    std::atomic<float>* modulationRate;              // PARAM
-    std::atomic<float>* modulationNoise;             // PARAM
-    float*              modulationInversionFactor;
-    std::atomic<float>* modulationIsInverted;        // PARAM
-    float*              previousPulseWidth;
-    std::atomic<float>* pulseWidth;                  // PARAM
+    //==========================================================================
 
-    std::atomic<float>* level;                       // PARAM
-    std::atomic<float>* mix;                         // PARAM
+    // declare value tree state parameters - atomic<float>* is THREAD SAFE
+    std::atomic<float>* modulationShape;             
+    std::atomic<float>* modulationRate;              
+    std::atomic<float>* modulationNoise;             
+    std::atomic<float>* modulationIsInverted;        
+    std::atomic<float>* pulseWidth;                  
+    std::atomic<float>* level;                       
+    std::atomic<float>* mix;  
 
-    // variable for gain ramp --- 0.0f to 1.0f (same for current gain in .cpp ^)
+    // previous values for specific parameters
+    float previousShape;
+    float modulationInversionFactor;
+    float previousPulseWidth;
     float previousLevel;
+
+    //==========================================================================
 
     // wavetable variables
     Array<float> wavetable;
