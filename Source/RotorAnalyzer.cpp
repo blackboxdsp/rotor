@@ -39,7 +39,7 @@ void RotorAnalyzer::paint (Graphics& g)
 
     // get range and then set scale accordingly
     Range<float> maxRange = FloatVectorOperations::findMinAndMax(outputData, outputSize);
-    const float scale = 1.0f / jmax((float)FFTSize, maxRange.getEnd());
+    const float scale = 1.0f / jmax((float) FFTSize, maxRange.getEnd());
 
     g.setColour(fillStart);
     for (int i = 0; i < outputSize; i++)
@@ -48,7 +48,7 @@ void RotorAnalyzer::paint (Graphics& g)
         
         const float magnitude = outputData[i] * scale;
         const float decibels = Decibels::gainToDecibels(magnitude);
-        const float y = jmap(decibels, -90.0f, -12.0f, height, 0.0f);
+        const float y = jmap(decibels, -90.0f, -15.0f, height, 0.0f);
 
         g.drawVerticalLine((int) x, y, height);
     }

@@ -57,8 +57,8 @@ AudioProcessorValueTreeState::ParameterLayout RotorAudioProcessor::createParamet
     // RATE
     auto p_modulationRate = std::make_unique<AudioParameterFloat>(
         "rate", "Rate",
-        NormalisableRange<float>(10.0f, 12000.0f, 1.0f, getSkewFactor(10.0f, 12000.0f, 500.0f), false), 
-        500.0f);
+        NormalisableRange<float>(10.0f, 12500.0f, 0.1f, getSkewFactor(10.0f, 12500.0f, 1000.0f), false), 
+        1000.0f);
     params.push_back(std::move(p_modulationRate));
 
     // NOISE

@@ -122,7 +122,7 @@ void RotorLookAndFeel::drawRotarySlider(
 		auto name = slider.getName();
 		if (name == "rate")
 		{
-			String readoutValue = (value >= 1000.0 ? String(value / 1000.0, 1) + "k" : String(value, 1));
+			String readoutValue = value >= 1000.0 ? String(value / 1000.0, 2) + "k" : String(value, 1);
 			readout = readoutValue + slider.getTextValueSuffix();
 		}
 		else if (name == "mix" || name == "level")

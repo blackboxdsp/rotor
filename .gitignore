@@ -5,7 +5,7 @@
 # WINDOWS BUILD(S)
 /Builds/VisualStudio2019/.vs/
 /Builds/VisualStudio2019/x64/
-/Builds/VisualStudio2019/x86/
+/Builds/VisualStudio2019/Win32/
 
 # MACOSX BUILD(S)
 /Builds/MacOSX/build/
