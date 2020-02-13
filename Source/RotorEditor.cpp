@@ -119,18 +119,19 @@ RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, Aud
 
     //==========================================================================
 
+    // set lookAndFeel configurations
+    setLookAndFeel(&lookAndFeel);
+
     // handle open gl initializing
     glContext.setComponentPaintingEnabled(true);
     glContext.attachTo(*this);
 
     // set aspect ratio and dimensions accordingly
     double ratio = 0.5;
+    setResizable(true, false);
     setResizeLimits(324, 324 / ratio, 540, 540 / ratio);
     getConstrainer()->setFixedAspectRatio(ratio);
     setSize(360, 360 / ratio);
-
-    // set lookAndFeel configurations
-    setLookAndFeel(&lookAndFeel);
 }
 
 RotorAudioProcessorEditor::~RotorAudioProcessorEditor()
