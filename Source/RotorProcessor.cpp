@@ -14,7 +14,7 @@ RotorAudioProcessor::RotorAudioProcessor()
     : parameters(*this, nullptr, Identifier("Rotor"), createParameterLayout()),
       AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
-#if ! JucePlugin_IsSynth
+#if ! JucePlugin_IsSynth 
         .withInput("Input", AudioChannelSet::stereo(), true)
 #endif
         .withOutput("Output", AudioChannelSet::stereo(), true)
