@@ -8,6 +8,8 @@
   
 Rotor is a variable waveform ring modulation plugin targeting VST3 and AU for OS X and Windows platforms. It uses wavetable synthesis to generate various simple waveforms that act as the modulation signal for the input. It is compiled using the [JUCE](https://juce.com/) framework for C++.
 
+To see it in action, make sure to check out the [demo](https://drive.google.com/file/d/1szT238kz2ZAgqB3uCJYZRtq_IYkcSJrz/view?usp=sharing).
+
 ## Dependencies
 
 - JUCE (v5.4.7)
