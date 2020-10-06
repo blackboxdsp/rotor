@@ -1,5 +1,8 @@
 # Rotor
   
+![Win](https://github.com/maxwellmattryan/rotor/workflows/rotor-win/badge.svg)
+![MacOS](https://github.com/maxwellmattryan/rotor/workflows/rotor-mac/badge.svg)
+
 > Modern ring modulation
   
 <div style="text-align: center">
