@@ -14,7 +14,6 @@
 *.sln.docstates
 
 # HIDDEN FILES / FOLDERS
-.*
 !/.gitignore
 
 # CMake build files
