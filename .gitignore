@@ -1,15 +1,7 @@
 # FOLDERS
-/Predev/
-/Rotor/
-/.vs/
-
-# WINDOWS BUILD(S)
-/Builds/VisualStudio2019/.vs/
-/Builds/VisualStudio2019/x64/
-/Builds/VisualStudio2019/Win32/
-
-# MACOSX BUILD(S)
-/Builds/MacOSX/build/
+**/.vs/
+/demo/
+/design/
 
 # PLUGIN FORMATS
 *.vst3
@@ -25,5 +17,8 @@
 .*
 !/.gitignore
 
-# HTML
-VST3_SDK/doc/
+# CMake build files
+/build/
+
+# JUCE repository module
+/JUCE/
