@@ -3,10 +3,6 @@
 /demo/
 /design/
 
-# PLUGIN FORMATS
-*.vst3
-*.component
-
 # USER-SPECIFIC FILES
 *.suo 
 *.user 
