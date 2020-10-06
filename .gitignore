@@ -15,5 +15,6 @@
 # CMake build files
 /build/
 
-# JUCE repository module
+# JUCE repository module and code
 /JUCE/
+/Rotor/JuceLibraryCode
