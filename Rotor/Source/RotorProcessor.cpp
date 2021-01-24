@@ -227,43 +227,45 @@ void RotorAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& m
     if (editor)
         editor->preAnalyzer->pushBuffer(buffer);
 
-    for (auto sample = 0; sample < buffer.getNumSamples(); sample++)
+    for (auto channel = 0; channel < buffer.getNumChannels(); channel++)
     {
-        // set current phase to previous block's last sample value (for continuity)
-        currentPhase = previousPhase;
+        for (auto sample = 0; sample < buffer.getNumSamples(); sample++)
+        {
+            // set current phase to previous block's last sample value (for continuity)
+            currentPhase = previousPhase;
 
-        // get write pointer to buffer samples
-        auto* samples = buffer.getWritePointer(0);
+            // get write pointer to buffer samples
+            auto* samples = buffer.getWritePointer(channel);
 
-        // read first sample value into two variables (original [o_sampleData] and processed [p_sampleData])
-        auto o_sampleData = samples[sample], p_sampleData = samples[sample];
+            // read first sample value into two variables (original [o_sampleData] and processed [p_sampleData])
+            auto o_sampleData = samples[sample], p_sampleData = samples[sample];
 
-        // multiply wavetable value by original signal and update phase value
-        p_sampleData *= (wavetable[(int) currentPhase] * modulationInversionFactor);
-        currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
+            // multiply wavetable value by original signal and update phase value
+            p_sampleData *= (wavetable[(int) currentPhase] * modulationInversionFactor);
+            currentPhase = fmod(currentPhase + phaseDelta, wavetableSize);
 
-        // read current mix ratio value and scale between 0.0f and 1.0f (** DOES NOT CHECK IF MIX IS > 100.0f **)
-        auto currentDryWet = *mix / 100.0f;
+            // read current mix ratio value and scale between 0.0f and 1.0f (** DOES NOT CHECK IF MIX IS > 100.0f **)
+            auto currentDryWet = *mix / 100.0f;
 
-        // calculate values of dry and wet signals according to currentDryWet
-        p_sampleData *= currentDryWet;
-        o_sampleData *= (1.0f - currentDryWet);
+            // calculate values of dry and wet signals according to currentDryWet
+            p_sampleData *= currentDryWet;
+            o_sampleData *= (1.0f - currentDryWet);
 
-        // calculate random noise and udpate p_sampleData accordingly to noise parameter
-        auto n_sampleData = p_sampleData * Random::getSystemRandom().nextFloat();
-        n_sampleData *= *modulationNoise;
-        p_sampleData *= (1.0f - *modulationNoise);
-        p_sampleData += n_sampleData;
+            // calculate random noise and udpate p_sampleData accordingly to noise parameter
+            auto n_sampleData = p_sampleData * Random::getSystemRandom().nextFloat();
+            n_sampleData *= *modulationNoise;
+            p_sampleData *= (1.0f - *modulationNoise);
+            p_sampleData += n_sampleData;
 
-        // calculate result sample value (r_sampleData)
-        auto r_sampleData = p_sampleData + o_sampleData;
+            // calculate result sample value (r_sampleData)
+            auto r_sampleData = p_sampleData + o_sampleData;
 
-        // loop through channels and set samples accordingly
-        for (auto channel = 0; channel < buffer.getNumChannels(); channel++)
+            // loop through channels and set samples accordingly
             buffer.setSample(channel, sample, r_sampleData);
 
-        // update previous phase value to avoid discontinuities
-        previousPhase = currentPhase;
+            // update previous phase value to avoid discontinuities
+            previousPhase = currentPhase;
+        }
     }
 
     // get current output gain and update if needed then apply it
