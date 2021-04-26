@@ -1,20 +1,21 @@
-# FOLDERS
-**/.vs/
-/demo/
-/design/
+# IDE cache folders
+.vs/
+.vscode/
+.idea/
 
-# USER-SPECIFIC FILES
-*.suo 
-*.user 
-*.userosscache
-*.sln.docstates
+# MacOS-related
+**/.DS_Store
 
-# HIDDEN FILES / FOLDERS
-!/.gitignore
+# JUCE
+juce/
 
-# CMake build files
-/build/
+# Binaries and executables
+bin/
+out/
 
-# JUCE repository module and code
-/JUCE/
-/Rotor/JuceLibraryCode/
+# Miscellaneous project stuff
+design/
+
+project/Backup/
+project/Samples/
+project/Desktop.ini

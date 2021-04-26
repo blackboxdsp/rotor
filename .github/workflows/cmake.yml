@@ -1,0 +1,44 @@
+name: phantom
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    env:
+      BUILD_TYPE: Release
+
+    steps:
+    - name: "Preparation"
+      uses: actions/checkout@v2
+
+    - name: "1/5: Clone (JUCE)"
+      uses: actions/checkout@v2
+      with:
+        repository: juce-framework/JUCE
+        path: ${{runner.workspace}}/phantom/JUCE
+  
+    # JUCE
+    - name: "2/5: Configuration (JUCE)"
+      working-directory: ${{runner.workspace}}/phantom/JUCE
+      run: cmake -B bin .
+
+    - name: "3/5: Build (JUCE)"
+      working-directory: ${{runner.workspace}}/phantom/JUCE
+      run: cmake --build bin
+
+    # Phantom
+    - name: "4/5: Configuration (Phantom)"
+      working-directory: ${{runner.workspace}}/phantom
+      run: cmake -B bin .
+
+    - name: "5/5: Build (Phantom)"
+      working-directory: ${{runner.workspace}}/phantom
+      run: cmake --build bin --config ${{ env.BUILD_TYPE }} --target Phantom_All

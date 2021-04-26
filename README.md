@@ -3,10 +3,13 @@
 ![Win](https://github.com/maxwellmattryan/rotor/workflows/rotor-win/badge.svg)
 ![MacOS](https://github.com/maxwellmattryan/rotor/workflows/rotor-mac/badge.svg)
 
-> Modern ring modulation
+> Modern ring modulation effect plugin
   
 <div style="text-align: center">
-    <img src="./screenshot.png" alt="Rotor screenshot" title="Rotor running in Ableton Live 10" height="720"/>
+    <img 
+        src="https://storage.googleapis.com/mattmaxwell-assets/portfolio/projects/rotor.png" 
+        alt="Rotor screenshot" title="Rotor running in Ableton Live 10" height="720"
+    />
 </div>
   
 Rotor is a variable waveform ring modulation plugin targeting VST3 and AU for OS X and Windows platforms. It uses wavetable synthesis to generate various simple waveforms that act as the modulation signal for the input. It is compiled using the [JUCE](https://juce.com/) framework for C++.
@@ -15,7 +18,7 @@ To see it in action, make sure to check out the [demo](https://drive.google.com/
 
 ## Dependencies
 
-- JUCE (v5.4.7)
+- JUCE (v6.0.8)
 - VST3 SDK (v3.6.14)
 
 ## Usage
