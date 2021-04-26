@@ -1,4 +1,4 @@
-name: phantom
+name: rotor
 
 on:
   push:
@@ -23,22 +23,22 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: juce-framework/JUCE
-        path: ${{runner.workspace}}/phantom/JUCE
+        path: ${{runner.workspace}}/rotor/JUCE
   
     # JUCE
     - name: "2/5: Configuration (JUCE)"
-      working-directory: ${{runner.workspace}}/phantom/JUCE
+      working-directory: ${{runner.workspace}}/rotor/JUCE
       run: cmake -B bin .
 
     - name: "3/5: Build (JUCE)"
-      working-directory: ${{runner.workspace}}/phantom/JUCE
+      working-directory: ${{runner.workspace}}/rotor/JUCE
       run: cmake --build bin
 
-    # Phantom
-    - name: "4/5: Configuration (Phantom)"
-      working-directory: ${{runner.workspace}}/phantom
+    # Rotor
+    - name: "4/5: Configuration (Rotor)"
+      working-directory: ${{runner.workspace}}/rotor
       run: cmake -B bin .
 
-    - name: "5/5: Build (Phantom)"
-      working-directory: ${{runner.workspace}}/phantom
-      run: cmake --build bin --config ${{ env.BUILD_TYPE }} --target Phantom_All
+    - name: "5/5: Build (Rotor)"
+      working-directory: ${{runner.workspace}}/rotor
+      run: cmake --build bin --config ${{ env.BUILD_TYPE }} --target Rotor_All
