@@ -7,7 +7,7 @@
   
 <div style="text-align: center">
     <img 
-        src="https://storage.googleapis.com/mattmaxwell-assets/portfolio/projects/rotor.png" 
+        src="https://storage.googleapis.com/mattmaxwell-assets/images/portfolio/projects/rotor.png" 
         alt="Rotor screenshot" title="Rotor running in Ableton Live 10" height="720"
     />
 </div>
