@@ -10,7 +10,9 @@
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
+
+#include "RotorData.h"
 
 //==============================================================================
 class RotorLookAndFeel : public LookAndFeel_V4
@@ -49,7 +51,7 @@ private:
     float fontSize;
     static const Font& getSliderReadoutFont(float fontSize)
     {
-        static Font sliderReadout(Font(Typeface::createSystemTypefaceFor(BinaryData::montserrat_ttf, BinaryData::montserrat_ttfSize)));
+        static Font sliderReadout(Font(Typeface::createSystemTypefaceFor(RotorData::montserrat_ttf, RotorData::montserrat_ttfSize)));
         sliderReadout.setHeight(fontSize);
         return sliderReadout;
     }

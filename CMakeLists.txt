@@ -14,8 +14,8 @@ juce_add_plugin(Rotor
         IS_MIDI_EFFECT FALSE
         NEEDS_MIDI_INPUT FALSE
         NEEDS_MIDI_OUTPUT FALSE
-        PLUGIN_MANUFACTURER_CODE BKBX
-        PLUGIN_CODE ROTR
+        PLUGIN_MANUFACTURER_CODE Bkbx
+        PLUGIN_CODE Rotr
         FORMATS AU VST3
         PRODUCT_NAME "Rotor")
 
@@ -37,12 +37,12 @@ target_compile_definitions(Rotor PUBLIC
         JUCE_DISPLAY_SPLASH_SCREEN=0)
 
 # Add binary data from resources folder
-juce_add_binary_data(RotorData SOURCES
-        resources/background.png
-        resources/montserrat-light.ttf
-        resources/montserrat.ttf
-        resources/louis-george-cafe-light.ttf
-        resources/louis-george-cafe.ttf)
+juce_add_binary_data(RotorData HEADER_NAME "RotorData.h" NAMESPACE RotorData SOURCES
+        resources/fonts/montserrat-light.ttf
+        resources/fonts/montserrat.ttf
+        resources/fonts/louis-george-cafe-light.ttf
+        resources/fonts/louis-george-cafe.ttf
+        resources/images/background.png)
 
 # Link libraries to the plugin's source code and other resources (i.e. binary data)
 target_link_libraries(Rotor PRIVATE

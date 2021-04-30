@@ -8,8 +8,7 @@
   ==============================================================================
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "./RotorAnalyzer.h"
+#include "RotorAnalyzer.h"
 
 //==============================================================================
 RotorAnalyzer::RotorAnalyzer()

@@ -20,26 +20,30 @@ jobs:
     - name: "Preparation"
       uses: actions/checkout@v2
 
-    - name: "1/5: Clone (JUCE)"
+    - name: "1/6: Clone (JUCE)"
       uses: actions/checkout@v2
       with:
         repository: juce-framework/JUCE
         path: ${{runner.workspace}}/rotor/JUCE
   
     # JUCE
-    - name: "2/5: Configuration (JUCE)"
+    - name: "2/6: Configuration (JUCE)"
       working-directory: ${{runner.workspace}}/rotor/JUCE
       run: cmake -B bin .
 
-    - name: "3/5: Build (JUCE)"
+    - name: "3/6: Build (JUCE)"
       working-directory: ${{runner.workspace}}/rotor/JUCE
       run: cmake --build bin
 
     # Rotor
-    - name: "4/5: Configuration (Rotor)"
+    - name: "4/6: Precompilation (Rotor)"
+      working-directory: ${{runner.workspace}}/rotor
+      run: chmod +x ./scripts/precompile.sh && ./scripts/precompile.sh
+
+    - name: "5/6: Configuration (Rotor)"
       working-directory: ${{runner.workspace}}/rotor
       run: cmake -B bin .
 
-    - name: "5/5: Build (Rotor)"
+    - name: "6/6: Build (Rotor)"
       working-directory: ${{runner.workspace}}/rotor
       run: cmake --build bin --config ${{ env.BUILD_TYPE }} --target Rotor_All

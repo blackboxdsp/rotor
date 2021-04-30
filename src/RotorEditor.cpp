@@ -8,8 +8,8 @@
   ==============================================================================
 */
 
-#include "./RotorEditor.h"
-#include "./RotorProcessor.h"
+#include "RotorData.h"
+#include "RotorEditor.h"
 
 //==============================================================================
 RotorAudioProcessorEditor::RotorAudioProcessorEditor(RotorAudioProcessor& p, AudioProcessorValueTreeState& vts)
@@ -155,7 +155,7 @@ RotorAudioProcessorEditor::~RotorAudioProcessorEditor()
 void RotorAudioProcessorEditor::paint (Graphics& g)
 {
     // draw background image (this method allows for dynamic resizing)
-    Image backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
+    Image backgroundImage = ImageCache::getFromMemory(RotorData::background_png, RotorData::background_pngSize);
     g.drawImage(backgroundImage, getLocalBounds().toFloat());
 }
 

@@ -5,8 +5,8 @@
   ==============================================================================
 */
 
-#include "./RotorEditor.h"
-#include "./RotorProcessor.h"
+#include "RotorEditor.h"
+#include "RotorProcessor.h"
 
 //==============================================================================
 RotorAudioProcessor::RotorAudioProcessor()

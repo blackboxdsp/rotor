@@ -10,11 +10,11 @@
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
 
-#include "./RotorAnalyzer.h"
-#include "./RotorLookAndFeel.h"
-#include "./RotorProcessor.h"
+#include "RotorAnalyzer.h"
+#include "RotorLookAndFeel.h"
+#include "RotorProcessor.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
